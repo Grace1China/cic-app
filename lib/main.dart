@@ -1,5 +1,6 @@
+import 'package:church_platform/sunday/SundayWidget.dart';
 import 'package:flutter/material.dart';
-import 'HomeWidget.dart';
+import 'home/HomeWidget.dart';
 
 void main() => runApp(MyApp());
 
@@ -40,10 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
       'Index 2: 灵修打卡',
       style: optionStyle,
     ),
-    Text(
-      'Index 3: 主日信息',
-      style: optionStyle,
-    ),
+    SundayWidget(),
     Text(
       'Index 4: 课程资料',
       style: optionStyle,

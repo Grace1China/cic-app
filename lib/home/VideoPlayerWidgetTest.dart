@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 
-class VideoPlayerWidget extends StatefulWidget {
-  VideoPlayerWidget({Key key}) : super(key: key);
+class VideoPlayerWidgetTest extends StatefulWidget {
+  VideoPlayerWidgetTest({Key key}) : super(key: key);
 
   @override
-  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
+  _VideoPlayerWidgetTestState createState() => _VideoPlayerWidgetTestState();
 }
 
-class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
+class _VideoPlayerWidgetTestState extends State<VideoPlayerWidgetTest> {
   VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
 

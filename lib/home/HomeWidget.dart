@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'VideoPlayerScreen.dart';
-import 'VideoPlayerWidget.dart';
+import 'VideoPlayerWidgetTest.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -68,29 +68,33 @@ class _HomeWidgetState extends State<HomeWidget> {
 //          Image(
 //            image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
 //          ),
-//          Stack(
-//            children: <Widget>[
-//              Center(child: CircularProgressIndicator()),
-//              Center(
-//                child: FadeInImage.memoryNetwork(
-//                  placeholder: kTransparentImage,
-//                  image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
-//                ),
-//              ),
-//            ],
-//          ),
+          Stack(
+            alignment: AlignmentDirectional.center,
+            children: <Widget>[
+              Center(child: CircularProgressIndicator()),
+              Center(
+                child: FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+//                  width: 600,
+//                  height: 240,
+//                  fit: BoxFit.cover,
+                ),
+              ),
+            ],
+          ),
 //          FadeInImage.memoryNetwork(
 //            placeholder: kTransparentImage,
 //            image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
 //          )
-          Image.asset(
-            'images/church1.png',
-            width: 600,
-            height: 240,
-            fit: BoxFit.cover,
-          ),
+//          Image.asset(
+//            'images/church1.png',
+//            width: 600,
+//            height: 240,
+//            fit: BoxFit.cover,
+//          ),
           Text("宣传视频",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-          VideoPlayerWidget(),
+          VideoPlayerWidgetTest(),
 //          RaisedButton(
 //            child: Text('播放视频'),
 //            onPressed: () {
