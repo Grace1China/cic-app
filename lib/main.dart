@@ -1,3 +1,4 @@
+import 'package:church_platform/course/CourseWidget.dart';
 import 'package:church_platform/sunday/SundayWidget.dart';
 import 'package:flutter/material.dart';
 import 'home/HomeWidget.dart';
@@ -42,10 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
       style: optionStyle,
     ),
     SundayWidget(),
-    Text(
-      'Index 4: 课程资料',
-      style: optionStyle,
-    ),
+    CourseWidget(),
   ];
 
   void _onItemTapped(int index) {

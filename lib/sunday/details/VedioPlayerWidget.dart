@@ -5,8 +5,8 @@ import 'package:video_player/video_player.dart';
 
 
 class VedioPlayerWidget extends StatefulWidget {
-  Sunday sunday;
-  VedioPlayerWidget({Key key, this.sunday}) : super(key: key);
+  String url;
+  VedioPlayerWidget({Key key, this.url}) : super(key: key);
 
   @override
   _VedioPlayerWidgetState createState() => _VedioPlayerWidgetState();
@@ -22,7 +22,7 @@ class _VedioPlayerWidgetState extends State<VedioPlayerWidget> {
     // offers several different constructors to play videos from assets, files,
     // or the internet.
     _controller = VideoPlayerController.network(
-      widget.sunday.video,
+      widget.url,
     );
 
     // Initialize the controller and store the Future for later use.
