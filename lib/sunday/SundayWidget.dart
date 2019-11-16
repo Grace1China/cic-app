@@ -1,7 +1,9 @@
+import 'package:church_platform/account/AccountWidget.dart';
 import 'package:church_platform/home/VideoPlayerScreen.dart';
 import 'package:church_platform/sunday/Sunday.dart';
 import 'package:church_platform/sunday/SundayItem.dart';
 import 'package:church_platform/sunday/details/SundayDetailsWidget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -71,6 +73,17 @@ class _SundayWidgetState extends State<SundayWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('讲道'),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.account_circle),
+              onPressed: (){
+                Navigator.of(context).push(
+                    CupertinoPageRoute(
+                        fullscreenDialog: true,
+                        builder: (context) => AccountWidget()
+                    )
+                );
+              })
+        ],
       ),
       body: ListView(
         padding: EdgeInsets.symmetric(vertical: 8.0),

@@ -1,9 +1,11 @@
+import 'package:church_platform/account/AccountWidget.dart';
 import 'package:church_platform/course/Course.dart';
 import 'package:church_platform/course/CourseItem.dart';
 import 'package:church_platform/home/VideoPlayerScreen.dart';
 import 'package:church_platform/sunday/Sunday.dart';
 import 'package:church_platform/sunday/SundayItem.dart';
 import 'package:church_platform/sunday/details/SundayDetailsWidget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -79,11 +81,22 @@ class _CourseWidgetState extends State<CourseWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('课程'),
+//        actions: <Widget>[
+//          IconButton(icon: Icon(Icons.account_circle),
+//              onPressed: (){
+//                 Navigator.of(context).push(
+//                    CupertinoPageRoute(
+//                        fullscreenDialog: true,
+//                        builder: (context) => AccountWidget()
+//                    )
+//                );
+//              })
+//        ],
       ),
+      backgroundColor: Colors.black12,
       body: GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.75
-      ),
+          childAspectRatio: 0.75),
           itemCount:modules.length,
           itemBuilder: (context,index){
             //如果显示到最后一个并且Icon总数小于200时继续获取数据

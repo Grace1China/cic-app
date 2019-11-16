@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   transparent_image: ^1.0.0
   video_player:
+  shared_preferences: ^0.5.4+3
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +53,7 @@ flutter:
     - images/pic2.jpg
     - images/pic3.jpg
     - images/church1.png
+    - images/receive.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

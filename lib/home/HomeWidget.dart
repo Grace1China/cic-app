@@ -1,3 +1,6 @@
+import 'package:church_platform/account/AccountWidget.dart';
+import 'package:church_platform/donate/DonateWidget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'VideoPlayerScreen.dart';
@@ -33,6 +36,20 @@ class _HomeWidgetState extends State<HomeWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('教会'),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.account_circle),
+            onPressed: (){
+            //效果同等
+//              Navigator.push(context,
+//                  MaterialPageRoute(builder: (context) => DonateWidget(), fullscreenDialog: true));
+              Navigator.of(context).push(
+                  CupertinoPageRoute(
+                      fullscreenDialog: true,
+                      builder: (context) => AccountWidget()
+                  )
+              );
+            })
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(0),
@@ -68,31 +85,28 @@ class _HomeWidgetState extends State<HomeWidget> {
 //          Image(
 //            image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
 //          ),
-          Stack(
-            alignment: AlignmentDirectional.center,
-            children: <Widget>[
-              Center(child: CircularProgressIndicator()),
-              Center(
-                child: FadeInImage.memoryNetwork(
-                  placeholder: kTransparentImage,
-                  image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
-//                  width: 600,
-//                  height: 240,
-//                  fit: BoxFit.cover,
-                ),
-              ),
-            ],
-          ),
+//          Stack(
+//            alignment: AlignmentDirectional.center,
+//            children: <Widget>[
+//              Center(child: CircularProgressIndicator()),
+//              Center(
+//                child: FadeInImage.memoryNetwork(
+//                  placeholder: kTransparentImage,
+//                  image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+//                ),
+//              ),
+//            ],
+//          ),
 //          FadeInImage.memoryNetwork(
 //            placeholder: kTransparentImage,
 //            image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
 //          )
-//          Image.asset(
-//            'images/church1.png',
+          Image.asset(
+            'images/church1.png',
 //            width: 600,
 //            height: 240,
 //            fit: BoxFit.cover,
-//          ),
+          ),
           Text("宣传视频",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
           VideoPlayerWidgetTest(),
 //          RaisedButton(

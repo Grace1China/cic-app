@@ -16,12 +16,15 @@ class CourseItem extends StatelessWidget {
     return
       SingleChildScrollView(
         child:Container(
-            color: Colors.yellow[400],
-            height: 300,
-            margin: EdgeInsets.all(10.0),
-//      padding: EdgeInsets.all(5.0),
-            child: Padding(
-                padding: EdgeInsets.all(8.0),
+//            color: Colors.black12,
+//            height: 300,
+//        decoration: BoxDecoration(border: Border.all()),
+//            margin: EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(10.0),
+            child: Container(
+              color: Colors.white,
+              child: Padding(
+                padding: EdgeInsets.all(0.0),
                 child: Column(
                   children: <Widget>[
                     FadeInImage.memoryNetwork(
@@ -36,14 +39,14 @@ class CourseItem extends StatelessWidget {
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),maxLines: 2,),
                     Divider(),
                     Container(
-                      margin: EdgeInsets.all(10.0),
+                      margin: EdgeInsets.all(5.0),
                       child: Center(
                         child: Row(
                           children: <Widget>[
                             Text("￥5"),
                             Spacer(),
                             Expanded(
-                              child:Text("999已售",overflow: TextOverflow.ellipsis,maxLines: 1),
+                              child:Text("999已售",overflow: TextOverflow.ellipsis,maxLines: 1,textAlign: TextAlign.end,),
                             ),
                           ],
                         ),
@@ -53,7 +56,8 @@ class CourseItem extends StatelessWidget {
                   ],
                 ),
 
-      )
+              ),
+            )
 
 //        child: GridTile(
 //          header: Text(
