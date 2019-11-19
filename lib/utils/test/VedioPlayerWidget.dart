@@ -1,5 +1,3 @@
-import 'package:church_platform/home/VideoPlayerScreen.dart';
-import 'package:church_platform/sunday/Sunday.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 

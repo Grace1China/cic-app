@@ -1,5 +1,4 @@
 import 'package:church_platform/account/AccountWidget.dart';
-import 'package:church_platform/home/VideoPlayerScreen.dart';
 import 'package:church_platform/sunday/Sunday.dart';
 import 'package:church_platform/sunday/SundayItem.dart';
 import 'package:church_platform/sunday/details/SundayDetailsWidget.dart';

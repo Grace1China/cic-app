@@ -1,6 +1,7 @@
-import 'package:church_platform/home/VideoPlayerScreen.dart';
+import 'package:church_platform/utils/CheWiePlayerWidget.dart';
+import 'package:church_platform/utils/test/VideoPlayerScreen.dart';
 import 'package:church_platform/sunday/Sunday.dart';
-import 'package:church_platform/sunday/details/VedioPlayerWidget.dart';
+import 'package:church_platform/utils/test/VedioPlayerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:church_platform/course/Course.dart';
@@ -36,7 +37,8 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
       // VideoPlayerController to finish initializing.
       body: ListView(
         children: <Widget>[
-          VedioPlayerWidget(url:widget.course.video),
+//          VedioPlayerWidget(url:widget.course.video),
+          CheWiePlayerWidget(url:widget.course.video),
           Container(
             padding: const EdgeInsets.all(5),
             child: Text(

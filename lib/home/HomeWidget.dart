@@ -1,10 +1,12 @@
 import 'package:church_platform/account/AccountWidget.dart';
 import 'package:church_platform/donate/DonateWidget.dart';
+import 'package:church_platform/utils/test/CheWiePlayerTest.dart';
+import 'package:church_platform/utils/CheWiePlayerWidget.dart';
+import 'package:church_platform/utils/test/VedioPlayerWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'VideoPlayerScreen.dart';
-import 'VideoPlayerWidgetTest.dart';
+import '../utils/test/VideoPlayerScreen.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -82,9 +84,9 @@ class _HomeWidgetState extends State<HomeWidget> {
             ),
           ),
           Text("宣传画",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-//          Image(
-//            image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-//          ),
+          Image(
+            image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+          ),
 //          Stack(
 //            alignment: AlignmentDirectional.center,
 //            children: <Widget>[
@@ -101,20 +103,22 @@ class _HomeWidgetState extends State<HomeWidget> {
 //            placeholder: kTransparentImage,
 //            image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
 //          )
-          Image.asset(
-            'images/church1.png',
-//            width: 600,
-//            height: 240,
-//            fit: BoxFit.cover,
-          ),
+//          Image.asset(
+//            'images/church1.png',
+////            width: 600,
+////            height: 240,
+////            fit: BoxFit.cover,
+//          ),
           Text("宣传视频",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-          VideoPlayerWidgetTest(),
+//          VedioPlayerWidget(url:"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"),
+          CheWiePlayerWidget(url:"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
 //          RaisedButton(
 //            child: Text('播放视频'),
 //            onPressed: () {
 //              Navigator.push(
 //                context,
-//                MaterialPageRoute(builder: (context) => VideoPlayerScreen(),),
+////                MaterialPageRoute(builder: (context) => VideoPlayerScreen(),),
+//              MaterialPageRoute(builder: (context) => CheWiePlayerTest()),
 //              );
 //            },
 //          ),

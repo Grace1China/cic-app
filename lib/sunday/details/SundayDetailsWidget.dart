@@ -1,8 +1,7 @@
-import 'package:church_platform/home/VideoPlayerScreen.dart';
 import 'package:church_platform/sunday/Sunday.dart';
-import 'package:church_platform/sunday/details/VedioPlayerWidget.dart';
+import 'package:church_platform/utils/CheWiePlayerWidget.dart';
+import 'package:church_platform/utils/test/VedioPlayerWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 
 
 class SundayDetailsWidget extends StatefulWidget {
@@ -35,7 +34,8 @@ class _SundayDetailsWidgetState extends State<SundayDetailsWidget> {
       // VideoPlayerController to finish initializing.
       body: ListView(
         children: <Widget>[
-          VedioPlayerWidget(url:widget.sunday.video),
+//          VedioPlayerWidget(url:widget.sunday.video),
+          CheWiePlayerWidget(url:widget.sunday.video),
           Container(
             padding: const EdgeInsets.all(5),
             child: Text(
