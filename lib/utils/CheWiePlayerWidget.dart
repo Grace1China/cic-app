@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 
+void main() {
+  runApp(new MaterialApp(home: new CheWiePlayerWidget()));
+}
+
 class CheWiePlayerWidget extends StatefulWidget {
   String url;
   CheWiePlayerWidget({this.title = '播放器',this.url});

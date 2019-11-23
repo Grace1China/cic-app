@@ -25,10 +25,13 @@ dependencies:
   cupertino_icons: ^0.1.2
   transparent_image: ^1.0.0
   shared_preferences: ^0.5.4+3
+  http:
+  provider:
 
   video_player:
   chewie:
 
+  audioplayers: ^0.13.3
 
 dev_dependencies:
   flutter_test:
