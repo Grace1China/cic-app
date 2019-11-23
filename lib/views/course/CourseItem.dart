@@ -1,5 +1,5 @@
-import 'package:church_platform/course/Course.dart';
-import 'package:church_platform/sunday/Sunday.dart';
+import 'package:church_platform/views/course/Course.dart';
+import 'package:church_platform/views/sunday/Sunday.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:transparent_image/transparent_image.dart';

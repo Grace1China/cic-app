@@ -1,12 +1,12 @@
-import 'package:church_platform/account/AccountWidget.dart';
-import 'package:church_platform/donate/DonateWidget.dart';
-import 'package:church_platform/utils/test/CheWiePlayerTest.dart';
-import 'package:church_platform/utils/CheWiePlayerWidget.dart';
-import 'package:church_platform/utils/test/VedioPlayerWidget.dart';
+import 'package:church_platform/views/account/AccountWidget.dart';
+import 'package:church_platform/views/donate/DonateWidget.dart';
+import 'package:church_platform/vedio/test/CheWiePlayerTest.dart';
+import 'package:church_platform/vedio/CheWiePlayerWidget.dart';
+import 'package:church_platform/vedio/test/VedioPlayerNativeWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
-import '../utils/test/VideoPlayerScreen.dart';
+import '../../vedio/test/VideoPlayerNativeScreen.dart';
 
 class HomeWidget extends StatefulWidget {
   @override

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-
-class VideoPlayerWidgetTest extends StatefulWidget {
-  VideoPlayerWidgetTest({Key key}) : super(key: key);
-
-  @override
-  _VideoPlayerWidgetTestState createState() => _VideoPlayerWidgetTestState();
+void main() {
+  runApp(new MaterialApp(home: new VedioPlayerNativeWidget(url:"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4")));
 }
 
-class _VideoPlayerWidgetTestState extends State<VideoPlayerWidgetTest> {
+class VedioPlayerNativeWidget extends StatefulWidget {
+  String url;
+  VedioPlayerNativeWidget({Key key, this.url}) : super(key: key);
+
+  @override
+  _VedioPlayerNativeWidgetState createState() => _VedioPlayerNativeWidgetState();
+}
+
+class _VedioPlayerNativeWidgetState extends State<VedioPlayerNativeWidget> {
   VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
 
@@ -19,7 +23,7 @@ class _VideoPlayerWidgetTestState extends State<VideoPlayerWidgetTest> {
     // offers several different constructors to play videos from assets, files,
     // or the internet.
     _controller = VideoPlayerController.network(
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+      widget.url,
     );
 
     // Initialize the controller and store the Future for later use.

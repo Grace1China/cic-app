@@ -1,7 +1,7 @@
-import 'package:church_platform/account/AccountWidget.dart';
-import 'package:church_platform/sunday/Sunday.dart';
-import 'package:church_platform/sunday/SundayItem.dart';
-import 'package:church_platform/sunday/details/SundayDetailsWidget.dart';
+import 'package:church_platform/views/account/AccountWidget.dart';
+import 'package:church_platform/views/sunday/Sunday.dart';
+import 'package:church_platform/views/sunday/SundayItem.dart';
+import 'package:church_platform/views/sunday/details/SundayDetailsWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';

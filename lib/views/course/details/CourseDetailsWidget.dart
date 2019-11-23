@@ -1,10 +1,10 @@
-import 'package:church_platform/utils/CheWiePlayerWidget.dart';
-import 'package:church_platform/utils/test/VideoPlayerScreen.dart';
-import 'package:church_platform/sunday/Sunday.dart';
-import 'package:church_platform/utils/test/VedioPlayerWidget.dart';
+import 'package:church_platform/vedio/CheWiePlayerWidget.dart';
+import 'package:church_platform/vedio/test/VideoPlayerNativeScreen.dart';
+import 'package:church_platform/views/sunday/Sunday.dart';
+import 'package:church_platform/vedio/test/VedioPlayerNativeWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:church_platform/course/Course.dart';
+import 'package:church_platform/views/course/Course.dart';
 
 
 class CourseDetailsWidget extends StatefulWidget {

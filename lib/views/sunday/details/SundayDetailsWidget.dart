@@ -1,6 +1,6 @@
-import 'package:church_platform/sunday/Sunday.dart';
-import 'package:church_platform/utils/CheWiePlayerWidget.dart';
-import 'package:church_platform/utils/test/VedioPlayerWidget.dart';
+import 'package:church_platform/views/sunday/Sunday.dart';
+import 'package:church_platform/vedio/CheWiePlayerWidget.dart';
+import 'package:church_platform/vedio/test/VedioPlayerNativeWidget.dart';
 import 'package:flutter/material.dart';
 
 
