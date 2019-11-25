@@ -13,7 +13,12 @@ import 'player_widget.dart';
 typedef void OnError(Exception exception);
 
 void main() {
-  runApp(new MaterialApp(home: new AudioPlayerWidget(url: 'https://luan.xyz/files/audio/ambient_c_motion.mp3')));
+  runApp(new MaterialApp(
+      home: Scaffold(
+          body: new AudioPlayerWidget(
+              url: 'https://luan.xyz/files/audio/ambient_c_motion.mp3')
+          )
+      ));
 }
 
 class AudioPlayerWidget extends StatefulWidget {
@@ -29,11 +34,9 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-          child:  PlayerWidget(url:widget.url),
-        )
-    );
+    return Center(
+            child:  PlayerWidget(url:widget.url),
+          );
 
   }
 }

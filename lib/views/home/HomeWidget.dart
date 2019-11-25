@@ -1,12 +1,12 @@
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
 import 'package:church_platform/vedio/test/CheWiePlayerTest.dart';
-import 'package:church_platform/vedio/CheWiePlayerWidget.dart';
+import 'package:church_platform/vedio/VedioPlayerWidget.dart';
 import 'package:church_platform/vedio/test/VedioPlayerNativeWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
-import '../../vedio/test/VideoPlayerNativeScreen.dart';
+import '../../vedio/test/VedioPlayerNativeScreen.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -111,7 +111,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 //          ),
           Text("宣传视频",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
 //          VedioPlayerWidget(url:"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"),
-          CheWiePlayerWidget(url:"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
+          VedioPlayerWidget(url:"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
 //          RaisedButton(
 //            child: Text('播放视频'),
 //            onPressed: () {

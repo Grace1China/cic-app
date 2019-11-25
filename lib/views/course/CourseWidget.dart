@@ -1,7 +1,7 @@
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:church_platform/views/course/Course.dart';
 import 'package:church_platform/views/course/CourseItem.dart';
-import 'package:church_platform/vedio/test/VideoPlayerNativeScreen.dart';
+import 'package:church_platform/vedio/test/VedioPlayerNativeScreen.dart';
 import 'package:church_platform/views/sunday/Sunday.dart';
 import 'package:church_platform/views/sunday/SundayItem.dart';
 import 'package:church_platform/views/sunday/details/SundayDetailsWidget.dart';

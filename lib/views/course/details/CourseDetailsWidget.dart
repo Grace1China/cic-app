@@ -1,5 +1,5 @@
-import 'package:church_platform/vedio/CheWiePlayerWidget.dart';
-import 'package:church_platform/vedio/test/VideoPlayerNativeScreen.dart';
+import 'package:church_platform/vedio/VedioPlayerWidget.dart';
+import 'package:church_platform/vedio/test/VedioPlayerNativeScreen.dart';
 import 'package:church_platform/views/sunday/Sunday.dart';
 import 'package:church_platform/vedio/test/VedioPlayerNativeWidget.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +38,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
       body: ListView(
         children: <Widget>[
 //          VedioPlayerWidget(url:widget.course.video),
-          CheWiePlayerWidget(url:widget.course.video),
+          VedioPlayerWidget(url:widget.course.video),
           Container(
             padding: const EdgeInsets.all(5),
             child: Text(

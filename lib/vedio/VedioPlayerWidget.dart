@@ -6,22 +6,22 @@ import 'package:video_player/video_player.dart';
 
 
 void main() {
-  runApp(new MaterialApp(home: new CheWiePlayerWidget()));
+  runApp(new MaterialApp(home: new VedioPlayerWidget()));
 }
 
-class CheWiePlayerWidget extends StatefulWidget {
+class VedioPlayerWidget extends StatefulWidget {
   String url;
-  CheWiePlayerWidget({this.title = '播放器',this.url});
+  VedioPlayerWidget({this.title = '播放器',this.url});
 
   final String title;
 
   @override
   State<StatefulWidget> createState() {
-    return _CheWiePlayerWidgetState();
+    return _VedioPlayerWidgetState();
   }
 }
 
-class _CheWiePlayerWidgetState extends State<CheWiePlayerWidget> {
+class _VedioPlayerWidgetState extends State<VedioPlayerWidget> {
   TargetPlatform _platform;
   VideoPlayerController _videoPlayerController1;
   ChewieController _chewieController;
