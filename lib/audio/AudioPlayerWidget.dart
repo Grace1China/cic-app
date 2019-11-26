@@ -13,9 +13,9 @@ import 'player_widget.dart';
 typedef void OnError(Exception exception);
 
 void main() {
-  runApp(new MaterialApp(
+  runApp(MaterialApp(
       home: Scaffold(
-          body: new AudioPlayerWidget(
+          body: AudioPlayerWidget(
               url: 'https://luan.xyz/files/audio/ambient_c_motion.mp3')
           )
       ));

@@ -157,7 +157,7 @@ class _PDFViewContentState extends State<PDFViewContent> {
                 divisions: _totalPages,
                 label: "${_currentPage}/${_totalPages}",
                 onChanged: (v) {
-                  print("Slider打印：${v}");
+//                  print("Slider打印：${v}");
                   final position = v.round();
                   if (_currentPage != position){
                     _currentPage = position;

@@ -69,7 +69,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     return Container(
         margin: EdgeInsets.all(10),
 //        padding: EdgeInsets.symmetric(horizontal: 0),
-        height: 80,
+        height: 70,
         decoration: BoxDecoration(
         border: Border.all(color: Colors.grey,width: 0.5),
         borderRadius: BorderRadius.circular(5.0),
@@ -88,7 +88,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                   }
                 });
               },
-              iconSize: 50.0,
+              iconSize: 44.0,
               icon: _isPlaying ? Icon(Icons.pause):Icon(Icons.play_arrow) ,
               color: Colors.cyan),
 //          Container(

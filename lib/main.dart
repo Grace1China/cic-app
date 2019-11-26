@@ -1,6 +1,7 @@
 import 'package:church_platform/views/account/LoginWidget.dart';
 import 'package:church_platform/views/course/CourseWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
+import 'package:church_platform/views/spiritual/SpiritualMainWidget.dart';
 import 'package:church_platform/views/sunday/SundayWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,10 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static  List<Widget> _widgetOptions = <Widget>[
     HomeWidget(),
     DonateWidget(),
-    Text(
-      'Index 2: L3打卡',
-      style: optionStyle,
-    ),
+    SpiritualMainWidget(),
     SundayWidget(),
     CourseWidget(),
   ];
@@ -89,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.markunread_mailbox),
-            title: Text('灵修打卡'),
+            title: Text('L3打卡'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.live_tv),
