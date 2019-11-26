@@ -62,11 +62,13 @@ class _VedioPlayerWidgetState extends State<VedioPlayerWidget> {
   @override
   Widget build(BuildContext context) {
     return Center(
-              child: Chewie(
-                controller: _chewieController,
-              ),
-
-
+//              child: Theme(
+//                data: ThemeData.light().copyWith(platform: TargetPlatform.android),
+                child: Chewie(
+                  controller: _chewieController,
+                ),
+//              )
     );
+
   }
 }

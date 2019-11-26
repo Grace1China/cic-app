@@ -43,11 +43,11 @@ class _MyHomePageState extends State<MyHomePage> {
   static  List<Widget> _widgetOptions = <Widget>[
     HomeWidget(),
     DonateWidget(),
-    SundayWidget(),
     Text(
       'Index 2: L3打卡',
       style: optionStyle,
     ),
+    SundayWidget(),
     CourseWidget(),
   ];
 

@@ -7,12 +7,12 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(new MaterialApp(
+  runApp(MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text("PDFView test"),
         ),
-          body: new PDFViewerWidget(url: "http://www.pdf995.com/samples/pdf.pdf"),
+          body: PDFViewerWidget(url: "http://www.pdf995.com/samples/pdf.pdf"),
       ),
   ));
 }
@@ -104,7 +104,7 @@ class _PDFViewContentState extends State<PDFViewContent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(10),
+//      margin: EdgeInsets.all(5),
 //      height: 500,
 //      width: 300,
 //      color: Colors.grey,
@@ -145,9 +145,9 @@ class _PDFViewContentState extends State<PDFViewContent> {
               ),
             ),
             Container(
-              margin: EdgeInsets.all(10),
+//              margin: EdgeInsets.all(5),
 //              padding: EdgeInsets.all(10),
-              height: 50,
+//              height: 44,
 //              color: Colors.amberAccent,
               child:
               Slider(

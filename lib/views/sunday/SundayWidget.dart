@@ -15,8 +15,8 @@ class SundayWidget extends StatefulWidget {
 
 class _SundayWidgetState extends State<SundayWidget> {
   int pageIndex = 1;
-  List<Sunday> modules = [Sunday("讲道1",1,"信息名字","cover","讲员名字","datetime",'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
-    Sunday("讲道2",2,"信息名字2","cover2","讲员名字2","datetime2",'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4')];
+  List<Sunday> modules = [Sunday("讲道1",1,"信息名字","cover","讲员名字","datetime",'https://sermon-ims.s3-ap-southeast-1.amazonaws.com/videos/20161016IMS.mp4'),
+    Sunday("讲道2",2,"信息名字2","cover2","讲员名字2","datetime2",'https://sermon-ims.s3-ap-southeast-1.amazonaws.com/videos/20161016IMS.mp4')];
 
   @override
   void initState() {

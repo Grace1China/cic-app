@@ -84,9 +84,9 @@ class _HomeWidgetState extends State<HomeWidget> {
             ),
           ),
           Text("宣传画",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-          Image(
-            image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-          ),
+//          Image(
+//            image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+//          ),
 //          Stack(
 //            alignment: AlignmentDirectional.center,
 //            children: <Widget>[
@@ -103,12 +103,12 @@ class _HomeWidgetState extends State<HomeWidget> {
 //            placeholder: kTransparentImage,
 //            image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
 //          )
-//          Image.asset(
-//            'images/church1.png',
-////            width: 600,
-////            height: 240,
-////            fit: BoxFit.cover,
-//          ),
+          Image.asset(
+            'images/church1.png',
+//            width: 600,
+//            height: 240,
+//            fit: BoxFit.cover,
+          ),
           Text("宣传视频",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
 //          VedioPlayerWidget(url:"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"),
           VedioPlayerWidget(url:"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),

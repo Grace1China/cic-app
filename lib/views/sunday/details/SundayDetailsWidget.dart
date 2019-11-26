@@ -1,3 +1,4 @@
+import 'package:church_platform/pdf/PDFViewerWidget.dart';
 import 'package:church_platform/views/sunday/Sunday.dart';
 import 'package:church_platform/vedio/VedioPlayerWidget.dart';
 import 'package:church_platform/vedio/test/VedioPlayerNativeWidget.dart';
@@ -32,20 +33,32 @@ class _SundayDetailsWidgetState extends State<SundayDetailsWidget> {
       ),
       // Use a FutureBuilder to display a loading spinner while waiting for the
       // VideoPlayerController to finish initializing.
-      body: ListView(
-        children: <Widget>[
-//          VedioPlayerWidget(url:widget.sunday.video),
+      body: Container(
+//        color: Colors.greenAccent,
+//        margin: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
           VedioPlayerWidget(url:widget.sunday.video),
-          Container(
-            padding: const EdgeInsets.all(5),
-            child: Text(
-              widget.sunday.name,
+//            VedioPlayerWidget(url:widget.sunday.video),
+            Container(
+              padding: const EdgeInsets.all(5),
+//              color: Colors.grey,
+              child: Text(
+                widget.sunday.name,
 //              softWrap: true,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-        ],
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+
+            Expanded(
+              child:Container(
+//                color: Colors.amberAccent,
+                child: PDFViewerWidget(url: "http://www.pdf995.com/samples/pdf.pdf"),
+              )
+            )
+          ],
+        ),
+      ) // This trailing comma makes auto-formatting nicer for build methods.
     );;
   }
 }
