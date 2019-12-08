@@ -3,6 +3,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:church_platform/net/Sermon.dart';
 import 'package:http/http.dart' as http;
 import 'package:church_platform/net/WeaklyReport.dart';
 
@@ -60,6 +61,23 @@ class API{
         return baseResponse.data;
       }
       throw Exception('没有日报');
+    } else {
+      throw Exception('请求没有返回200');
+    }
+  }
+
+   Future<Sermon> getSermon() async {
+    final response = await http.get("http://l3.community/rapi/sermon/0",
+      headers: {HttpHeaders.authorizationHeader: "bear eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTc1NzgzNjA1LCJqdGkiOiIzMjYyYTJlMzU4MDQ0ZTFhYmY1M2VlZTQwZjJkYjMyMSIsInVzZXJfaWQiOjM3fQ.x0nprlwJqxnZdnltRaU7r0gciUTCZoq4wzfbrijLZZw"},
+    );
+
+    if (response.statusCode == 200) {
+
+      final baseResponse = BaseResponse2.fromJson(json.decode(response.body));
+      if(baseResponse.errCode == "0"){
+        return baseResponse.data;
+      }
+      throw Exception('没有讲道');
     } else {
       throw Exception('请求没有返回200');
     }

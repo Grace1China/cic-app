@@ -7,6 +7,7 @@ import 'package:church_platform/vedio/VedioPlayerWidget.dart';
 import 'package:church_platform/vedio/test/VedioPlayerNativeWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../vedio/test/VedioPlayerNativeScreen.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -154,6 +155,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                           image: snapshot.data.image,
                           fit: BoxFit.cover,
                         ),
+//                        HtmlWidget(snapshot.data.content,webView: true,),
                         Html(data: snapshot.data.content,)
                       ],
                     ));
@@ -162,7 +164,7 @@ class _HomeWidgetState extends State<HomeWidget> {
               }
 
               // By default, show a loading spinner.
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator(),);
             },
           ),
         ],

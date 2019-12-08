@@ -20,7 +20,14 @@ class BaseResponse {
   }
 }
 
-class WeaklyReport {
+//class ResponeResult{
+//
+//  ResponeResult.fromJson(Map<String, dynamic> json);
+//
+//  ResponeResult();
+//}
+
+class WeaklyReport{
   int id;
   int church;
   int user;
