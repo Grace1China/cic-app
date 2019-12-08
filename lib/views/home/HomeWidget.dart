@@ -1,3 +1,5 @@
+import 'package:church_platform/net/API.dart';
+import 'package:church_platform/net/WeaklyReport.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
 import 'package:church_platform/vedio/test/CheWiePlayerTest.dart';
@@ -7,25 +9,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../vedio/test/VedioPlayerNativeScreen.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
   _HomeWidgetState createState() => _HomeWidgetState();
 }
 
-
 class _HomeWidgetState extends State<HomeWidget> {
-//  Future<Post> post;
+  Future<WeaklyReport> weaklyReport;
 
   @override
   void initState() {
     super.initState();
-//    post = fetchPost();
+    weaklyReport = API().getWeaklyReport();
   }
 
   @override
   Widget build(BuildContext context) {
-
     Widget textSection = Container(
       padding: const EdgeInsets.all(5),
       child: Text(
@@ -39,23 +40,20 @@ class _HomeWidgetState extends State<HomeWidget> {
       appBar: AppBar(
         title: Text('教会'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.account_circle),
-            onPressed: (){
-            //效果同等
+          IconButton(
+              icon: Icon(Icons.account_circle),
+              onPressed: () {
+                //效果同等
 //              Navigator.push(context,
 //                  MaterialPageRoute(builder: (context) => DonateWidget(), fullscreenDialog: true));
-              Navigator.of(context).push(
-                  CupertinoPageRoute(
-                      fullscreenDialog: true,
-                      builder: (context) => AccountWidget()
-                  )
-              );
-            })
+                Navigator.of(context).push(CupertinoPageRoute(
+                    fullscreenDialog: true,
+                    builder: (context) => AccountWidget()));
+              })
         ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(0),
-
         children: [
           Container(
             padding: const EdgeInsets.all(5),
@@ -67,7 +65,8 @@ class _HomeWidgetState extends State<HomeWidget> {
           ),
 
           textSection,
-          Text("崇拜时间",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text("崇拜时间",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           Container(
             padding: const EdgeInsets.all(5),
             child: Text(
@@ -75,7 +74,10 @@ class _HomeWidgetState extends State<HomeWidget> {
               softWrap: true,
             ),
           ),
-          Text("地点",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+          Text(
+            "地点",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           Container(
             padding: const EdgeInsets.all(5),
             child: Text(
@@ -83,7 +85,10 @@ class _HomeWidgetState extends State<HomeWidget> {
               softWrap: true,
             ),
           ),
-          Text("宣传画",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+          Text(
+            "宣传画",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
 //          Image(
 //            image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
 //          ),
@@ -109,9 +114,13 @@ class _HomeWidgetState extends State<HomeWidget> {
 //            height: 240,
 //            fit: BoxFit.cover,
           ),
-          Text("宣传视频",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+          Text(
+            "宣传视频",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
 //          VedioPlayerWidget(url:"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"),
-          VedioPlayerWidget(url:"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
+          VedioPlayerWidget(
+              url: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
 //          RaisedButton(
 //            child: Text('播放视频'),
 //            onPressed: () {
@@ -122,6 +131,40 @@ class _HomeWidgetState extends State<HomeWidget> {
 //              );
 //            },
 //          ),
+
+          FutureBuilder<WeaklyReport>(
+            future: weaklyReport,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Container(
+//                    color: Colors.yellow,
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.all(5),
+                          child: Text(snapshot.data.title,
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        ),
+
+//                        Image(image: NetworkImage(snapshot.data.image),),
+                        FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: snapshot.data.image,
+                          fit: BoxFit.cover,
+                        ),
+                        Html(data: snapshot.data.content,)
+                      ],
+                    ));
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+
+              // By default, show a loading spinner.
+              return CircularProgressIndicator();
+            },
+          ),
         ],
       ),
     );
