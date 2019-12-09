@@ -73,7 +73,7 @@ class _SundayDetailsWidgetState extends State<SundayDetailsWidget> {
           }
 
           // By default, show a loading spinner.
-          return CircularProgressIndicator();
+          return Center(child:CircularProgressIndicator());
         },
       ),
 

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'views/home/HomeWidget.dart';
 import 'utils/SharedPreferencesUtils.dart';
+import 'package:oktoast/oktoast.dart';
 
 
 void main() => runApp(MyApp());
@@ -18,13 +19,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
+    return OKToast(
+      child:  MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
 
-        primarySwatch: Colors.blue,
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(key:myTabbedPageKey,title: 'Flutter Demo Home Page'),
       ),
-      home: MyHomePage(key:myTabbedPageKey,title: 'Flutter Demo Home Page'),
     );
   }
 }

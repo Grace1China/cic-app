@@ -1,12 +1,17 @@
 import 'dart:async';
 
+import 'package:church_platform/net/API.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:validate/validate.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 
 class LoginWidget extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final appTitle = '登录';
@@ -15,13 +20,13 @@ class LoginWidget extends StatelessWidget {
         appBar: AppBar(
           title: Text(appTitle),
         ),
-        body: MyCustomForm(),
+        body: MyCustomForm()
     );
   }
 }
 
 class _LoginData {
-  String email = '';
+  String username = '';
   String password = '';
 }
 
@@ -46,6 +51,8 @@ class MyCustomFormState extends State<MyCustomForm> {
   final myController = TextEditingController();
 
   _LoginData _data = new _LoginData();
+
+  bool _saving = false;
 
 //  String _validateEmail(String value) {
 //    // If empty value, the isEmail function throw a error.
@@ -73,8 +80,9 @@ class MyCustomFormState extends State<MyCustomForm> {
       _formKey.currentState.save(); // Save our form now.
 
       print('Printing the login data.');
-      print('Email: ${_data.email}');
+      print('Email: ${_data.username}');
       print('Password: ${_data.password}');
+
     }
   }
 
@@ -90,74 +98,156 @@ class MyCustomFormState extends State<MyCustomForm> {
     print("Second text field: ${myController.text}");
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
-    return Container(
-      padding: EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-//          Row(
-//            mainAxisAlignment: MainAxisAlignment.start,
-//            crossAxisAlignment: CrossAxisAlignment.center,
-//            children: <Widget>[
-//              Text("用户名",style: TextStyle(fontSize: 16),),
-//              SizedBox(width: 10),
-//
-//            ],
-//          ),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                autofocus: true,
-                decoration: InputDecoration(
-                    hintText: '请输入用户名',
-                    labelText: '用户名'
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return '用户名不能为空';
-                  }
-                  if (value != "Daniel"){
-                    return '用户名错误';
-                  }
-                  return null;
-                },
-                onChanged: (text) {
-                  print("First text field: $text");
-                },
-              ),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
+  Widget _buildWidget() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            keyboardType: TextInputType.text,
+            autofocus: true,
+            decoration: InputDecoration(
+                hintText: '请输入用户名',
+                labelText: '用户名'
+            ),
+            validator: (value) {
+              if (value.isEmpty) {
+                return '用户名不能为空';
+              }
+//                  if (value != "Daniel"){
+//                    return '用户名错误';
+//                  }
+              return null;
+            },
+            onChanged: (text) {
+              print("First text field: $text");
+            },
+            onSaved: (String value) => _data.username = value,
+          ),
+          TextFormField(
+            obscureText: true,
+            decoration: InputDecoration(
 //              border: InputBorder.none,
-                    hintText: '请输入密码',
-                    labelText: '密码'
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return '密码不能为空';
-                  }
-                  if (value != "123456"){
-                    return '密码错误';
-                  }
-                  return null;
-                },
-                controller: myController,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: RaisedButton(
-                    onPressed: () {
-                      // Validate returns true if the form is valid, or false
-                      // otherwise.
-                      if (_formKey.currentState.validate()) {
+                hintText: '请输入密码',
+                labelText: '密码'
+            ),
+            validator: (value) {
+              if (value.isEmpty) {
+                return '密码不能为空';
+              }
+//                  if (value != "123456"){
+//                    return '密码错误';
+//                  }
+              return null;
+            },
+            controller: myController,
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: RaisedButton(
+                onPressed: () async {
+                  // Validate returns true if the form is valid, or false
+                  // otherwise.
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
 
-                        SharedPreferencesUtils.saveIsLogin();
-                        Navigator.of(context).pop();
-                        return;
+                    setState(() {
+                      _saving = true;
+                    });
+
+
+//                    new Future.delayed(new Duration(seconds: 4), () {
+//                      setState(() {
+//                        _saving = false;
+//                      });
+//                    });
+
+                    try{
+                      String token = await API().login(_data.username, myController.text);
+
+                      setState(() {
+                        _saving = false;
+                      });
+
+                      if(token != null){
+
+                        showToast(
+                            "登陆成功",
+                            duration: Duration(seconds: 2),
+                            position: ToastPosition.center,
+                            backgroundColor: Colors.black.withOpacity(0.8),
+                            radius: 13.0,
+                            textStyle: TextStyle(fontSize: 18.0),
+                            onDismiss: (){
+                              Navigator.of(context).pop();
+                            }
+                        );
+
+//                      Fluttertoast.showToast(
+//                            msg: "登陆成功",
+//                            toastLength: Toast.LENGTH_SHORT,
+//                            gravity: ToastGravity.CENTER,
+//                            timeInSecForIos: 1,
+//                            backgroundColor: Colors.grey,
+//                            textColor: Colors.white,
+//                            fontSize: 16.0
+//                        );
+                      }else{
+
+                        showToast(
+                          "登陆失败",
+                          duration: Duration(seconds: 2),
+                          position: ToastPosition.center,
+                          backgroundColor: Colors.black.withOpacity(0.8),
+                          radius: 13.0,
+                          textStyle: TextStyle(fontSize: 18.0),
+                        );
+                      }
+                    }catch (e){
+                      setState(() {
+                        _saving = false;
+                      });
+
+                      showToast(
+                        "登陆失败-" + e.toString(),
+                        duration: Duration(seconds: 5),
+                        position: ToastPosition.center,
+                        backgroundColor: Colors.black.withOpacity(0.8),
+                        radius: 13.0,
+                        textStyle: TextStyle(fontSize: 18.0),
+                      );
+                    }
+
+//                        showDialog(
+//                          context: context,
+//                          builder: (context) {
+//                            return AlertDialog(
+//                              // Retrieve the text the that user has entered by using the
+//                              // TextEditingController.
+//                              content: Text("正在登陆..."),
+//                            );
+//                          },
+//                        );
+
+
+
+
+//
+//                        showToastWidget(Container(
+//                                            padding: EdgeInsets.all(0),
+//                                            child: Text("正在登陆...",style: TextStyle(fontSize: 18),),) ,
+//                            duration: Duration(seconds: 5),);
+
+//                        String token = await API().login(_data.username, myController.text);
+//                        if(token != null){
+//                          Navigator.of(context).pop();
+//                        }else{
+//
+//                        }
+
+
+                    return;
 //                        Scaffold.of(context)
 //                            .showSnackBar(SnackBar(content: Text('正在登录...'),action: SnackBarAction(
 //                          label: 'Dissmiss',
@@ -171,40 +261,37 @@ class MyCustomFormState extends State<MyCustomForm> {
 //                        )));
 
 
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              // Retrieve the text the that user has entered by using the
-                              // TextEditingController.
-                              content: Text("登录成功"),//Text(myController.text),
-                            );
-                          },
-                        );
+//                        Timer(Duration(seconds: 3), () {
+//                          print("Yeah, this line is printed after 3 seconds");
+//                          SharedPreferencesUtils.saveIsLogin();
+//                          Navigator.of(context).pop();
+//                        });
 
-                        Timer(Duration(seconds: 3), () {
-                          print("Yeah, this line is printed after 3 seconds");
-                          SharedPreferencesUtils.saveIsLogin();
-                          Navigator.of(context).pop();
-                        });
+                  }else{
 
-                      }else{
-
-                      }
-                    },
-                    child: Text('登录',
-                        style: new TextStyle(
-                            color: Colors.white)),
-                    color: Colors.blue
-                ),
-                margin: new EdgeInsets.only(
-                    top: 20.0
-                ),
-              )
-            ],
-          ),
-        ),
+                  }
+                },
+                child: Text('登录',
+                    style: new TextStyle(
+                        color: Colors.white)),
+                color: Colors.blue
+            ),
+            margin: new EdgeInsets.only(
+                top: 20.0
+            ),
+          )
+        ],
+      ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Build a Form widget using the _formKey created above.
+    return ModalProgressHUD(child:  Container(
+      padding: EdgeInsets.all(20.0),
+        child:  _buildWidget()
+    ),inAsyncCall:_saving ,);
   }
 }
 
