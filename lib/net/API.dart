@@ -3,14 +3,15 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'package:church_platform/net/LoginResult.dart';
+import 'package:church_platform/net/LoginResponse.dart';
+import 'package:church_platform/net/RegisterResponse.dart';
 import 'package:church_platform/net/Sermon.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:http/http.dart' as http;
 import 'package:church_platform/net/WeaklyReport.dart';
 
 
-///rapi/auth/jwt/create/ 登陆
+///rapi/auth/jwt/create/ 登录
 ///
 /// {
 //  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTU3NTc5NjY1NSwianRpIjoiMDg2Y2E4N2RkMjExNGYwNmI1OGI0YzEzOGZhNGIzMjIiLCJ1c2VyX2lkIjoxM30.vDDXnY8vX5ElntVjzwm2TRMqcQbtfz9oyCQnKW9KAb0",
@@ -113,4 +114,30 @@ class API{
       throw Exception(response.statusCode.toString() + ":" + response.body);
     }
   }
+
+  Future<bool> register(String churchCode,String username, String email,String pwd) async {
+
+    var body = json.encode({'username':username,
+      'email':email,
+      'church_code':churchCode,
+      'password':pwd,
+      'role':"2",
+    });
+
+    final response = await http.post(HOST + APIS + "/user_create",
+        headers: {
+          HttpHeaders.contentTypeHeader:'application/json'},
+        body:body);
+
+    if (response.statusCode == 201) {
+      final baseResponse = RegisterResponse.fromJson(json.decode(response.body));
+      if(baseResponse != null){
+        return true;
+      }
+      throw Exception('注册失败');
+    } else {
+      throw Exception(response.statusCode.toString() + ":" + response.reasonPhrase + "." + response.body);
+    }
+  }
+
 }
