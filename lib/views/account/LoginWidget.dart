@@ -122,7 +122,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               return null;
             },
             onChanged: (text) {
-              print("First text field: $text");
+//              print("First text field: $text");
             },
             onSaved: (String value) => _data.username = value,
           ),

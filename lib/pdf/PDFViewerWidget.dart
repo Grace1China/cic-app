@@ -117,12 +117,13 @@ class _PDFViewContentState extends State<PDFViewContent> {
             crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: PDFView(
+              child:
+              PDFView(
                 filePath: widget.path,
-                autoSpacing: true,
                 enableSwipe: true,
-                pageSnap: true,
-                swipeHorizontal: false,
+                swipeHorizontal: true,
+                autoSpacing: true, //自动调整大小，顶满view
+                pageFling: true, //整页滑动。
                 nightMode: false,
                 onError: (e) {
                   print(e);

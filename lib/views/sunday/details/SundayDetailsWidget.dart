@@ -34,7 +34,7 @@ class _SundayDetailsWidgetState extends State<SundayDetailsWidget> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: AppBar(
-        title: Text("讲道"),
+        title: Text("主日"),
       ),
       // Use a FutureBuilder to display a loading spinner while waiting for the
       // VideoPlayerController to finish initializing.

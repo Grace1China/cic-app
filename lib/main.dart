@@ -3,6 +3,7 @@ import 'package:church_platform/views/course/CourseWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
 import 'package:church_platform/views/spiritual/SpiritualMainWidget.dart';
 import 'package:church_platform/views/sunday/SundayWidget.dart';
+import 'package:church_platform/views/sunday/details/SermonDetailsWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HomeWidget(),
     DonateWidget(),
     SpiritualMainWidget(),
-    SundayWidget(),
+    SermonDetailsWidget(),
     CourseWidget(),
   ];
 
@@ -82,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.account_balance),
-            title: Text('IMS教会'),
+            title: Text('教会'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.monetization_on),
@@ -90,15 +91,15 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.markunread_mailbox),
-            title: Text('L3打卡'),
+            title: Text('L3'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.live_tv),
-            title: Text('主日信息'),
+            title: Text('主日'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.library_books),
-            title: Text('课程资料'),
+            title: Text('课程'),
           ),
         ],
         currentIndex: _selectedIndex,

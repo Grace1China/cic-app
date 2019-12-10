@@ -53,43 +53,44 @@ class _HomeWidgetState extends State<HomeWidget> {
               })
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(0),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(5),
-            child: Text(
-              'IMS',
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(5),
+              child: Text(
+                'IMS',
 //              softWrap: true,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
 
-          textSection,
-          Text("崇拜时间",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Container(
-            padding: const EdgeInsets.all(5),
-            child: Text(
-              '每周日上午11:00',
-              softWrap: true,
+            textSection,
+            Text("崇拜时间",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Container(
+              padding: const EdgeInsets.all(5),
+              child: Text(
+                '每周日上午11:00',
+                softWrap: true,
+              ),
             ),
-          ),
-          Text(
-            "地点",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          Container(
-            padding: const EdgeInsets.all(5),
-            child: Text(
-              '21世纪剧院主礼堂',
-              softWrap: true,
+            Text(
+              "地点",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-          ),
-          Text(
-            "宣传画",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
+            Container(
+              padding: const EdgeInsets.all(5),
+              child: Text(
+                '21世纪剧院主礼堂',
+                softWrap: true,
+              ),
+            ),
+            Text(
+              "宣传画",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
 //          Image(
 //            image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
 //          ),
@@ -109,19 +110,19 @@ class _HomeWidgetState extends State<HomeWidget> {
 //            placeholder: kTransparentImage,
 //            image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
 //          )
-          Image.asset(
-            'images/church1.png',
+            Image.asset(
+              'images/church1.png',
 //            width: 600,
 //            height: 240,
 //            fit: BoxFit.cover,
-          ),
-          Text(
-            "宣传视频",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-//          VedioPlayerWidget(url:"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"),
-          VedioPlayerWidget(
-              url: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
+            ),
+            Text(
+              "宣传视频",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            VedioPlayerNativeWidget(url:"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
+            VedioPlayerWidget(
+                url: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
 //          RaisedButton(
 //            child: Text('播放视频'),
 //            onPressed: () {
@@ -133,41 +134,42 @@ class _HomeWidgetState extends State<HomeWidget> {
 //            },
 //          ),
 
-          FutureBuilder<WeaklyReport>(
-            future: weaklyReport,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Container(
+            FutureBuilder<WeaklyReport>(
+              future: weaklyReport,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Container(
 //                    color: Colors.yellow,
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          child: Text(snapshot.data.title,
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                        ),
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(snapshot.data.title,
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          ),
 
 //                        Image(image: NetworkImage(snapshot.data.image),),
-                        FadeInImage.memoryNetwork(
-                          placeholder: kTransparentImage,
-                          image: snapshot.data.image,
-                          fit: BoxFit.cover,
-                        ),
+                          FadeInImage.memoryNetwork(
+                            placeholder: kTransparentImage,
+                            image: snapshot.data.image,
+                            fit: BoxFit.cover,
+                          ),
 //                        HtmlWidget(snapshot.data.content,webView: true,),
-                        Html(data: snapshot.data.content,)
-                      ],
-                    ));
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
+                          Html(data: snapshot.data.content,)
+                        ],
+                      ));
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
 
-              // By default, show a loading spinner.
-              return Center(child: CircularProgressIndicator(),);
-            },
-          ),
-        ],
+                // By default, show a loading spinner.
+                return Center(child: CircularProgressIndicator(),);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

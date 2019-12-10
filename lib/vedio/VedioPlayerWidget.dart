@@ -35,7 +35,7 @@ class _VedioPlayerWidgetState extends State<VedioPlayerWidget> {
       videoPlayerController: _videoPlayerController1,
       aspectRatio: 3 / 2,
       autoPlay: true,
-      looping: true,
+      looping: false,
       // Try playing around with some of these other options:
 
       // showControls: false,
