@@ -58,48 +58,74 @@ class _SermonDetailsWidgetState extends State<SermonDetailsWidget> {
                     ),
                   ),
 
+
                   Container(
                     padding: const EdgeInsets.all(5),
-//                    color: Colors.grey,
-                    child:  Text("敬拜",
-                      textAlign: TextAlign.left,
-//                              softWrap: true,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    child:  Text("第三方播放器HLS",textAlign: TextAlign.left,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
-
-                  VedioPlayerWidget(url: snapshot.data.worshipvideo,),
+                  VedioPlayerWidget(url: "http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8"),
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    child:  Text("第三方播放器HTTP",textAlign: TextAlign.left,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  VedioPlayerWidget(url: snapshot.data.worshipvideo),
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    child:  Text("原生播放器HLS",textAlign: TextAlign.left,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  VedioPlayerNativeWidget(url:"http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8",),
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    child:  Text("原生播放器HTTP",textAlign: TextAlign.left,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                   VedioPlayerNativeWidget(url:snapshot.data.worshipvideo,),
-                  Container(
-                    padding: const EdgeInsets.all(5),
-//                    color: Colors.grey,
-                    child:  Text("主持",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
 
-                  VedioPlayerWidget(url: snapshot.data.mcvideo,),
+//                  Container(
+//                    padding: const EdgeInsets.all(5),
+////                    color: Colors.grey,
+//                    child:  Text("敬拜",
+//                      textAlign: TextAlign.left,
+////                              softWrap: true,
+//                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//                    ),
+//                  ),
+//
+//                  VedioPlayerWidget(url: snapshot.data.worshipvideo),
 
-                  Container(
-                    padding: const EdgeInsets.all(5),
-//                    color: Colors.grey,
-                    child:  Text("讲道",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  VedioPlayerWidget(url: snapshot.data.sermonvideo,),
-
-                  Container(
-                    padding: const EdgeInsets.all(5),
-//                    color: Colors.grey,
-                    child:  Text("奉献",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  VedioPlayerWidget(url: snapshot.data.givingvideo,),
+//                  Container(
+//                    padding: const EdgeInsets.all(5),
+////                    color: Colors.grey,
+//                    child:  Text("主持",
+//                      textAlign: TextAlign.left,
+//                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//                    ),
+//                  ),
+//
+//                  VedioPlayerWidget(url: snapshot.data.mcvideo,),
+//
+//                  Container(
+//                    padding: const EdgeInsets.all(5),
+////                    color: Colors.grey,
+//                    child:  Text("讲道",
+//                      textAlign: TextAlign.left,
+//                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//                    ),
+//                  ),
+//                  VedioPlayerWidget(url: snapshot.data.sermonvideo,),
+//
+//                  Container(
+//                    padding: const EdgeInsets.all(5),
+////                    color: Colors.grey,
+//                    child:  Text("奉献",
+//                      textAlign: TextAlign.left,
+//                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//                    ),
+//                  ),
+//                  VedioPlayerWidget(url: snapshot.data.givingvideo,),
 
 //                  Expanded(
 //                      child:
