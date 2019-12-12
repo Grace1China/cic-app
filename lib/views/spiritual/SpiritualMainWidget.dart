@@ -26,7 +26,9 @@ class _SpiritualMainWidgetState extends State<SpiritualMainWidget> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('L3打卡'),
+        title: Text('L3'),
+        elevation:
+        (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.account_circle),
               onPressed: (){
@@ -53,7 +55,7 @@ class _SpiritualMainWidgetState extends State<SpiritualMainWidget> {
             child: Text('去灵修',
                 style: new TextStyle(
                     color: Colors.white)),
-            color: Colors.blue
+            color: Theme.of(context).accentColor
         ),
 
       ),

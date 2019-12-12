@@ -26,6 +26,8 @@ class _AccountWidgetState extends State<AccountWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('个人中心'),
+        elevation:
+        (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
       ),
       body: ListView(
         padding: const EdgeInsets.all(8),
@@ -112,7 +114,7 @@ class _AccountWidgetState extends State<AccountWidget> {
             children: <Widget>[
 
               FlatButton(child: Text("登出"),
-                color: Colors.blue, onPressed: (){
+                color: Theme.of(context).buttonColor, onPressed: (){
                   SharedPreferencesUtils.logout();
                   MyApp.myTabbedPageKey.currentState.changeIndex(4);
                   Navigator.of(context).pop();

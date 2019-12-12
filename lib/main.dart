@@ -10,7 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'views/home/HomeWidget.dart';
 import 'utils/SharedPreferencesUtils.dart';
 import 'package:oktoast/oktoast.dart';
-
+import 'package:flutter/foundation.dart';
+import 'utils/CPTheme.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,10 +24,10 @@ class MyApp extends StatelessWidget {
     return OKToast(
       child:  MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-
-          primarySwatch: Colors.blue,
-        ),
+        themeMode: ThemeMode.light,
+        theme: defaultTargetPlatform == TargetPlatform.iOS         //new
+            ? kIOSTheme                                              //new
+            : kAndroidTheme,
         home: MyHomePage(key:myTabbedPageKey,title: 'Flutter Demo Home Page'),
       ),
     );
@@ -103,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Theme.of(context).accentColor,
         onTap: _onItemTapped,
       ),
     );

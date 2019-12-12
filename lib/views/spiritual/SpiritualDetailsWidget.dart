@@ -26,6 +26,8 @@ class _SpiritualDetailsWidgetState extends State<SpiritualDetailsWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('灵修'),
+        elevation:
+        (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
       ),
       body: ListView(
         children: <Widget>[

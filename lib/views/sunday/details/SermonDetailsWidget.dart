@@ -33,7 +33,9 @@ class _SermonDetailsWidgetState extends State<SermonDetailsWidget> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: AppBar(
-        title: Text("主日信息"),
+        title: Text("主日"),
+        elevation:
+        (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
       ),
       // Use a FutureBuilder to display a loading spinner while waiting for the
       // VideoPlayerController to finish initializing.

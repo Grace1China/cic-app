@@ -20,6 +20,8 @@ class LoginWidget extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(appTitle),
+          elevation:
+          (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
         ),
         body: MyCustomForm()
     );
@@ -275,7 +277,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: Text('登录',
                     style: new TextStyle(
                         color: Colors.white)),
-                color: Colors.blue
+                color: Theme.of(context).buttonColor
             ),
             margin: new EdgeInsets.only(
                 top: 20.0
@@ -294,7 +296,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
                 child: Text('还没有账户？去注册',
                     style: new TextStyle(
-                        color: Colors.blue)),
+                        color: Theme.of(context).buttonColor)),
 //                color: Colors.white
             ),
 //            margin: new EdgeInsets.only(

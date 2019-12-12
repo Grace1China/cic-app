@@ -40,6 +40,8 @@ class _HomeWidgetState extends State<HomeWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('教会'),
+        elevation:
+        (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.account_circle),

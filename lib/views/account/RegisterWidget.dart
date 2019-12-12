@@ -19,6 +19,8 @@ class RegisterWidget extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(appTitle),
+          elevation:
+          (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
         ),
         body: MyCustomForm()
     );
@@ -238,7 +240,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: Text('注册',
                     style: new TextStyle(
                         color: Colors.white)),
-                color: Colors.blue
+                color: Theme.of(context).buttonColor
             ),
             margin: new EdgeInsets.only(
                 top: 20.0

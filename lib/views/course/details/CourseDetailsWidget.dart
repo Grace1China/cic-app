@@ -32,6 +32,8 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
     return  Scaffold(
       appBar: AppBar(
         title: Text(widget.course.name),
+        elevation:
+        (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
       ),
       // Use a FutureBuilder to display a loading spinner while waiting for the
       // VideoPlayerController to finish initializing.
