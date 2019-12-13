@@ -40,6 +40,8 @@ class _HomeWidgetState extends State<HomeWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('教会'),
+//        backgroundColor: Color(0xFFFF1744), //背景色，在theme优先级之上
+        //centerTitle: true, //ios默认居中，android需要制定为true。
         elevation:
         (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
         actions: <Widget>[

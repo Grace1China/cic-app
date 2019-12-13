@@ -56,12 +56,19 @@ Map<int, Color> kCPMaterialColorGreen2 =
 
 final ThemeData kIOSTheme = ThemeData(
 
-  primaryColor: Colors.grey[100],
+  primaryColor: kCPColorGreen2,// Colors.grey[100], //navgationbar颜色
   primaryColorBrightness: Brightness.light,
+  primaryTextTheme: TextTheme(  //title颜色。android默认白色
+      title: TextStyle(
+          color: Colors.white
+      )
+  ),
+  primaryIconTheme: IconThemeData(color: Colors.white),//navgation item icon 颜色。android默认白色，若在appBar的iconTheme写上，反而变成黑色。
 
   accentColor: kCPColorGreen2,
 
   fontFamily: 'Montserrat',
+
 
 //  textTheme: TextTheme(
 //    headline: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold),
@@ -91,6 +98,7 @@ final ThemeData kAndroidTheme = ThemeData(
   //其他
   primarySwatch: MaterialColor(0xFF279C74, kCPMaterialColorGreen2), //0xFF880E4F紫红
 //  primaryColorBrightness: Brightness.light,
+
 );
 
 //demo

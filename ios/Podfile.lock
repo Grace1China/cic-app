@@ -1,6 +1,10 @@
 PODS:
   - audioplayers (0.0.1):
     - Flutter
+  - fijkplayer (0.2.3):
+    - FIJKPlayer (~> 0.4.4)
+    - Flutter
+  - FIJKPlayer (0.4.4)
   - Flutter (1.0.0)
   - flutter_pdfview (0.0.1):
     - Flutter
@@ -37,6 +41,7 @@ PODS:
 
 DEPENDENCIES:
   - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
+  - fijkplayer (from `.symlinks/plugins/fijkplayer/ios`)
   - Flutter (from `Flutter`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -55,11 +60,14 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - FIJKPlayer
     - FMDB
 
 EXTERNAL SOURCES:
   audioplayers:
     :path: ".symlinks/plugins/audioplayers/ios"
+  fijkplayer:
+    :path: ".symlinks/plugins/fijkplayer/ios"
   Flutter:
     :path: Flutter
   flutter_pdfview:
@@ -93,6 +101,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   audioplayers: 84f968cea3f2deab00ec4f8ff53358b3c0b3992c
+  FIJKPlayer: b3a44750f39db82a99d5099ac6ae71c4aeac774c
+  fijkplayer: 0166b44fa11a2e41b991142c21dcee3b33da112f
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_pdfview: bdf86972519a15c6d8f50ad34e5b0429b255cbb4
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
@@ -110,6 +120,6 @@ SPEC CHECKSUMS:
   video_player_web: da8cadb8274ed4f8dbee8d7171b420dedd437ce7
   webview_flutter: db3aba222b23e4dc432e0c5882834123dc50ff9f
 
-PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
+PODFILE CHECKSUM: 9edc347499ceabf88ba94457527d502f1c602d16
 
 COCOAPODS: 1.8.4

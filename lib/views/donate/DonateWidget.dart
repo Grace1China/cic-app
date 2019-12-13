@@ -8,8 +8,10 @@ class DonateWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('奉献'),
+        //centerTitle: true,
         elevation:
         (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
+
         actions: <Widget>[
           IconButton(icon: Icon(Icons.account_circle),
               onPressed: (){

@@ -32,6 +32,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
     return  Scaffold(
       appBar: AppBar(
         title: Text(widget.course.name),
+        //centerTitle: true,
         elevation:
         (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
       ),

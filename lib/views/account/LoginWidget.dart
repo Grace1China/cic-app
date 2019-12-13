@@ -20,8 +20,10 @@ class LoginWidget extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(appTitle),
+          //centerTitle: true,
           elevation:
           (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
+
         ),
         body: MyCustomForm()
     );

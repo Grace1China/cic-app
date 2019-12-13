@@ -73,6 +73,7 @@ class _SundayWidgetState extends State<SundayWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('讲道'),
+        //centerTitle: true,
         elevation:
         (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
         actions: <Widget>[

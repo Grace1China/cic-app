@@ -7,12 +7,14 @@ import 'package:church_platform/views/sunday/details/SermonDetailsWidget.dart';
 import 'package:church_platform/views/sunday/details/SermonListOnceWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'views/home/HomeWidget.dart';
 import 'utils/SharedPreferencesUtils.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter/foundation.dart';
 import 'utils/CPTheme.dart';
+//import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,6 +24,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+//    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(  没反应
+//        statusBarColor: Colors.white
+//    ));
+
+//    FlutterStatusbarcolor.setStatusBarColor(Colors.white);
     return OKToast(
       child:  MaterialApp(
         title: 'Flutter Demo',

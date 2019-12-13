@@ -81,6 +81,7 @@ class _CourseWidgetState extends State<CourseWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('课程'),
+        //centerTitle: true,
 elevation:
 (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
 //        actions: <Widget>[

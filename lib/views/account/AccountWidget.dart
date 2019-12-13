@@ -26,8 +26,10 @@ class _AccountWidgetState extends State<AccountWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('个人中心'),
+        //centerTitle: true,
         elevation:
         (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
+
       ),
       body: ListView(
         padding: const EdgeInsets.all(8),
