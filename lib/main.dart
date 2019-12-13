@@ -4,6 +4,7 @@ import 'package:church_platform/views/donate/DonateWidget.dart';
 import 'package:church_platform/views/spiritual/SpiritualMainWidget.dart';
 import 'package:church_platform/views/sunday/SundayWidget.dart';
 import 'package:church_platform/views/sunday/details/SermonDetailsWidget.dart';
+import 'package:church_platform/views/sunday/details/SermonListOnceWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HomeWidget(),
     DonateWidget(),
     SpiritualMainWidget(),
-    SermonDetailsWidget(),
+    SermonListOnceWidget(),
     CourseWidget(),
   ];
 
