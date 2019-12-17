@@ -1,10 +1,11 @@
 import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/WeaklyReport.dart';
+import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
 import 'package:church_platform/vedio/test/CheWiePlayerTest.dart';
 import 'package:church_platform/vedio/VedioPlayerWidget.dart';
-import 'package:church_platform/vedio/test/VedioPlayerNativeWidget.dart';
+import 'package:church_platform/vedio/VedioPlayerNativeWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -124,9 +125,14 @@ class _HomeWidgetState extends State<HomeWidget> {
               "宣传视频",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            VedioPlayerNativeWidget(url:"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
-            VedioPlayerWidget(
-                url: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
+//            VedioPlayerNativeWidget(url:"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
+//            VedioPlayerWidget(
+//                url: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.width/16*9,
+              child:  VideofijkplayerWidget(url:"http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8",),
+            ),
 //          RaisedButton(
 //            child: Text('播放视频'),
 //            onPressed: () {

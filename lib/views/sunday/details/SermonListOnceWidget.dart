@@ -2,13 +2,13 @@ import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/Sermon.dart';
 import 'package:church_platform/pdf/PDFViewerWidget.dart';
 import 'package:church_platform/vedio/VedioPlayerWidget.dart';
-import 'package:church_platform/vedio/test/VedioPlayerNativeWidget.dart';
-import 'package:church_platform/vedio/test/VideofijkplayerWidget.dart';
+import 'package:church_platform/vedio/VedioPlayerNativeWidget.dart';
+import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:church_platform/views/sunday/Sunday.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:church_platform/vedio/test/VideofijkplayerWidget.dart';
+import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 
 
 class SermonListOnceWidget extends StatefulWidget {
@@ -86,12 +86,6 @@ class _SermonListOnceWidgetState extends State<SermonListOnceWidget> {
                     ),
                   ),
 
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    child:  Text("native HLS",textAlign: TextAlign.left,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  VedioPlayerNativeWidget(url:"http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8",),
 
                   Container(
                     padding: const EdgeInsets.all(5),
@@ -103,6 +97,14 @@ class _SermonListOnceWidgetState extends State<SermonListOnceWidget> {
                     height: MediaQuery.of(context).size.width/16*9,
                     child:  VideofijkplayerWidget(url:"http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8",),
                   ),
+
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    child:  Text("native HLS",textAlign: TextAlign.left,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  VedioPlayerNativeWidget(url:"http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8",),
+
 
 
 

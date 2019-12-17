@@ -2,7 +2,7 @@ import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/Sermon.dart';
 import 'package:church_platform/pdf/PDFViewerWidget.dart';
 import 'package:church_platform/vedio/VedioPlayerWidget.dart';
-import 'package:church_platform/vedio/test/VedioPlayerNativeWidget.dart';
+import 'package:church_platform/vedio/VedioPlayerNativeWidget.dart';
 import 'package:church_platform/views/sunday/Sunday.dart';
 import 'package:flutter/material.dart';
 

@@ -33,12 +33,12 @@ class _PDFViewerWidgetState extends State<PDFViewerWidget> {
   void initState() {
     super.initState();
 
-    getFileFromAsset("assets/mypdf.pdf").then((f) {
-      setState(() {
-        assetPDFPath = f.path;
-        print(assetPDFPath);
-      });
-    });
+//    getFileFromAsset("assets/mypdf.pdf").then((f) {
+//      setState(() {
+//        assetPDFPath = f.path;
+//        print(assetPDFPath);
+//      });
+//    });
 
     getFileFromUrl(widget.url).then((f) {
       setState(() {

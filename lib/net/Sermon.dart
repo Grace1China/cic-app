@@ -1,4 +1,6 @@
 
+import 'package:church_platform/views/sermon/SermonShowWidget.dart';
+
 class BaseResponse2 {
   String errCode;
   Sermon data;
@@ -55,6 +57,52 @@ class Sermon {
         this.sermonvideo,
         this.givingvideo,
         this.status});
+
+  List<SermonType> canShowTypes(){
+    var list = List<SermonType>();
+//    if(worshipvideo != null){
+//      list.add(SermonType.warship);
+//    }
+//    if(mcvideo != null){
+//      list.add(SermonType.mc);
+//    }
+//    if(SermonType.sermon != null){
+//      list.add(SermonType.sermon);
+//    }
+//    if(givingvideo != null){
+//      list.add(SermonType.giving);
+//    }
+
+    list.add(SermonType.warship);
+    list.add(SermonType.mc);
+    list.add(SermonType.sermon);
+    list.add(SermonType.giving);
+
+    return list;
+  }
+
+  String getUrl(SermonType type){
+    switch(type){
+      case SermonType.warship:{
+        return "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+        return worshipvideo;
+      }
+      case SermonType.mc:{
+        return 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4';
+        return mcvideo;
+      }
+      case SermonType.sermon:
+        {
+
+          return sermonvideo;
+        }
+      case SermonType.giving:{
+        return "http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8";
+        return givingvideo;
+      }
+    }
+    return sermonvideo;
+  }
 
   Sermon.fromJson(Map<String, dynamic> json) {
     id = json['id'];

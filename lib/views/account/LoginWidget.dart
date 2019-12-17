@@ -31,7 +31,7 @@ class LoginWidget extends StatelessWidget {
 }
 
 class _LoginData {
-  String username = '';
+  String email = '';
   String password = '';
 }
 
@@ -85,7 +85,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       _formKey.currentState.save(); // Save our form now.
 
       print('Printing the login data.');
-      print('Email: ${_data.username}');
+      print('Email: ${_data.email}');
       print('Password: ${_data.password}');
 
     }
@@ -110,15 +110,15 @@ class MyCustomFormState extends State<MyCustomForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.emailAddress,
             autofocus: true,
             decoration: InputDecoration(
-                hintText: '请输入用户名',
-                labelText: '用户名'
+                hintText: '请输入邮箱',
+                labelText: '邮箱'
             ),
             validator: (value) {
               if (value.isEmpty) {
-                return '用户名不能为空';
+                return '邮箱不能为空';
               }
 //                  if (value != "Daniel"){
 //                    return '用户名错误';
@@ -128,7 +128,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             onChanged: (text) {
 //              print("First text field: $text");
             },
-            onSaved: (String value) => _data.username = value,
+            onSaved: (String value) => _data.email = value,
           ),
           TextFormField(
             obscureText: true,
@@ -169,7 +169,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 //                    });
 
                     try{
-                      String token = await API().login(_data.username, myController.text);
+                      String token = await API().login(_data.email, myController.text);
 
                       setState(() {
                         _saving = false;

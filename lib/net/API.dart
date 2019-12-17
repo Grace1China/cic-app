@@ -76,7 +76,7 @@ class API{
 
     final token = await SharedPreferencesUtils.getToken();
     final response = await http.get(HOST + APIS + "/sermon/0",
-      headers: {HttpHeaders.authorizationHeader: "bear " + token},
+//      headers: {HttpHeaders.authorizationHeader: "bear " + token},
     );
 
     if (response.statusCode == 200) {
@@ -91,9 +91,9 @@ class API{
     }
   }
 
-  Future<String> login(String username, String pwd) async {
+  Future<String> login(String email, String pwd) async {
 
-    var body = json.encode({'username':username, 'password':pwd});
+    var body = json.encode({'email':email, 'password':pwd});
 //    var body = {'username':username, 'password':pwd};
 
 
@@ -129,15 +129,26 @@ class API{
           HttpHeaders.contentTypeHeader:'application/json'},
         body:body);
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
+
       final baseResponse = RegisterResponse.fromJson(json.decode(response.body));
-      if(baseResponse != null){
+      if(baseResponse.errCode == "0"){
         return true;
       }
       throw Exception('注册失败');
     } else {
       throw Exception(response.statusCode.toString() + ":" + response.reasonPhrase + "." + response.body);
     }
+
+//    if (response.statusCode == 201) {
+//      final baseResponse = RegisterResponse.fromJson(json.decode(response.body));
+//      if(baseResponse != null){
+//        return true;
+//      }
+//      throw Exception('注册失败');
+//    } else {
+//      throw Exception(response.statusCode.toString() + ":" + response.reasonPhrase + "." + response.body);
+//    }
   }
 
 }
