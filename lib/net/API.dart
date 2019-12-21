@@ -7,62 +7,48 @@ import 'package:church_platform/net/LoginResponse.dart';
 import 'package:church_platform/net/RegisterResponse.dart';
 import 'package:church_platform/net/Sermon.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:church_platform/net/WeaklyReport.dart';
+import 'ChurchResponse.dart';
 
-
-///rapi/auth/jwt/create/ 登录
-///
-/// {
-//  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTU3NTc5NjY1NSwianRpIjoiMDg2Y2E4N2RkMjExNGYwNmI1OGI0YzEzOGZhNGIzMjIiLCJ1c2VyX2lkIjoxM30.vDDXnY8vX5ElntVjzwm2TRMqcQbtfz9oyCQnKW9KAb0",
-//  "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTc1NzEwNTU1LCJqdGkiOiJjZDlhN2U1NzhlNmI0OTg5OTRjN2JkMDlkNzNlZTZjOSIsInVzZXJfaWQiOjEzfQ.6RXfeb33gcncjg_Deo7sdEGsFkSIYLu6TVN3Xf0OBd4"
-//}
-
-//{
-//"detail": "No active account found with the given credentials"
-//}
-
-///rapi/auth/users/注册
-///
-/// 参数
-/// {
-//  "email": "2008zkapie@163.com",
-//  "username": "kevin42",
-//  "password": "111aa3333"
-//}
-// 成功返回
-//{
-//"email": "2008zkapie@163.com",
-//"username": "kevin42",
-//"id": 15
-//}
-//错误返回
-//{
-//  "username": [
-//    "已存在一位使用该名字的用户。"
-//  ]
-//}
-
-
-///rapi/sermon/{id} //0 最新讲道。
-///
-///
 
 class API{
-  static final String HOST = "http://l3.community";
+  static final String HOST = "http://54.169.143.92";//"""http://l3.community";
   static final String APIS = "/rapi";
 
-  // curl -X GET "http://l3.community/rapi/eweekly/0" -H "accept: application/json" -H "authoriztion:bear eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTc1NzgzNjA1LCJqdGkiOiIzMjYyYTJlMzU4MDQ0ZTFhYmY1M2VlZTQwZjJkYjMyMSIsInVzZXJfaWQiOjM3fQ.x0nprlwJqxnZdnltRaU7r0gciUTCZoq4wzfbrijLZZw " -d "{ \"username\": \"aa\", \"password\": \"aa_123456\"}"
-  Future<WeaklyReport> getWeaklyReport() async {
+  Future<Church> getChurch() async {
 
     final token = await SharedPreferencesUtils.getToken();
-    final response = await http.get(HOST + APIS + "/eweekly/0",
-      headers: {HttpHeaders.authorizationHeader: "bear " + token},
+    final response = await http.get(HOST + APIS + "/getmychurch",
+      headers: {HttpHeaders.authorizationHeader: "Bearer " + token},
     );
 
+    debugPrint("网络请求：" + response.request.toString() + "，Header:" + response.request.headers.toString() + ",Response:" + response.body,wrapWidth:1024);
+    if (response.statusCode == 200) {
+
+      final baseResponse = ChurchResponse.fromJson(json.decode(response.body));
+      if(baseResponse.errCode == "0"){
+        return baseResponse.data;
+      }
+      throw Exception('没有教会信息');
+    } else {
+      throw Exception(response.statusCode.toString() + ":" + response.body);
+    }
+  }
+
+  Future<WeaklyReport> getWeaklyReportL3() async {
+
+    final token = await SharedPreferencesUtils.getToken();
+    final response = await http.get(HOST + APIS + "/eweekly/l3",
+      headers: {HttpHeaders.authorizationHeader: "Bearer " + token},
+    );
+
+    debugPrint("网络请求：" + response.request.toString() + "，Header:" + response.request.headers.toString() + ",Response:" + response.body);
     if (response.statusCode == 200) {
 
       final baseResponse = BaseResponse.fromJson(json.decode(response.body));
+
       if(baseResponse.errCode == "0"){
         return baseResponse.data;
       }
@@ -72,11 +58,39 @@ class API{
     }
   }
 
+  // curl -X GET "http://l3.community/rapi/eweekly/0" -H "accept: application/json" -H "authoriztion:bear eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTc1NzgzNjA1LCJqdGkiOiIzMjYyYTJlMzU4MDQ0ZTFhYmY1M2VlZTQwZjJkYjMyMSIsInVzZXJfaWQiOjM3fQ.x0nprlwJqxnZdnltRaU7r0gciUTCZoq4wzfbrijLZZw " -d "{ \"username\": \"aa\", \"password\": \"aa_123456\"}"
+  Future<WeaklyReport> getWeaklyReport() async {
+
+    final token = await SharedPreferencesUtils.getToken();
+    final response = await http.get(HOST + APIS + "/eweekly/0",
+      headers: {HttpHeaders.authorizationHeader: "Bearer " + token},
+    );
+
+    debugPrint("网络请求：" + response.request.toString() + "，Header:" + response.request.headers.toString() + ",Response:" + response.body,wrapWidth: 1024);
+    if (response.statusCode == 200) {
+
+      final baseResponse = BaseResponse.fromJson(json.decode(response.body));
+      if(baseResponse.errCode == "0"){
+        return baseResponse.data;
+      }
+      throw Exception('没有日报');
+    } else {
+      if(response.statusCode == 401){
+        print("token过期");
+        //todo
+//        SharedPreferencesUtils.logout();
+//        MyApp.myTabbedPageKey.currentState.changeIndex(4);
+//        Navigator.of(context).pop();
+      }
+      throw Exception(response.statusCode.toString() + ":" + response.body);
+    }
+  }
+
    Future<Sermon> getSermon() async {
 
     final token = await SharedPreferencesUtils.getToken();
     final response = await http.get(HOST + APIS + "/sermon/0",
-//      headers: {HttpHeaders.authorizationHeader: "bear " + token},
+      headers: {HttpHeaders.authorizationHeader: "Bearer " + token,},
     );
 
     if (response.statusCode == 200) {

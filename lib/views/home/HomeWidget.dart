@@ -1,4 +1,5 @@
 import 'package:church_platform/net/API.dart';
+import 'package:church_platform/net/ChurchResponse.dart';
 import 'package:church_platform/net/WeaklyReport.dart';
 import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
@@ -19,11 +20,16 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
+
+  Future<Church> church;
+  Future<WeaklyReport> weaklyl3;
   Future<WeaklyReport> weaklyReport;
 
   @override
   void initState() {
     super.initState();
+    church = API().getChurch();
+    weaklyl3 = API().getWeaklyReportL3();
     weaklyReport = API().getWeaklyReport();
   }
 
@@ -62,40 +68,90 @@ class _HomeWidgetState extends State<HomeWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(5),
-              child: Text(
-                'IMS',
-//              softWrap: true,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
+
+            FutureBuilder<Church>(
+              future: church,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Container(
+//                    color: Colors.yellow,
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              snapshot.data.name,
+                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+
+                          Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: <Widget>[
+                              Center(child: CircularProgressIndicator()),
+                              Center(
+                                child: FadeInImage.memoryNetwork(
+                                  placeholder: kTransparentImage,
+                                  image: snapshot.data.promotCover,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(snapshot.data.description,
+                              style: TextStyle(fontSize: 14),
+                              softWrap: true,
+                            ),
+                          ),
+                          Text("崇拜",
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+
+                           ListView.builder(
+                                 itemCount: snapshot.data.venue.length,
+                                 shrinkWrap:true,
+                                 itemBuilder: (context, index) {
+                                   return Container(
+                                     padding: const EdgeInsets.all(5),
+                                     child: Row(
+//                                     mainAxisAlignment: MainAxisAlignment.start,
+//                                     crossAxisAlignment: CrossAxisAlignment.start,
+//                                     mainAxisSize: MainAxisSize.min,
+                                       children: <Widget>[
+                                         Text(
+                                           "每周日" + snapshot.data.venue[index].time,
+                                         ),
+                                         SizedBox(
+                                           width: 40,
+                                         ),
+                                         Text(
+                                           snapshot.data.venue[index].address,
+                                         ),
+                                       ],
+                                     ),
+                                   );
+                                 },
+                               ),
+
+                          snapshot.data.promotVideo != null ?
+                          Container(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.width/16*9,
+                            child:  VideofijkplayerWidget(url:snapshot.data.promotVideo,),
+                          ) : Container(),
+                        ],
+                      ));
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+
+                // By default, show a loading spinner.
+                return Center(child: CircularProgressIndicator(),);
+              },
             ),
 
-            textSection,
-            Text("崇拜时间",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            Container(
-              padding: const EdgeInsets.all(5),
-              child: Text(
-                '每周日上午11:00',
-                softWrap: true,
-              ),
-            ),
-            Text(
-              "地点",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            Container(
-              padding: const EdgeInsets.all(5),
-              child: Text(
-                '21世纪剧院主礼堂',
-                softWrap: true,
-              ),
-            ),
-            Text(
-              "宣传画",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
 //          Image(
 //            image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
 //          ),
@@ -115,34 +171,61 @@ class _HomeWidgetState extends State<HomeWidget> {
 //            placeholder: kTransparentImage,
 //            image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
 //          )
-            Image.asset(
-              'images/church1.png',
-//            width: 600,
-//            height: 240,
-//            fit: BoxFit.cover,
-            ),
-            Text(
-              "宣传视频",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+//            Image.asset(
+//              'images/church1.png',
+////            width: 600,
+////            height: 240,
+////            fit: BoxFit.cover,
+//            ),
 //            VedioPlayerNativeWidget(url:"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
 //            VedioPlayerWidget(
 //                url: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
-            Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.width/16*9,
-              child:  VideofijkplayerWidget(url:"http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8",),
+//            Container(
+//              width: double.infinity,
+//              height: MediaQuery.of(context).size.width/16*9,
+//              child:  VideofijkplayerWidget(url:"http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8",),
+//            ),
+
+            FutureBuilder<WeaklyReport>(
+              future: weaklyl3,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Container(
+//                    color: Colors.yellow,
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: Text("L3 EWeekly",
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(snapshot.data.title,
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          ),
+
+//                        Image(image: NetworkImage(snapshot.data.image),),
+                          snapshot.data.image != null ?
+                          FadeInImage.memoryNetwork(
+                            placeholder: kTransparentImage,
+                            image: snapshot.data.image,
+                            fit: BoxFit.cover,
+                          ):Container(),
+//                        HtmlWidget(snapshot.data.content,webView: true,),
+                          Html(data: snapshot.data.content,)
+                        ],
+                      ));
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+
+                // By default, show a loading spinner.
+                return Center(child: CircularProgressIndicator(),);
+              },
             ),
-//          RaisedButton(
-//            child: Text('播放视频'),
-//            onPressed: () {
-//              Navigator.push(
-//                context,
-////                MaterialPageRoute(builder: (context) => VideoPlayerScreen(),),
-//              MaterialPageRoute(builder: (context) => CheWiePlayerTest()),
-//              );
-//            },
-//          ),
 
             FutureBuilder<WeaklyReport>(
               future: weaklyReport,
@@ -156,16 +239,22 @@ class _HomeWidgetState extends State<HomeWidget> {
                         children: <Widget>[
                           Container(
                             padding: const EdgeInsets.all(5),
+                            child: Text("IMS EWeekly",
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(5),
                             child: Text(snapshot.data.title,
                                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                           ),
 
 //                        Image(image: NetworkImage(snapshot.data.image),),
+                        snapshot.data.image != null ?
                           FadeInImage.memoryNetwork(
                             placeholder: kTransparentImage,
                             image: snapshot.data.image,
                             fit: BoxFit.cover,
-                          ),
+                          ):Container(),
 //                        HtmlWidget(snapshot.data.content,webView: true,),
                           Html(data: snapshot.data.content,)
                         ],

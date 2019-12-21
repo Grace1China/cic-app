@@ -7,7 +7,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/foundation.dart';
 import 'package:date_format/date_format.dart';
 
-
 enum SermonType {
   warship,
   mc,
@@ -30,9 +29,41 @@ class SermonShowWidget extends StatefulWidget {
   SermonType selectedSermonType;
   Sermon sermon;
   List<SermonType> canShowTypes;
+  List<VideofijkplayerWidget> players;
+  Map<SermonType,VideofijkplayerWidget> playerMap = Map<SermonType,VideofijkplayerWidget>();
+//  Map<SermonType,Key> playerKeys = Map<SermonType,Key>();
+//  GlobalKey<VideofijkplayerWidgetState> key1 = GlobalKey<VideofijkplayerWidgetState>(debugLabel: "key1");
+//  GlobalKey<VideofijkplayerWidgetState> key2 = GlobalKey<VideofijkplayerWidgetState>(debugLabel: "key2");
+//  GlobalKey<VideofijkplayerWidgetState> key3 = GlobalKey<VideofijkplayerWidgetState>(debugLabel: "key3");
+//  GlobalKey<VideofijkplayerWidgetState> key4 = GlobalKey<VideofijkplayerWidgetState>(debugLabel: "key4");
 
   SermonShowWidget({Key key,this.sermon, this.selectedSermonType}) : super(key: key){
     canShowTypes = sermon.canShowTypes();
+//    playerKeys[SermonType.warship] = key1;
+//    playerKeys[SermonType.mc] = key2;
+//    playerKeys[SermonType.sermon] = key3;
+//    playerKeys[SermonType.giving] = key4;
+
+    players = canShowTypes.map((SermonType type){
+//      playerKeys[type] = Key(type.toString());
+      playerMap[type] = VideofijkplayerWidget(url: sermon.getUrl(type));
+      return playerMap[type];
+    }).toList();
+
+  }
+
+  void switchPlayer(SermonType type){
+
+    debugPrint("选择了 ${type.toString()} 类型");
+
+    playerMap.forEach((type,player){
+//      if(selectedSermonType != type){
+//      key.currentState.pause();
+//      }
+      player.selfState.pause();
+    });
+
+//    playerMap[selectedSermonType].selfState.start();
   }
 
   @override
@@ -40,6 +71,7 @@ class SermonShowWidget extends StatefulWidget {
 }
 
 class _SermonShowWidgetState extends State<SermonShowWidget> {
+
   @override
   void initState() {
     super.initState();
@@ -64,10 +96,16 @@ class _SermonShowWidgetState extends State<SermonShowWidget> {
 //        margin: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.width/16*9,
-              child:  VideofijkplayerWidget(url: widget.sermon.getUrl(widget.selectedSermonType),),
+            Stack(
+              children: widget.canShowTypes.map((type){
+                return Offstage(
+                          offstage: widget.selectedSermonType != type,
+                          child: Container(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.width/16*9,
+                            child:  widget.playerMap[type] ),
+                      );
+                }).toList(),
             ),
 
             Padding(
@@ -85,6 +123,8 @@ class _SermonShowWidgetState extends State<SermonShowWidget> {
                           children: widget.canShowTypes.map((type){
                             return GestureDetector(
                               onTap: (){
+                                widget.switchPlayer(type);
+
                                 setState(() {
                                   widget.selectedSermonType = type;
                                 });

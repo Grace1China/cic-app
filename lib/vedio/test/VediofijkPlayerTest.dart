@@ -2,7 +2,9 @@ import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(new MaterialApp(home: new VideofijkPlayerTest(url: "http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8")));
+  String s = "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+//  s = "http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8";
+  runApp(new MaterialApp(home: new VideofijkPlayerTest(url: s)));
 }
 
 class VideofijkPlayerTest extends StatefulWidget {
@@ -22,7 +24,12 @@ class _VideofijkPlayerTestState extends State<VideofijkPlayerTest> {
   @override
   void initState() {
     super.initState();
-    player.setDataSource(widget.url, autoPlay: true);
+    preparePlayer();
+  }
+
+  Future<void> preparePlayer() async{
+    await player.setDataSource(widget.url, autoPlay: false);
+    await player.prepareAsync();
   }
 
   @override

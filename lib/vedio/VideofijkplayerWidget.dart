@@ -4,22 +4,34 @@ import 'package:flutter/material.dart';
 class VideofijkplayerWidget extends StatefulWidget {
   final String url;
 
-  VideofijkplayerWidget({@required this.url});
+  VideofijkplayerWidgetState selfState;
+
+  VideofijkplayerWidget({Key key, @required this.url}) : super(key: key);
 
   @override
-  _VideofijkplayerWidgetState createState() => _VideofijkplayerWidgetState();
+  VideofijkplayerWidgetState createState(){
+    selfState = VideofijkplayerWidgetState();
+    return selfState;
+  }
+
 }
 
-class _VideofijkplayerWidgetState extends State<VideofijkplayerWidget> {
+class VideofijkplayerWidgetState extends State<VideofijkplayerWidget> {
   final FijkPlayer player = FijkPlayer();
 
-  _VideofijkplayerWidgetState();
+  VideofijkplayerWidgetState();
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    player.setDataSource(widget.url, autoPlay: true);
+    preparePlayer();
   }
+
+  Future<void> preparePlayer() async{
+      await player.setDataSource(widget.url, autoPlay: false);
+      player.prepareAsync();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,4 +48,21 @@ class _VideofijkplayerWidgetState extends State<VideofijkplayerWidget> {
     super.dispose();
     player.release();
   }
+
+  void start(){
+    player.start();
+  }
+
+  void pause(){
+    player.pause();
+  }
+
+  void stop(){
+    player.stop();
+  }
+
+  FijkState state(){
+    return player.state;
+  }
+
 }

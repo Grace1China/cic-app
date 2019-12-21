@@ -30,52 +30,52 @@ class BaseResponse {
 class WeaklyReport{
   int id;
   int church;
-  int user;
+  int creator;
   String title;
   String image;
   String content;
   int status;
-  String pubTime;
-  String createTime;
-  String updateTime;
+  String pub_time;
+  String create_time;
+  String update_time;
 
   WeaklyReport(
       {this.id,
         this.church,
-        this.user,
+        this.creator,
         this.title,
         this.image,
         this.content,
         this.status,
-        this.pubTime,
-        this.createTime,
-        this.updateTime});
+        this.pub_time,
+        this.create_time,
+        this.update_time});
 
   WeaklyReport.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     church = json['church'];
-    user = json['user'];
+    creator = json['creator'];
     title = json['title'];
     image = json['image'];
     content = json['content'];
     status = json['status'];
-    pubTime = json['pub_time'];
-    createTime = json['create_time'];
-    updateTime = json['update_time'];
+    pub_time = json['pub_time'];
+    create_time = json['create_time'];
+    update_time = json['update_time'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['church'] = this.church;
-    data['user'] = this.user;
+    data['creator'] = this.creator;
     data['title'] = this.title;
     data['image'] = this.image;
     data['content'] = this.content;
     data['status'] = this.status;
-    data['pub_time'] = this.pubTime;
-    data['create_time'] = this.createTime;
-    data['update_time'] = this.updateTime;
+    data['pub_time'] = this.pub_time;
+    data['create_time'] = this.create_time;
+    data['update_time'] = this.update_time;
     return data;
   }
 }
