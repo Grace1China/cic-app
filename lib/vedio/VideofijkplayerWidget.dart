@@ -1,5 +1,7 @@
+import 'package:church_platform/vedio/VideoPlayerManager.dart';
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
+
 
 class VideofijkplayerWidget extends StatefulWidget {
   final String url;
@@ -14,22 +16,21 @@ class VideofijkplayerWidget extends StatefulWidget {
     return selfState;
   }
 
+
 }
 
 class VideofijkplayerWidgetState extends State<VideofijkplayerWidget> {
-  final FijkPlayer player = FijkPlayer();
+
+  FijkPlayer player;
 
   VideofijkplayerWidgetState();
 
   @override
   void initState(){
+    debugPrint("创建播放器state ${this} ${widget.url}");
     super.initState();
-    preparePlayer();
-  }
 
-  Future<void> preparePlayer() async{
-      await player.setDataSource(widget.url, autoPlay: false);
-      player.prepareAsync();
+    player = VideoPlayerManager().getPlayer(widget.url);
   }
 
 
@@ -45,24 +46,29 @@ class VideofijkplayerWidgetState extends State<VideofijkplayerWidget> {
 
   @override
   void dispose() {
+    debugPrint("释放播放器 ${this} ${widget.url}");
     super.dispose();
-    player.release();
-  }
 
-  void start(){
-    player.start();
-  }
-
-  void pause(){
+    // 不再释放资源，统一管理。使用暂停。
+//    player.release();
     player.pause();
+
   }
 
-  void stop(){
-    player.stop();
-  }
-
-  FijkState state(){
-    return player.state;
-  }
+//  void start(){
+//    player.start();
+//  }
+//
+//  void pause(){
+//    player.pause();
+//  }
+//
+//  void stop(){
+//    player.stop();
+//  }
+//
+//  FijkState state(){
+//    return player.state;
+//  }
 
 }

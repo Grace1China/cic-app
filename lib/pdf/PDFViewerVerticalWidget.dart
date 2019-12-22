@@ -37,12 +37,16 @@ class _PDFViewerVerticalWidgetState extends State<PDFViewerVerticalWidget> {
   void initState() {
     super.initState();
 
-    getFileFromAsset("assets/mypdf.pdf").then((f) {
-      setState(() {
-        localPDFPath = f.path;
-        print(localPDFPath);
+    //TODO,转向后bug。记录pdf浏览的位置，转向后赋值。
+    debugPrint("创建pdf-state");
+    if(localPDFPath == null){
+      debugPrint("创建pdf- path为空");
+      getFileFromAsset("assets/mypdf.pdf").then((f) {
+        setState(() {
+          localPDFPath = f.path;
+          print(localPDFPath);
+        });
       });
-    });
 
 //    getFileFromUrl(widget.url).then((f) {
 //      setState(() {
@@ -50,6 +54,8 @@ class _PDFViewerVerticalWidgetState extends State<PDFViewerVerticalWidget> {
 //        print(localPDFPath);
 //      });
 //    });
+    }
+
   }
 
   Future<File> getFileFromAsset(String asset) async {
@@ -100,13 +106,14 @@ class _PDFViewerVerticalWidgetState extends State<PDFViewerVerticalWidget> {
               },
               onRender: (_pages) {
                 setState(() {
-                  print("渲染成功：总页码：${_pages}");
+                  print("pdf-渲染成功：总页码：${_pages}");
                   _totalPages = _pages;
                   _currentPage = 1;
                   _isPDFReady = true;
                 });
               },
               onViewCreated: (PDFViewController vc) {
+                print("pdf-创建成功：");
                 _pdfViewController = vc;
               },
               onPageChanged: (int page, int total) {

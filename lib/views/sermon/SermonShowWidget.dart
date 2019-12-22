@@ -1,54 +1,32 @@
+
 import 'package:church_platform/net/Sermon.dart';
 import 'package:church_platform/pdf/PDFViewerVerticalWidget.dart';
 import 'package:church_platform/pdf/PDFViewerWidget.dart';
+import 'package:church_platform/vedio/VideoPlayerManager.dart';
 import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/foundation.dart';
 import 'package:date_format/date_format.dart';
 
-enum SermonType {
-  warship,
-  mc,
-  sermon,
-  giving,
-}
 
-String getNameFromSermonType(SermonType type){
-  switch (type){
-    case SermonType.warship:return "敬拜";
-    case SermonType.mc:return "主持";
-    case SermonType.sermon:return "讲道";
-    case SermonType.giving:return "奉献";
-    default:
-  }
-}
 
 class SermonShowWidget extends StatefulWidget {
 
   SermonType selectedSermonType;
   Sermon sermon;
   List<SermonType> canShowTypes;
-  List<VideofijkplayerWidget> players;
-  Map<SermonType,VideofijkplayerWidget> playerMap = Map<SermonType,VideofijkplayerWidget>();
-//  Map<SermonType,Key> playerKeys = Map<SermonType,Key>();
-//  GlobalKey<VideofijkplayerWidgetState> key1 = GlobalKey<VideofijkplayerWidgetState>(debugLabel: "key1");
-//  GlobalKey<VideofijkplayerWidgetState> key2 = GlobalKey<VideofijkplayerWidgetState>(debugLabel: "key2");
-//  GlobalKey<VideofijkplayerWidgetState> key3 = GlobalKey<VideofijkplayerWidgetState>(debugLabel: "key3");
-//  GlobalKey<VideofijkplayerWidgetState> key4 = GlobalKey<VideofijkplayerWidgetState>(debugLabel: "key4");
+
+  PDFViewerVerticalWidget pdfWidget;
 
   SermonShowWidget({Key key,this.sermon, this.selectedSermonType}) : super(key: key){
     canShowTypes = sermon.canShowTypes();
-//    playerKeys[SermonType.warship] = key1;
-//    playerKeys[SermonType.mc] = key2;
-//    playerKeys[SermonType.sermon] = key3;
-//    playerKeys[SermonType.giving] = key4;
-
-    players = canShowTypes.map((SermonType type){
-//      playerKeys[type] = Key(type.toString());
-      playerMap[type] = VideofijkplayerWidget(url: sermon.getUrl(type));
-      return playerMap[type];
-    }).toList();
+    pdfWidget = PDFViewerVerticalWidget(url:sermon.pdf);
+//    players = canShowTypes.map((SermonType type){
+////      playerKeys[type] = Key(type.toString());
+//      playerMap[type] = VideofijkplayerWidget(url: sermon.getUrl(type));
+//      return playerMap[type];
+//    }).toList();
 
   }
 
@@ -56,14 +34,9 @@ class SermonShowWidget extends StatefulWidget {
 
     debugPrint("选择了 ${type.toString()} 类型");
 
-    playerMap.forEach((type,player){
-//      if(selectedSermonType != type){
-//      key.currentState.pause();
-//      }
-      player.selfState.pause();
+    VideoPlayerManager().getAllPlayer().forEach((type,player){
+      player.pause();
     });
-
-//    playerMap[selectedSermonType].selfState.start();
   }
 
   @override
@@ -81,6 +54,16 @@ class _SermonShowWidgetState extends State<SermonShowWidget> {
   void dispose() {
     super.dispose();
   }
+
+//  Widget pdfWidget(BuildContext context) {
+//    if(MediaQuery.of(context).orientation == Orientation.portrait)
+//    {
+//      return widget.pdfWidget;
+//    }
+//    else {
+//      return Container();
+//    }
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +86,7 @@ class _SermonShowWidgetState extends State<SermonShowWidget> {
                           child: Container(
                             width: double.infinity,
                             height: MediaQuery.of(context).size.width/16*9,
-                            child:  widget.playerMap[type] ),
+                            child:  VideofijkplayerWidget(url: widget.sermon.getUrl(type))),//MermoryData().playerMap[type] ),
                       );
                 }).toList(),
             ),
@@ -161,13 +144,16 @@ class _SermonShowWidgetState extends State<SermonShowWidget> {
             ),
 
 //            widget.pdfUrlStr != null ?
+            MediaQuery.of(context).orientation == Orientation.portrait ?
             Expanded(
-                child:Container(
+                child:
+                Container(
 //                color: Colors.amberAccent,
 //                  child: PDFViewerWidget(url: "http://www.pdf995.com/samples/pdf.pdf"),
-                  child: PDFViewerVerticalWidget(url: widget.sermon.pdf),
+//                  child: PDFViewerWidget(url:widget.sermon.pdf),
+                  child: widget.pdfWidget,
                 )
-            )
+            ):Container()
 //           : Expanded(
 //                 child: Container(),
 //               )

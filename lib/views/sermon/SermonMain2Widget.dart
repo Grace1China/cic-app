@@ -31,17 +31,14 @@ class _SermonMain2WidgetState extends State<SermonMain2Widget> {
   Future<Sermon> sermon;
 
 
-  VedioPlayerNativeWidget worshipPlayer;
-  VedioPlayerNativeWidget mcPlayer;
-  VedioPlayerNativeWidget sermonPlayer;
-  VedioPlayerNativeWidget givingPlayer;
+  List<SermonType> canShowTypes;
 
   @override
   void initState() {
     super.initState();
     sermon = API().getSermon();
-    //如何异步获取？？？
   }
+
 
   @override
   void dispose() {
@@ -76,6 +73,9 @@ class _SermonMain2WidgetState extends State<SermonMain2Widget> {
         future: sermon,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+
+            canShowTypes = snapshot.data.canShowTypes();
+
             return Container(
 //        color: Colors.greenAccent,
 //        margin: EdgeInsets.all(10),
@@ -112,21 +112,33 @@ class _SermonMain2WidgetState extends State<SermonMain2Widget> {
                         MaterialPageRoute(builder: (context) => SermonShowWidget(sermon: snapshot.data, selectedSermonType: SermonType.warship,)),
                       );
                     },
-                    child: CachedNetworkImage(
-                      imageUrl: snapshot.data.cover,
-                      imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
-                        children: <Widget>[
-                          Image(image: imageProvider,
-                            fit: BoxFit.cover,),
-                          Center(child:
-                          FloatingActionButton(
-                            heroTag: "btn0",
+                    child: Stack(
+                      children: <Widget>[
+                        Offstage(
+                          offstage: true,
+                          child: Container(
+                              width: MediaQuery.of(context).size.width*0.8,
+                              height: MediaQuery.of(context).size.width*0.8/16*9,
+                              child:  VideofijkplayerWidget(url: snapshot.data.getUrl(SermonType.warship))),
+                        ),
+                        CachedNetworkImage(
+                          imageUrl: snapshot.data.cover,
+                          imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+                            children: <Widget>[
+                              Image(image: imageProvider,
+                                fit: BoxFit.cover,),
+                              Center(child:
+                              FloatingActionButton(
+                                heroTag: "btn0",
 //                            onPressed: () {},
-                            child: snapshot.data.worshipvideo != null ? Icon(Icons.play_arrow,) : Icon(Icons.stop,),),
-                          ),
-                        ],),
-                      placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                      errorWidget: (context, url, error) => Center(child: Icon(Icons.error),),
+                                child: snapshot.data.worshipvideo != null ? Icon(Icons.play_arrow,) : Icon(Icons.stop,),),
+                              ),
+                            ],),
+                          placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+                          errorWidget: (context, url, error) => Center(child: Icon(Icons.error),),
+                        ),
+
+                      ],
                     ),
                   ),
 
@@ -145,20 +157,32 @@ class _SermonMain2WidgetState extends State<SermonMain2Widget> {
                         MaterialPageRoute(builder: (context) => SermonShowWidget(sermon: snapshot.data, selectedSermonType:SermonType.mc, )),
                       );
                     },
-                    child: CachedNetworkImage(
-                      imageUrl: snapshot.data.cover,
-                      imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
-                        children: <Widget>[
-                          Image(image: imageProvider,
-                            fit: BoxFit.cover,),
-                          Center(child:FloatingActionButton(
-                            heroTag: "btn1",
+                    child: Stack(
+                      children: <Widget>[
+                        Offstage(
+                          offstage: true,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.width/16*9,
+                            child:  VideofijkplayerWidget(url: snapshot.data.getUrl(SermonType.mc)),),
+                        ),
+                        CachedNetworkImage(
+                          imageUrl: snapshot.data.cover,
+                          imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+                            children: <Widget>[
+                              Image(image: imageProvider,
+                                fit: BoxFit.cover,),
+                              Center(child:FloatingActionButton(
+                                heroTag: "btn1",
 //                            onPressed: () {},
-                            child: snapshot.data.mcvideo != null ? Icon(Icons.play_arrow,) : Icon(Icons.stop,),
-                          ),),
-                        ],),
-                      placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                      errorWidget: (context, url, error) => Center(child: Icon(Icons.error),),
+                                child: snapshot.data.mcvideo != null ? Icon(Icons.play_arrow,) : Icon(Icons.stop,),
+                              ),),
+                            ],),
+                          placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+                          errorWidget: (context, url, error) => Center(child: Icon(Icons.error),),
+                        ),
+
+                      ],
                     ),
                   ),
 
@@ -178,20 +202,31 @@ class _SermonMain2WidgetState extends State<SermonMain2Widget> {
                         MaterialPageRoute(builder: (context) => SermonShowWidget(sermon: snapshot.data,selectedSermonType: SermonType.sermon,)),
                       );
                     },
-                    child: CachedNetworkImage(
-                      imageUrl: snapshot.data.cover,
-                      imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
-                        children: <Widget>[
-                          Image(image: imageProvider,
-                            fit: BoxFit.cover,),
-                          Center(child:FloatingActionButton(
-                            heroTag: "btn2",
+                    child: Stack(
+                      children: <Widget>[
+                        Offstage(
+                          offstage: true,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.width/16*9,
+                            child:  VideofijkplayerWidget(url: snapshot.data.getUrl(SermonType.giving)),),
+                        ),
+                        CachedNetworkImage(
+                          imageUrl: snapshot.data.cover,
+                          imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+                            children: <Widget>[
+                              Image(image: imageProvider,
+                                fit: BoxFit.cover,),
+                              Center(child:FloatingActionButton(
+                                heroTag: "btn2",
 //                            onPressed: () {},
-                            child: snapshot.data.sermonvideo != null ? Icon(Icons.play_arrow,) : Icon(Icons.stop,),
-                          ),),
-                        ],),
-                      placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                      errorWidget: (context, url, error) => Center(child: Icon(Icons.error),),
+                                child: snapshot.data.sermonvideo != null ? Icon(Icons.play_arrow,) : Icon(Icons.stop,),
+                              ),),
+                            ],),
+                          placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+                          errorWidget: (context, url, error) => Center(child: Icon(Icons.error),),
+                        ),
+                      ],
                     ),
                   ),
 
@@ -229,20 +264,31 @@ class _SermonMain2WidgetState extends State<SermonMain2Widget> {
                         MaterialPageRoute(builder: (context) => SermonShowWidget(sermon: snapshot.data, selectedSermonType: SermonType.giving, )),
                       );
                     },
-                    child: CachedNetworkImage(
-                      imageUrl: snapshot.data.cover,
-                      imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
-                        children: <Widget>[
-                          Image(image: imageProvider,
-                            fit: BoxFit.cover,),
-                          Center(child:FloatingActionButton(
-                            heroTag: "btn3",
+                    child: Stack(
+                      children: <Widget>[
+                        Offstage(
+                          offstage: true,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width*0.8,
+                            height: MediaQuery.of(context).size.width*0.8/16*9,
+                            child:  VideofijkplayerWidget(url: snapshot.data.getUrl(SermonType.mc)),),
+                        ),
+                        CachedNetworkImage(
+                          imageUrl: snapshot.data.cover,
+                          imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+                            children: <Widget>[
+                              Image(image: imageProvider,
+                                fit: BoxFit.cover,),
+                              Center(child:FloatingActionButton(
+                                heroTag: "btn3",
 //                            onPressed: () {},
-                            child: snapshot.data.givingvideo != null ? Icon(Icons.play_arrow,) : Icon(Icons.stop,),
-                          ),),
-                        ],),
-                      placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                      errorWidget: (context, url, error) => Center(child: Icon(Icons.error),),
+                                child: snapshot.data.givingvideo != null ? Icon(Icons.play_arrow,) : Icon(Icons.stop,),
+                              ),),
+                            ],),
+                          placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+                          errorWidget: (context, url, error) => Center(child: Icon(Icons.error),),
+                        ),
+                      ],
                     ),
                   ),
 

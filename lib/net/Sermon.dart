@@ -58,6 +58,7 @@ class Sermon {
         this.givingvideo,
         this.status});
 
+
   List<SermonType> canShowTypes(){
     var list = List<SermonType>();
 //    if(worshipvideo != null){
@@ -142,5 +143,22 @@ class Sermon {
     data['givingvideo'] = this.givingvideo;
     data['status'] = this.status;
     return data;
+  }
+}
+
+enum SermonType {
+  warship,
+  mc,
+  sermon,
+  giving,
+}
+
+String getNameFromSermonType(SermonType type){
+  switch (type){
+    case SermonType.warship:return "敬拜";
+    case SermonType.mc:return "主持";
+    case SermonType.sermon:return "讲道";
+    case SermonType.giving:return "奉献";
+    default:
   }
 }
