@@ -37,6 +37,13 @@ class VideoPlayerManager {
     _playerMap[url] = null;
   }
 
+  void clean(){
+    _playerMap.forEach((key,player){
+      player.release();
+    });
+    _playerMap = Map<String,FijkPlayer>();
+  }
+
   FijkPlayer _setPlayer(String url,FijkPlayer player){
     _playerMap[url] = player;
   }

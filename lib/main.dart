@@ -1,6 +1,7 @@
 import 'package:church_platform/views/account/LoginWidget.dart';
 import 'package:church_platform/views/course/CourseWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
+import 'package:church_platform/views/lordday/LorddayInfoWidget.dart';
 import 'package:church_platform/views/sermon/SermonMain2Widget.dart';
 import 'package:church_platform/views/sermon/SermonMainWidget.dart';
 import 'package:church_platform/views/spiritual/SpiritualMainWidget.dart';
@@ -60,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HomeWidget(),
     DonateWidget(),
     SpiritualMainWidget(),
-    SermonMain2Widget(),
+    LorddayInfoWidget(),
     CourseWidget(),
   ];
 

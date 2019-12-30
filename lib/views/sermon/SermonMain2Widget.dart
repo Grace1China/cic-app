@@ -45,6 +45,57 @@ class _SermonMain2WidgetState extends State<SermonMain2Widget> {
     super.dispose();
   }
 
+  Widget itemWidget(Sermon snapshotdata,String url,SermonType type){
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(5),
+//                    color: Colors.grey,
+          child:  Text("敬拜",
+            textAlign: TextAlign.left,
+//                              softWrap: true,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        GestureDetector(
+          onTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SermonShowWidget(sermon: snapshotdata, selectedSermonType: type,)),
+            );
+          },
+          child: Stack(
+            children: <Widget>[
+              Offstage(
+                offstage: true,
+                child: Container(
+                    width: MediaQuery.of(context).size.width*0.8,
+                    height: MediaQuery.of(context).size.width*0.8/16*9,
+                    child:  VideofijkplayerWidget(url: snapshotdata.getUrl(type))),
+              ),
+              CachedNetworkImage(
+                imageUrl: snapshotdata.cover,
+                imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+                  children: <Widget>[
+                    Image(image: imageProvider,
+                      fit: BoxFit.cover,),
+                    Center(child:
+                    FloatingActionButton(
+                      heroTag: "btn0",
+//                            onPressed: () {},
+                      child: snapshotdata.worshipvideo != null ? Icon(Icons.play_arrow,) : Icon(Icons.stop,),),
+                    ),
+                  ],),
+                placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+                errorWidget: (context, url, error) => Center(child: Icon(Icons.error),),
+              ),
+
+            ],
+          ),
+        ),
+      ],
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -95,52 +146,53 @@ class _SermonMain2WidgetState extends State<SermonMain2Widget> {
                   ),
 
 
-                  Container(
-                    padding: const EdgeInsets.all(5),
-//                    color: Colors.grey,
-                    child:  Text("敬拜",
-                      textAlign: TextAlign.left,
-//                              softWrap: true,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SermonShowWidget(sermon: snapshot.data, selectedSermonType: SermonType.warship,)),
-                      );
-                    },
-                    child: Stack(
-                      children: <Widget>[
-                        Offstage(
-                          offstage: true,
-                          child: Container(
-                              width: MediaQuery.of(context).size.width*0.8,
-                              height: MediaQuery.of(context).size.width*0.8/16*9,
-                              child:  VideofijkplayerWidget(url: snapshot.data.getUrl(SermonType.warship))),
-                        ),
-                        CachedNetworkImage(
-                          imageUrl: snapshot.data.cover,
-                          imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
-                            children: <Widget>[
-                              Image(image: imageProvider,
-                                fit: BoxFit.cover,),
-                              Center(child:
-                              FloatingActionButton(
-                                heroTag: "btn0",
-//                            onPressed: () {},
-                                child: snapshot.data.worshipvideo != null ? Icon(Icons.play_arrow,) : Icon(Icons.stop,),),
-                              ),
-                            ],),
-                          placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                          errorWidget: (context, url, error) => Center(child: Icon(Icons.error),),
-                        ),
-
-                      ],
-                    ),
-                  ),
+                  itemWidget(snapshot.data, snapshot.data.worshipvideo, SermonType.warship),
+//                  Container(
+//                    padding: const EdgeInsets.all(5),
+////                    color: Colors.grey,
+//                    child:  Text("敬拜",
+//                      textAlign: TextAlign.left,
+////                              softWrap: true,
+//                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//                    ),
+//                  ),
+//
+//                  GestureDetector(
+//                    onTap: (){
+//                      Navigator.push(
+//                        context,
+//                        MaterialPageRoute(builder: (context) => SermonShowWidget(sermon: snapshot.data, selectedSermonType: SermonType.warship,)),
+//                      );
+//                    },
+//                    child: Stack(
+//                      children: <Widget>[
+//                        Offstage(
+//                          offstage: true,
+//                          child: Container(
+//                              width: MediaQuery.of(context).size.width*0.8,
+//                              height: MediaQuery.of(context).size.width*0.8/16*9,
+//                              child:  VideofijkplayerWidget(url: snapshot.data.getUrl(SermonType.warship))),
+//                        ),
+//                        CachedNetworkImage(
+//                          imageUrl: snapshot.data.cover,
+//                          imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+//                            children: <Widget>[
+//                              Image(image: imageProvider,
+//                                fit: BoxFit.cover,),
+//                              Center(child:
+//                              FloatingActionButton(
+//                                heroTag: "btn0",
+////                            onPressed: () {},
+//                                child: snapshot.data.worshipvideo != null ? Icon(Icons.play_arrow,) : Icon(Icons.stop,),),
+//                              ),
+//                            ],),
+//                          placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+//                          errorWidget: (context, url, error) => Center(child: Icon(Icons.error),),
+//                        ),
+//
+//                      ],
+//                    ),
+//                  ),
 
                   Container(
                     padding: const EdgeInsets.all(5),

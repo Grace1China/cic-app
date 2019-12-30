@@ -4,6 +4,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:church_platform/net/LoginResponse.dart';
+import 'package:church_platform/net/LorddayInfoResponse.dart';
 import 'package:church_platform/net/RegisterResponse.dart';
 import 'package:church_platform/net/Sermon.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
@@ -40,7 +41,7 @@ class API{
   Future<WeaklyReport> getWeaklyReportL3() async {
 
     final token = await SharedPreferencesUtils.getToken();
-    final response = await http.get(HOST + APIS + "/eweekly/l3",
+    final response = await http.get(HOST + APIS + "/lorddayinfo/l3",
       headers: {HttpHeaders.authorizationHeader: "Bearer " + token},
     );
 
@@ -62,7 +63,7 @@ class API{
   Future<WeaklyReport> getWeaklyReport() async {
 
     final token = await SharedPreferencesUtils.getToken();
-    final response = await http.get(HOST + APIS + "/eweekly/0",
+    final response = await http.get(HOST + APIS + "/lorddayinfo",
       headers: {HttpHeaders.authorizationHeader: "Bearer " + token},
     );
 
@@ -100,6 +101,25 @@ class API{
         return baseResponse.data;
       }
       throw Exception('没有讲道');
+    } else {
+      throw Exception(response.statusCode.toString() + ":" + response.body);
+    }
+  }
+
+  Future<LorddayInfo> getLorddayInfo() async {
+
+    final token = await SharedPreferencesUtils.getToken();
+    final response = await http.get(HOST + APIS + "/lorddayinfo",
+      headers: {HttpHeaders.authorizationHeader: "Bearer " + token,},
+    );
+
+    if (response.statusCode == 200) {
+
+      final baseResponse = LorddayInfoResponse.fromJson(json.decode(response.body));
+      if(baseResponse.errCode == "0"){
+        return baseResponse.data;
+      }
+      throw Exception('没有主日信息');
     } else {
       throw Exception(response.statusCode.toString() + ":" + response.body);
     }
