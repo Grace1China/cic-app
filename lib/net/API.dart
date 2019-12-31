@@ -41,7 +41,7 @@ class API{
   Future<WeaklyReport> getWeaklyReportL3() async {
 
     final token = await SharedPreferencesUtils.getToken();
-    final response = await http.get(HOST + APIS + "/lorddayinfo/l3",
+    final response = await http.get(HOST + APIS + "/eweekly/l3",
       headers: {HttpHeaders.authorizationHeader: "Bearer " + token},
     );
 
@@ -63,7 +63,7 @@ class API{
   Future<WeaklyReport> getWeaklyReport() async {
 
     final token = await SharedPreferencesUtils.getToken();
-    final response = await http.get(HOST + APIS + "/lorddayinfo",
+    final response = await http.get(HOST + APIS + "/eweekly/0",
       headers: {HttpHeaders.authorizationHeader: "Bearer " + token},
     );
 

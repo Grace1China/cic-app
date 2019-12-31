@@ -1,6 +1,7 @@
 
 class BaseResponse {
   String errCode;
+  String errMsg;
   WeaklyReport data;
 
   BaseResponse({this.errCode, this.data});

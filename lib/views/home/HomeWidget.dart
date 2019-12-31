@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/ChurchResponse.dart';
 import 'package:church_platform/net/WeaklyReport.dart';
@@ -87,17 +88,36 @@ class _HomeWidgetState extends State<HomeWidget> {
                             ),
                           ),
 
-                          Stack(
-                            alignment: AlignmentDirectional.center,
-                            children: <Widget>[
-                              Center(child: CircularProgressIndicator()),
-                              Center(
-                                child: FadeInImage.memoryNetwork(
-                                  placeholder: kTransparentImage,
-                                  image: snapshot.data.promotCover,
-                                ),
-                              ),
-                            ],
+                          //只有加载完成才显示。
+                          CachedNetworkImage(
+                              imageUrl: snapshot.data.promotCover,
+                              imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+                                children: <Widget>[
+                                  Image(image: imageProvider,
+                                    fit: BoxFit.cover,),
+                                ],),
+                              placeholder: (context, url) => Container(),
+                              errorWidget: (context, url, error) => Container() //Center(child: Icon(Icons.error),),
+                          ),
+//加loading的图片。
+//                          Stack(
+//                            alignment: AlignmentDirectional.center,
+//                            children: <Widget>[
+//                              Center(child: CircularProgressIndicator()),
+//                              Center(
+//                                child: FadeInImage.memoryNetwork(
+//                                  placeholder: kTransparentImage,
+//                                  image: snapshot.data.promotCover,
+//                                ),
+//                              ),
+//                            ],
+//                          ),
+                          Offstage(
+                            offstage: snapshot.data.promotVideo == null || snapshot.data.promotVideo.isEmpty,
+                            child: Container(
+                                width: double.infinity,
+                                height: MediaQuery.of(context).size.width/16*9,
+                                child:  VideofijkplayerWidget(url: snapshot.data.promotVideo)),
                           ),
                           Container(
                             padding: const EdgeInsets.all(5),

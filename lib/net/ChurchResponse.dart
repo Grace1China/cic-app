@@ -72,7 +72,7 @@ class Church {
 
 class Venue {
   int id;
-  String time;
+  String time; //09:00:00
   String address;
   String addressUrl;
 

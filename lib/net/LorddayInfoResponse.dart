@@ -1,5 +1,6 @@
 class LorddayInfoResponse {
   String errCode;
+  String errMsg;
   LorddayInfo data;
 
   LorddayInfoResponse({this.errCode, this.data});
