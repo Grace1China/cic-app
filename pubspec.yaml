@@ -44,7 +44,9 @@ dependencies:
 
   cached_network_image: ^2.0.0-rc
 
-  fijkplayer: ^0.2.3
+  fijkplayer: ^0.4.2
+#    path: ../fijkplayer_mycustom/
+
   date_format: ^1.0.8
 
 dev_dependencies:

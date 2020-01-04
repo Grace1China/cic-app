@@ -2,6 +2,7 @@ import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/LorddayInfoResponse.dart';
 import 'package:church_platform/net/Sermon.dart';
 import 'package:church_platform/pdf/PDFViewerWidget.dart';
+import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/vedio/VedioPlayerWidget.dart';
 import 'package:church_platform/vedio/VedioPlayerNativeWidget.dart';
 import 'package:church_platform/vedio/VideoPlayerManager.dart';
@@ -41,9 +42,17 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> {
   void initState() {
     super.initState();
     VideoPlayerManager().clean();
-    lorddayInfo = API().getLorddayInfo();
+    refreshRemoteData();
   }
 
+  void refreshRemoteData() async{
+//    bool isLogin = await SharedPreferencesUtils.isLogin();
+//    if(isLogin){
+      lorddayInfo = API().getLorddayInfo();
+//    }else{
+//      lorddayInfo = API().getLorddayInfoL3();
+//    }
+  }
 
   @override
   void dispose() {

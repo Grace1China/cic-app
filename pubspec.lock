@@ -28,7 +28,7 @@ packages:
       name: audioplayers
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.13.5"
+    version: "0.13.6"
   boolean_selector:
     dependency: transitive
     description:
@@ -42,7 +42,7 @@ packages:
       name: cached_network_image
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0-rc.1"
+    version: "2.0.0"
   charcode:
     dependency: transitive
     description:
@@ -102,10 +102,10 @@ packages:
   fijkplayer:
     dependency: "direct main"
     description:
-      name: fijkplayer
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.2.3"
+      path: "../fijkplayer_mycustom"
+      relative: true
+    source: path
+    version: "0.4.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -124,14 +124,14 @@ packages:
       name: flutter_html
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.11.0"
+    version: "0.11.1"
   flutter_pdfview:
     dependency: "direct main"
     description:
       name: flutter_pdfview
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0+9"
+    version: "1.0.0+10"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -148,14 +148,14 @@ packages:
       name: flutter_widget_from_html
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.3.1-rc"
+    version: "0.3.2"
   flutter_widget_from_html_core:
     dependency: transitive
     description:
       name: flutter_widget_from_html_core
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.2.4+3"
+    version: "0.2.5"
   fluttertoast:
     dependency: "direct main"
     description:
@@ -176,7 +176,7 @@ packages:
       name: http
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.12.0+2"
+    version: "0.12.0+3"
   http_parser:
     dependency: transitive
     description:
@@ -212,13 +212,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.3"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.4"
   oktoast:
     dependency: "direct main"
     description:
       name: oktoast
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.2.1"
+    version: "2.3.0"
   open_iconic_flutter:
     dependency: transitive
     description:
@@ -267,14 +274,14 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   provider:
     dependency: "direct main"
     description:
       name: provider
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.2.0"
+    version: "4.0.1"
   quiver:
     dependency: transitive
     description:
@@ -302,7 +309,7 @@ packages:
       name: shared_preferences_macos
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.1+2"
+    version: "0.0.1+3"
   shared_preferences_platform_interface:
     dependency: transitive
     description:
@@ -335,7 +342,7 @@ packages:
       name: sqflite
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.8"
+    version: "1.2.0"
   stack_trace:
     dependency: transitive
     description:
@@ -405,14 +412,14 @@ packages:
       name: url_launcher_macos
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.1+1"
+    version: "0.0.1+2"
   url_launcher_platform_interface:
     dependency: transitive
     description:
       name: url_launcher_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.5"
   url_launcher_web:
     dependency: transitive
     description:
@@ -461,7 +468,7 @@ packages:
       name: webview_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.3.18+1"
+    version: "0.3.19+2"
   xml:
     dependency: transitive
     description:
@@ -470,5 +477,5 @@ packages:
     source: hosted
     version: "3.5.0"
 sdks:
-  dart: ">=2.5.0 <3.0.0"
-  flutter: ">=1.12.13+hotfix.4 <2.0.0"
+  dart: ">=2.6.0 <3.0.0"
+  flutter: ">=1.12.13+hotfix.5 <2.0.0"

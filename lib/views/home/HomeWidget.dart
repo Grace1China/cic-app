@@ -239,11 +239,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                         ],
                       ));
                 } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
+                  return Container(); //Text("${snapshot.error}");
                 }
 
                 // By default, show a loading spinner.
-                return Center(child: CircularProgressIndicator(),);
+                return Container(); //Center(child: CircularProgressIndicator(),);
               },
             ),
 
@@ -280,11 +280,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                         ],
                       ));
                 } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
+                  return Container();//Text("${snapshot.error}");
                 }
 
                 // By default, show a loading spinner.
-                return Center(child: CircularProgressIndicator(),);
+                return Container();//Center(child: CircularProgressIndicator(),);
               },
             ),
           ],

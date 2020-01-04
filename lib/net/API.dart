@@ -125,6 +125,22 @@ class API{
     }
   }
 
+  Future<LorddayInfo> getLorddayInfoL3() async {
+
+    final response = await http.get(HOST + APIS + "/lorddayinfo/l3");
+
+    if (response.statusCode == 200) {
+
+      final baseResponse = LorddayInfoResponse.fromJson(json.decode(response.body));
+      if(baseResponse.errCode == "0"){
+        return baseResponse.data;
+      }
+      throw Exception('没有主日信息');
+    } else {
+      throw Exception(response.statusCode.toString() + ":" + response.body);
+    }
+  }
+
   Future<String> login(String email, String pwd) async {
 
     var body = json.encode({'email':email, 'password':pwd});
