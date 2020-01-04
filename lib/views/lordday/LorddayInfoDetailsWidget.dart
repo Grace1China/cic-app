@@ -128,8 +128,7 @@ class _LorddayInfoDetailsWidgetState extends State<LorddayInfoDetailsWidget> {
                           }
                           ).toList(),
                         ),
-//                        Text(formatDate(DateTime.parse(widget.media.date) ,[yyyy,'年',mm,'月',dd,'日'])),
-                        Text("xxxx年xx月xx日"),
+                        Text(formatDate(DateTime.parse(widget.lorddayInfo.pubTime) ,[yyyy,'年',mm,'月',dd,'日'])),
                       ],
                     ),
                   ),
