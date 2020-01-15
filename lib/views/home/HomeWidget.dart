@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/ChurchResponse.dart';
 import 'package:church_platform/net/WeaklyReport.dart';
+import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';

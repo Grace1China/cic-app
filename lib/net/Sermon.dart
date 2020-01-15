@@ -1,5 +1,5 @@
 
-import 'package:church_platform/views/sermon/SermonShowWidget.dart';
+import 'package:church_platform/views/old/sermon/SermonShowWidget.dart';
 
 class BaseResponse2 {
   String errCode;

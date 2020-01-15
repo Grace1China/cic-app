@@ -7,6 +7,7 @@ import 'package:church_platform/net/LoginResponse.dart';
 import 'package:church_platform/net/LorddayInfoResponse.dart';
 import 'package:church_platform/net/RegisterResponse.dart';
 import 'package:church_platform/net/Sermon.dart';
+import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;

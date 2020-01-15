@@ -1,4 +1,4 @@
-import 'package:church_platform/views/sunday/Sunday.dart';
+import 'package:church_platform/views/old/sunday/Sunday.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 

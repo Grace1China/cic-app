@@ -1,6 +1,7 @@
 
 import 'package:church_platform/net/LorddayInfoResponse.dart';
 import 'package:church_platform/net/Sermon.dart';
+import 'package:church_platform/net/models/Medias.dart';
 import 'package:church_platform/pdf/PDFViewerVerticalWidget.dart';
 import 'package:church_platform/pdf/PDFViewerWidget.dart';
 import 'package:church_platform/vedio/VideoPlayerManager.dart';
