@@ -8,6 +8,7 @@ import 'package:church_platform/vedio/VedioPlayerNativeWidget.dart';
 import 'package:church_platform/vedio/VideoPlayerManager.dart';
 import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
+import 'package:church_platform/views/account/LoginWidget.dart';
 import 'package:church_platform/views/lordday/LorddayInfoDetailsWidget.dart';
 import 'package:church_platform/views/lordday/VideoSpeedTestWidget.dart';
 import 'package:church_platform/views/sermon/SermonShowWidget.dart';
@@ -24,7 +25,21 @@ void main() {
   runApp(new MaterialApp(home: new LorddayInfoWidget()));
 }
 
+class RefreshLorddayWidgetNotifier with ChangeNotifier{
+  bool needRefresh = false;
+
+  refresh(){
+    needRefresh = true;
+    notifyListeners();
+  }
+
+  refreshEnd(){
+    needRefresh = false;
+  }
+}
+
 class LorddayInfoWidget extends StatefulWidget {
+  static final myLorddayInfoWidgetKey = new GlobalKey<_LorddayInfoWidgetState>();
 
   LorddayInfoWidget({Key key}) : super(key: key);
 
@@ -32,7 +47,9 @@ class LorddayInfoWidget extends StatefulWidget {
   _LorddayInfoWidgetState createState() => _LorddayInfoWidgetState();
 }
 
-class _LorddayInfoWidgetState extends State<LorddayInfoWidget> {
+class _LorddayInfoWidgetState extends State<LorddayInfoWidget> with WidgetsBindingObserver
+{
+  AppLifecycleState state;
   Future<LorddayInfo> lorddayInfo;
 
   List<Medias> canShowMedias;
@@ -41,22 +58,54 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     VideoPlayerManager().clean();
     refreshRemoteData();
+
+
   }
 
   void refreshRemoteData() async{
-//    bool isLogin = await SharedPreferencesUtils.isLogin();
-//    if(isLogin){
-      lorddayInfo = API().getLorddayInfo();
-//    }else{
-//      lorddayInfo = API().getLorddayInfoL3();
-//    }
+    bool isLogin = await SharedPreferencesUtils.isLogin();
+
+    setState(() {
+      if(isLogin){
+        lorddayInfo = API().getLorddayInfo();
+      }else{
+        lorddayInfo = API().getLorddayInfoL3();
+      }
+    });
+
   }
+
+//  @override
+//  void didUpdateWidget(LorddayInfoWidget oldWidget) {
+//    super.didUpdateWidget(oldWidget);
+//    print("didupdatewidget");
+//
+//  }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    this.state = state;
+    debugPrint("状态：" + state.toString());
+    if(state == AppLifecycleState.resumed){
+      print("resume");
+    }else if(state == AppLifecycleState.inactive){
+      // app is inactive
+    }else if(state == AppLifecycleState.paused){
+      // user is about quit our app temporally
+    }else if(state == AppLifecycleState.detached){
+      // app detached (not used in iOS)
+    }
   }
 
 //  返回一个item元素的list
@@ -72,7 +121,7 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> {
       ),
     ));
 
-    if(media.sDURL.isNotEmpty){
+    if(media.hDURL.isNotEmpty){
       widgets.add(GestureDetector(
         onTap: (){
           Navigator.push(
@@ -87,10 +136,10 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> {
               child: Container(
                   width: MediaQuery.of(context).size.width*0.8,
                   height: MediaQuery.of(context).size.width*0.8/16*9,
-                  child:  MediaTypeFromInt(media.kind) != MediaType.sermon ? VideofijkplayerWidget(url: media.sHDURL):Container()),
+                  child:  MediaTypeFromInt(media.kind) != MediaType.sermon ? VideofijkplayerWidget(url: media.hDURL):Container()),
             ),
 //              Image.network(
-//                media.imagePresignedUrl ?? defaultimageurl,
+//                media.image ?? defaultimageurl,
 //                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
 //                  //加载速度快，但是无法区分没加载  和 加载完。
 //                  if (loadingProgress == null)
@@ -118,7 +167,7 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> {
 //              ),
 
             CachedNetworkImage(
-                imageUrl: media.imagePresignedUrl,
+                imageUrl: media.image,
                 imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
                   children: <Widget>[
                     Image(image: imageProvider,
@@ -219,13 +268,16 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> {
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.account_circle),
-              onPressed: () {
+              onPressed: () async{
                 //效果同等
 //              Navigator.push(context,
 //                  MaterialPageRoute(builder: (context) => DonateWidget(), fullscreenDialog: true));
+              bool isLogin = await SharedPreferencesUtils.isLogin();
                 Navigator.of(context).push(CupertinoPageRoute(
                     fullscreenDialog: true,
-                    builder: (context) => AccountWidget()));
+                    builder: (context) => isLogin ? AccountWidget() : LoginWidget()));
+
+
               })
         ],
       ),
@@ -239,14 +291,14 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> {
 
             canShowMedias = List<Medias>();
             snapshot.data.medias.forEach((Medias m){
-              if(m.sHDURL.isNotEmpty || m.content.isNotEmpty){
+              if(m.hDURL.isNotEmpty || m.content.isNotEmpty){
                 canShowMedias.add(m);
               }
             });
 
             canPlayMedias = List<Medias>();
             snapshot.data.medias.forEach((Medias m){
-              if(m.sDURL.isNotEmpty){
+              if(m.hDURL.isNotEmpty){
                 canPlayMedias.add(m);
               }
             });

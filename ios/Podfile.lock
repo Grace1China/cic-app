@@ -1,7 +1,7 @@
 PODS:
   - audioplayers (0.0.1):
     - Flutter
-  - fijkplayer (0.2.3):
+  - fijkplayer (0.4.2):
     - FIJKPlayer (~> 0.4.4)
     - Flutter
   - FIJKPlayer (0.4.4)
@@ -102,7 +102,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   audioplayers: 84f968cea3f2deab00ec4f8ff53358b3c0b3992c
   FIJKPlayer: b3a44750f39db82a99d5099ac6ae71c4aeac774c
-  fijkplayer: 0166b44fa11a2e41b991142c21dcee3b33da112f
+  fijkplayer: 0df23ba12768de84627f82e76fbb2ac1039e1130
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_pdfview: bdf86972519a15c6d8f50ad34e5b0429b255cbb4
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b

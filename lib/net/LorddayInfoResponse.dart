@@ -27,7 +27,7 @@ class LorddayInfo {
   String title;
   Speaker speaker;
   String scripture;
-  int series;
+//  int series;
   List<Medias> medias;
   String createTime;
   String updateTime;
@@ -41,7 +41,7 @@ class LorddayInfo {
         this.title,
         this.speaker,
         this.scripture,
-        this.series,
+//        this.series,
         this.medias,
         this.createTime,
         this.updateTime,
@@ -57,7 +57,7 @@ class LorddayInfo {
     speaker =
     json['speaker'] != null ? new Speaker.fromJson(json['speaker']) : null;
     scripture = json['scripture'];
-    series = json['series'];
+//    series = json['series'];
     if (json['medias'] != null) {
       medias = new List<Medias>();
       json['medias'].forEach((v) {
@@ -82,7 +82,7 @@ class LorddayInfo {
       data['speaker'] = this.speaker.toJson();
     }
     data['scripture'] = this.scripture;
-    data['series'] = this.series;
+//    data['series'] = this.series;
     if (this.medias != null) {
       data['medias'] = this.medias.map((v) => v.toJson()).toList();
     }
@@ -174,7 +174,7 @@ class Speaker {
   String introduction;
   String createTime;
   String updateTime;
-  Null church;
+  String church;
 
   Speaker(
       {this.id,

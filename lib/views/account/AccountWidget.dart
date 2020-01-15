@@ -1,3 +1,4 @@
+import 'package:church_platform/views/lordday/LorddayInfoWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -119,7 +120,10 @@ class _AccountWidgetState extends State<AccountWidget> {
                 color: Theme.of(context).buttonColor, onPressed: (){
                   SharedPreferencesUtils.logout();
                   MyApp.myTabbedPageKey.currentState.changeIndex(4);
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(); //先pop。后refresh。refresh可能会出错
+                  if(LorddayInfoWidget.myLorddayInfoWidgetKey.currentState != null){
+                    LorddayInfoWidget.myLorddayInfoWidgetKey.currentState.refreshRemoteData();
+                  }
               },),
             ],
           )

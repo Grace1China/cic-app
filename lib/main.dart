@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HomeWidget(),
     DonateWidget(),
     SpiritualMainWidget(),
-    LorddayInfoWidget(),
+    LorddayInfoWidget(key:LorddayInfoWidget.myLorddayInfoWidgetKey),
     CourseWidget(),
   ];
 
@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   void _onItemTapped(int index) async {
     bool b = await SharedPreferencesUtils.isLogin();
-    if(!b && index != 4){
+    if(!b && [0,1,2].contains(index)){
 //      Navigator.of(context).push(route)
       Navigator.push(context, CupertinoPageRoute(
           fullscreenDialog: true,

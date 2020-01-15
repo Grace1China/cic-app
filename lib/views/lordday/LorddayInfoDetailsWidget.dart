@@ -88,7 +88,7 @@ class _LorddayInfoDetailsWidgetState extends State<LorddayInfoDetailsWidget> {
                   child: Container(
                       width: double.infinity,
                       height: MediaQuery.of(context).size.width/16*9,
-                      child:  VideofijkplayerWidget(url: media.sHDURL)),
+                      child:  VideofijkplayerWidget(url: media.hDURL)),
                 );
               }).toList(),
             ),
@@ -145,7 +145,7 @@ class _LorddayInfoDetailsWidgetState extends State<LorddayInfoDetailsWidget> {
               ),
             ),
 
-            (widget.medias[widget.selectedIndex].pdfPresignedUrl.isNotEmpty &&
+            (widget.medias[widget.selectedIndex].pdf.isNotEmpty &&
             MediaQuery.of(context).orientation == Orientation.portrait) ?
             Expanded(
                 child:
@@ -154,7 +154,7 @@ class _LorddayInfoDetailsWidgetState extends State<LorddayInfoDetailsWidget> {
 //                  child: PDFViewerVerticalWidget(url: "http://www.pdf995.com/samples/pdf.pdf"),
 //                  child: PDFViewerWidget(url:widget.sermon.pdf),
 //                  child: widget.pdfWidget,
-                  child: PDFViewerVerticalWidget(url: widget.medias[widget.selectedIndex].pdfPresignedUrl,),
+                  child: PDFViewerVerticalWidget(url: widget.medias[widget.selectedIndex].pdf,),
                 )
             ):Container()
 

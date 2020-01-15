@@ -89,15 +89,18 @@ class _HomeWidgetState extends State<HomeWidget> {
                           ),
 
                           //只有加载完成才显示。
-                          CachedNetworkImage(
-                              imageUrl: snapshot.data.promotCover,
-                              imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
-                                children: <Widget>[
-                                  Image(image: imageProvider,
-                                    fit: BoxFit.cover,),
-                                ],),
-                              placeholder: (context, url) => Container(),
-                              errorWidget: (context, url, error) => Container() //Center(child: Icon(Icons.error),),
+                          Offstage(
+                            offstage: snapshot.data.promotCover == null || snapshot.data.promotCover.isEmpty,
+                            child: CachedNetworkImage(
+                                imageUrl: snapshot.data.promotCover,
+                                imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+                                  children: <Widget>[
+                                    Image(image: imageProvider,
+                                      fit: BoxFit.cover,),
+                                  ],),
+                                placeholder: (context, url) => Container(),
+                                errorWidget: (context, url, error) => Container() //Center(child: Icon(Icons.error),),
+                            ),
                           ),
 //加loading的图片。
 //                          Stack(
