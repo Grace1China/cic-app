@@ -1,4 +1,4 @@
-import 'package:church_platform/views/course/Course.dart';
+import 'package:church_platform/views/old/course/Course.dart';
 import 'package:church_platform/views/old/sunday/Sunday.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';

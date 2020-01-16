@@ -3,6 +3,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:church_platform/net/CourseResponse.dart';
 import 'package:church_platform/net/LoginResponse.dart';
 import 'package:church_platform/net/LorddayInfoResponse.dart';
 import 'package:church_platform/net/RegisterResponse.dart';
@@ -18,6 +19,8 @@ import 'ChurchResponse.dart';
 class API{
   static final String HOST = "http://13.231.255.163";//"""http://l3.community";
   static final String APIS = "/rapi";
+
+  HttpClient _httpClient = HttpClient();
 
   Future<Church> getChurch() async {
 
@@ -140,6 +143,55 @@ class API{
     } else {
       throw Exception(response.statusCode.toString() + ":" + response.body);
     }
+  }
+
+  Future<CourseResponse> getCourseList({int page,int pagesize}) async {
+
+    final token = await SharedPreferencesUtils.getToken();
+    final response = await http.get(HOST + APIS + "/courses/pagesize/$pagesize/page/$page",
+      headers: token != null && token.isNotEmpty ? {HttpHeaders.authorizationHeader: "Bearer " + token,} : {},
+    );
+
+    if (response.statusCode == 200) {
+
+      final baseResponse = CourseResponse.fromJson(json.decode(response.body));
+      if(baseResponse.errCode == "0"){
+        return baseResponse;
+      }
+      throw Exception('没有课程信息');
+    } else {
+      throw Exception(response.statusCode.toString() + ":" + response.body);
+    }
+
+/*    var url = HOST + APIS + "/courses/pagesize/$pagesize/page/$page";
+    _httpClient.getUrl(Uri.parse(url)).then((HttpClientRequest request) {
+          if(token.isNotEmpty){
+            request.headers.add(HttpHeaders.authorizationHeader, "Bearer " + token);
+          }
+          return request.close();
+    }).then((HttpClientResponse response) {
+
+      if (response.statusCode == 200) {
+
+        final baseResponse = CourseResponse.fromJson(json.decode(response.body));
+        if(baseResponse.errCode == "0"){
+          return baseResponse;
+        }
+        throw Exception('没有课程信息');
+      } else {
+        throw Exception(response.statusCode.toString() + ":" + response.body);
+      }
+
+//      if (response.statusCode == 200) {
+//        response.transform(utf8.decoder).join().then((String string) {
+//          print(string);
+//        });
+//      } else {
+//        print("error");
+//      }
+    });*/
+
+
   }
 
   Future<String> login(String email, String pwd) async {

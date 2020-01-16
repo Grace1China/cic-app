@@ -4,7 +4,7 @@ import 'package:church_platform/views/old/sunday/Sunday.dart';
 import 'package:church_platform/vedio/VedioPlayerNativeWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:church_platform/views/course/Course.dart';
+import 'package:church_platform/views/old/course/Course.dart';
 
 
 class CourseDetailsWidget extends StatefulWidget {

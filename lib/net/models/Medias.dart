@@ -36,7 +36,6 @@ MediaType MediaTypeFromInt(int i){
 
 
 class Medias {
-  int owner;
   int kind;
   String title;
   String video;
@@ -46,14 +45,11 @@ class Medias {
   String sDURL;
   String audio;
   String image;
-  String imagePresignedUrl;
-  String pdfPresignedUrl;
   String pdf;
   String content;
 
   Medias(
-      {this.owner,
-        this.kind,
+      {this.kind,
         this.title,
         this.video,
         this.videoStatus,
@@ -62,13 +58,10 @@ class Medias {
         this.sDURL,
         this.audio,
         this.image,
-        this.imagePresignedUrl,
-        this.pdfPresignedUrl,
         this.pdf,
         this.content});
 
   Medias.fromJson(Map<String, dynamic> json) {
-    owner = json['owner'];
     kind = json['kind'];
     title = json['title'];
     video = json['video'];
@@ -78,15 +71,12 @@ class Medias {
     sDURL = json['SD_URL'];
     audio = json['audio'];
     image = json['image'];
-    imagePresignedUrl = json['image_presigned_url'];
-    pdfPresignedUrl = json['pdf_presigned_url'];
     pdf = json['pdf'];
     content = json['content'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['owner'] = this.owner;
     data['kind'] = this.kind;
     data['title'] = this.title;
     data['video'] = this.video;
@@ -96,8 +86,6 @@ class Medias {
     data['SD_URL'] = this.sDURL;
     data['audio'] = this.audio;
     data['image'] = this.image;
-    data['image_presigned_url'] = this.imagePresignedUrl;
-    data['pdf_presigned_url'] = this.pdfPresignedUrl;
     data['pdf'] = this.pdf;
     data['content'] = this.content;
     return data;
