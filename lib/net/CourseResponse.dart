@@ -1,8 +1,5 @@
-import 'package:church_platform/net/ChurchResponse.dart';
-import 'package:church_platform/net/LorddayInfoResponse.dart';
 import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/net/models/Medias.dart';
-import 'package:church_platform/net/models/Speaker.dart';
 
 class CourseResponse {
   String errCode;

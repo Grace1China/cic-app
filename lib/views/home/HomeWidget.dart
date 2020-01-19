@@ -1,20 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/net/API.dart';
-import 'package:church_platform/net/ChurchResponse.dart';
 import 'package:church_platform/net/WeaklyReport.dart';
 import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
-import 'package:church_platform/views/donate/DonateWidget.dart';
-import 'package:church_platform/vedio/test/CheWiePlayerTest.dart';
-import 'package:church_platform/vedio/VedioPlayerWidget.dart';
-import 'package:church_platform/vedio/VedioPlayerNativeWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:transparent_image/transparent_image.dart';
-import '../../vedio/test/VedioPlayerNativeScreen.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class HomeWidget extends StatefulWidget {
   @override

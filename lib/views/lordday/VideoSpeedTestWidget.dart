@@ -1,15 +1,9 @@
 
-import 'package:church_platform/net/LorddayInfoResponse.dart';
-import 'package:church_platform/net/Sermon.dart';
 import 'package:church_platform/net/models/Medias.dart';
-import 'package:church_platform/pdf/PDFViewerVerticalWidget.dart';
-import 'package:church_platform/pdf/PDFViewerWidget.dart';
-import 'package:church_platform/vedio/VideoPlayerManager.dart';
 import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/foundation.dart';
-import 'package:date_format/date_format.dart';
 
 
 

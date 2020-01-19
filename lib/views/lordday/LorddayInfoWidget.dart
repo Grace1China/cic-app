@@ -1,25 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/LorddayInfoResponse.dart';
-import 'package:church_platform/net/Sermon.dart';
 import 'package:church_platform/net/models/Medias.dart';
-import 'package:church_platform/pdf/PDFViewerWidget.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
-import 'package:church_platform/vedio/VedioPlayerWidget.dart';
-import 'package:church_platform/vedio/VedioPlayerNativeWidget.dart';
 import 'package:church_platform/vedio/VideoPlayerManager.dart';
 import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:church_platform/views/account/LoginWidget.dart';
 import 'package:church_platform/views/lordday/LorddayInfoDetailsWidget.dart';
-import 'package:church_platform/views/lordday/VideoSpeedTestWidget.dart';
-import 'package:church_platform/views/old/sermon/SermonShowWidget.dart';
-import 'package:church_platform/views/old/sunday/Sunday.dart';
-import 'package:church_platform/views/old/sunday/details/SermonDetailsWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
-import 'package:transparent_image/transparent_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 
 void main() {

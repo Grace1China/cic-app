@@ -2,7 +2,7 @@ import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/CourseResponse.dart';
 import 'package:church_platform/net/models/Page.dart';
 import 'package:church_platform/views/courses/CourseGridItem.dart';
-import 'package:church_platform/views/courses/CourseInfoWidget.dart';
+import 'package:church_platform/views/courses/CourseDetailsWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -103,7 +103,7 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
                       Navigator.push(
                         context,
                         new MaterialPageRoute(
-                            builder: (context) => CourseInfoWidget(course: courses[index])
+                            builder: (context) => CourseDetailsWidget(course: courses[index])
                         ),
                       );
                     },

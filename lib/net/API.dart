@@ -3,16 +3,17 @@
 
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:church_platform/net/CourseResponse.dart';
 import 'package:church_platform/net/LoginResponse.dart';
 import 'package:church_platform/net/LorddayInfoResponse.dart';
 import 'package:church_platform/net/RegisterResponse.dart';
-import 'package:church_platform/net/Sermon.dart';
+import 'package:church_platform/net/WeaklyReport.dart';
 import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:church_platform/net/WeaklyReport.dart';
+
 import 'ChurchResponse.dart';
 
 
@@ -87,25 +88,6 @@ class API{
 //        MyApp.myTabbedPageKey.currentState.changeIndex(4);
 //        Navigator.of(context).pop();
       }
-      throw Exception(response.statusCode.toString() + ":" + response.body);
-    }
-  }
-
-   Future<Sermon> getSermon() async {
-
-    final token = await SharedPreferencesUtils.getToken();
-    final response = await http.get(HOST + APIS + "/sermon/0",
-      headers: {HttpHeaders.authorizationHeader: "Bearer " + token,},
-    );
-
-    if (response.statusCode == 200) {
-
-      final baseResponse = BaseResponse2.fromJson(json.decode(response.body));
-      if(baseResponse.errCode == "0"){
-        return baseResponse.data;
-      }
-      throw Exception('没有讲道');
-    } else {
       throw Exception(response.statusCode.toString() + ":" + response.body);
     }
   }

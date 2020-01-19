@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 
-class CourseInfoWidget extends StatefulWidget {
+class CourseDetailsWidget extends StatefulWidget {
   Course course;
-  CourseInfoWidget({Key key, this.course}) : super(key: key);
+  CourseDetailsWidget({Key key, this.course}) : super(key: key);
 
   @override
-  _CourseInfoWidgetState createState() => _CourseInfoWidgetState();
+  _CourseDetailsWidgetState createState() => _CourseDetailsWidgetState();
 }
 
-class _CourseInfoWidgetState extends State<CourseInfoWidget> {
+class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
 
   @override
   void initState() {

@@ -1,23 +1,16 @@
 import 'package:church_platform/views/account/LoginWidget.dart';
 import 'package:church_platform/views/courses/CourseGridWidget.dart';
-import 'package:church_platform/views/old/course/CourseWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
 import 'package:church_platform/views/lordday/LorddayInfoWidget.dart';
-import 'package:church_platform/views/old/sermon/SermonMain2Widget.dart';
-import 'package:church_platform/views/old/sermon/SermonMainWidget.dart';
 import 'package:church_platform/views/spiritual/SpiritualMainWidget.dart';
-import 'package:church_platform/views/old/sunday/SundayWidget.dart';
-import 'package:church_platform/views/old/sunday/details/SermonDetailsWidget.dart';
-import 'package:church_platform/views/old/sunday/details/SermonListOnceWidget.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'views/home/HomeWidget.dart';
-import 'utils/SharedPreferencesUtils.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
+
 import 'utils/CPTheme.dart';
+import 'utils/SharedPreferencesUtils.dart';
+import 'views/home/HomeWidget.dart';
 //import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 void main() => runApp(MyApp());
