@@ -1,6 +1,6 @@
 class Page {
   int page = 1;
-  int pageSize = 4;
+  int pageSize = 10;
   int totalPage = 1000;
 
   Page(

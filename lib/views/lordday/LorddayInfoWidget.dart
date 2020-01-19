@@ -130,15 +130,19 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> with WidgetsBindi
             MaterialPageRoute(builder: (context) => LorddayInfoDetailsWidget(lorddayInfo: lorddayInfo, medias:canPlayMedias , selectedIndex: canPlayMedias.indexOf(media),)),
           );
         },
-        child: Stack(
-          children: <Widget>[
-            Offstage(
-              offstage: true,
-              child: Container(
-                  width: MediaQuery.of(context).size.width*0.8,
-                  height: MediaQuery.of(context).size.width*0.8/16*9,
-                  child:  MediaTypeFromInt(media.kind) != MediaType.sermon ? VideofijkplayerWidget(url: media.hDURL):Container()),
-            ),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.width/16*9,
+          child: Stack(
+            children: <Widget>[
+              //如果测试，把Offstage，宽高设为0.8比例，就可以看到
+              Offstage(
+                offstage: true,
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width/16*9,
+                    child:  MediaTypeFromInt(media.kind) != MediaType.sermon ? VideofijkplayerWidget(url: media.hDURL):Container()),
+              ),
 //              Image.network(
 //                media.image ?? defaultimageurl,
 //                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
@@ -167,26 +171,32 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> with WidgetsBindi
 //                },
 //              ),
 
-            CachedNetworkImage(
-                imageUrl: media.image,
-                imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
-                  children: <Widget>[
-                    Image(image: imageProvider,
-                      fit: BoxFit.cover,),
-                    Center(child:
-                    FloatingActionButton(
-                      heroTag: "btn0${index}",
+              CachedNetworkImage(
+                  imageUrl: media.image,
+                  imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+                    children: <Widget>[
+                      Image(image: imageProvider,
+                        fit: BoxFit.cover,),
+                      Center(child:
+                      FloatingActionButton(
+                        heroTag: "btn0${index}",
 //                            onPressed: () {},
-                      child:  Icon(Icons.play_arrow,),),
-                    ),
-                  ],),
-                placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                errorWidget: (context, url, error) => Center(child: Image.asset(
-                  'images/church1.png',
-                  fit: BoxFit.cover,
-                ),) //Center(child: Icon(Icons.error),),
-            ),
-          ],
+                        child:  Icon(Icons.play_arrow,),),
+                      ),
+                    ],),
+                  placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+                  errorWidget: (context, url, error) =>
+                      Container(
+                        decoration:  BoxDecoration(
+                          border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+                          color: Colors.black12,//底色
+                          borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+    //                              boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
+                        ),
+                      ), //Center(child: Icon(Icons.error),),
+              ),
+            ],
+          ),
         ),
       ));
     }else if(media.content.isNotEmpty){

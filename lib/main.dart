@@ -1,5 +1,5 @@
 import 'package:church_platform/views/account/LoginWidget.dart';
-import 'package:church_platform/views/courses/CourseMainWidget.dart';
+import 'package:church_platform/views/courses/CourseGridWidget.dart';
 import 'package:church_platform/views/old/course/CourseWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
 import 'package:church_platform/views/lordday/LorddayInfoWidget.dart';
@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
     DonateWidget(),
     SpiritualMainWidget(),
     LorddayInfoWidget(key:LorddayInfoWidget.myLorddayInfoWidgetKey),
-    CourseMainWidget(),
+    CourseGridWidget(),
   ];
 
   void changeIndex(int index){

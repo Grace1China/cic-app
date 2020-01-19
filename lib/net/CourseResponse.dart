@@ -42,7 +42,7 @@ class CourseResponse {
 class Course {
   int id;
   Church church;
-  Speaker speaker;
+//  Speaker speaker;
   String title;
   String description;
   String content;
@@ -54,7 +54,7 @@ class Course {
   Course(
       {this.id,
         this.church,
-        this.speaker,
+//        this.speaker,
         this.title,
         this.description,
         this.content,
@@ -67,8 +67,8 @@ class Course {
     id = json['id'];
     church =
     json['church'] != null ? new Church.fromJson(json['church']) : null;
-    speaker =
-    json['speaker'] != null ? new Speaker.fromJson(json['speaker']) : null;
+//    speaker =
+//    json['speaker'] != null ? new Speaker.fromJson(json['speaker']) : null;
     title = json['title'];
     description = json['description'];
     content = json['content'];
@@ -89,9 +89,9 @@ class Course {
     if (this.church != null) {
       data['church'] = this.church.toJson();
     }
-    if (this.speaker != null) {
-      data['speaker'] = this.speaker.toJson();
-    }
+//    if (this.speaker != null) {
+//      data['speaker'] = this.speaker.toJson();
+//    }
     data['title'] = this.title;
     data['description'] = this.description;
     data['content'] = this.content;

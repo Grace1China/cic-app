@@ -18,14 +18,19 @@ class CourseGridItem extends StatelessWidget {
 //            color: Colors.black12,
             height: 275,
 //        decoration: BoxDecoration(border: Border.all()),
-            margin: EdgeInsets.all(10.0),
+          decoration:  BoxDecoration(
+            border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+            color: Colors.black12,//底色
+            borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+            //                              boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
+          ),
+            margin: EdgeInsets.all(5.0),
 //            padding: EdgeInsets.all(10.0),
             child: Container(
+              padding: EdgeInsets.all(5.0),
               color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.all(0.0),
-                child: Column(
-                  children: <Widget>[
+              child: Column(
+                children: <Widget>[
 //                    FadeInImage.memoryNetwork(
 //                      placeholder: kTransparentImage,
 //                      image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
@@ -33,47 +38,70 @@ class CourseGridItem extends StatelessWidget {
 //                                  height: 176,
 //                      fit: BoxFit.cover,
 //                    ),
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      height: 176,
-                      child: CachedNetworkImage(
-                          imageUrl: course.medias[0].image,
-                          imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
-                            children: <Widget>[
-                              Image(image: imageProvider,
-                                fit: BoxFit.cover,),
-                            ],),
-                          placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                          errorWidget: (context, url, error) =>
-                              Center(child: Image.asset(
-                                'images/church1.png',
-                                fit: BoxFit.cover,
-                              ),)
-//                              Center(child: Icon(Icons.error),),
-                      ),
-                    ),
-                    Text(course.title,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),maxLines: 1,),
-                    Divider(),
-                    Container(
-                      margin: EdgeInsets.all(5.0),
-                      child: Center(
-                        child: Row(
+                  Container(
+//                    margin: EdgeInsets.all(5),
+//                      padding: EdgeInsets.all(5),
+//                      width: 200,
+                    height: 170,
+                    child: CachedNetworkImage(
+                        imageUrl: course.medias[0].image,
+                        imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
                           children: <Widget>[
-                            Text("￥${course.price}"),
-                            Spacer(),
-                            Expanded(
-                              child:Text("999已售",overflow: TextOverflow.ellipsis,maxLines: 1,textAlign: TextAlign.end,),
+                            Image(image: imageProvider,
+                              fit: BoxFit.cover,),
+                          ],),
+                        placeholder: (context, url) =>
+//                              Center(child: CircularProgressIndicator(),),
+                              Container(
+        //                            color: Colors.grey,
+                                decoration:  BoxDecoration(
+                                  border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+                                  color: Colors.black26,//底色
+                                  borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+        //                              boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
+                                ),
+                                child: Center(child: CircularProgressIndicator(),),
+                              ),
+                        errorWidget: (context, url, error) =>
+                          //灰色边框
+                            Container(
+//                            color: Colors.grey,
+                              decoration:  BoxDecoration(
+                                border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+                                color: Colors.black12,//底色
+                                borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+//                              boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
+                              ),
                             ),
-                          ],
-                        ),
+                              //默认图
+//                              Center(child: Image.asset(
+//                                'images/church1.png',
+//                                fit: BoxFit.cover,
+//                              ),)
+                              //error小图
+//                              Center(child: Icon(Icons.error),),
+                    ),
+                  ),
+                  Text(course.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),maxLines: 1,),
+                  Divider(),
+                  Container(
+//                    margin: EdgeInsets.all(5.0),
+                    child: Center(
+                      child: Row(
+                        children: <Widget>[
+                          Text("￥${course.price}"),
+                          Spacer(),
+                          Expanded(
+                            child:Text("999已售",overflow: TextOverflow.ellipsis,maxLines: 1,textAlign: TextAlign.end,),
+                          ),
+                        ],
                       ),
                     ),
+                  ),
 
-                  ],
-                ),
-
+                ],
               ),
             )
 

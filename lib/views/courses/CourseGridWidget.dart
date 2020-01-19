@@ -9,13 +9,13 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 
 
-class CourseMainWidget extends StatefulWidget {
+class CourseGridWidget extends StatefulWidget {
   @override
-  _CourseMainWidgetState createState() => _CourseMainWidgetState();
+  _CourseGridWidgetState createState() => _CourseGridWidgetState();
 }
 
 
-class _CourseMainWidgetState extends State<CourseMainWidget> {
+class _CourseGridWidgetState extends State<CourseGridWidget> {
   EasyRefreshController _controller = EasyRefreshController();
   bool isFirstLoad = true;
   bool isloading = true;
@@ -135,7 +135,7 @@ class _CourseMainWidgetState extends State<CourseMainWidget> {
 //              })
 //        ],
         ),
-        backgroundColor: Colors.black12,
+//        backgroundColor: Colors.black12,
         body:buildBody(context),
 
     );

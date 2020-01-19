@@ -43,10 +43,17 @@ class _CourseInfoWidgetState extends State<CourseInfoWidget> {
           children: <Widget>[
 //          VedioPlayerWidget(url:widget.course.video),
 //          VedioPlayerWidget(url:widget.course.medias[0].hDURL),
-//          Container(
-//              width: double.infinity,
-//              height: MediaQuery.of(context).size.width/16*9,
-//              child:  VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
+          Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.width,
+              decoration:  BoxDecoration(
+                border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+//                color: Colors.black26,//底色
+                borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
+              ),
+              child:
+//              VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
             Stack(alignment: AlignmentDirectional.center,
               children: <Widget>[
 //              Offstage(
@@ -57,18 +64,37 @@ class _CourseInfoWidgetState extends State<CourseInfoWidget> {
 //                    child: VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
 //              ),
                 CachedNetworkImage(
-                    imageUrl: widget.course.medias[0].image ?? 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+                    imageUrl: widget.course.medias[0].image,
                     imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
                       children: <Widget>[
                         Image(image: imageProvider,
                           fit: BoxFit.cover,),
 
                       ],),
-                    placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                    errorWidget: (context, url, error) => Center(child: Image.asset(
-                      'images/church1.png',
-                      fit: BoxFit.cover,
-                    ),) //Center(child: Icon(Icons.error),),
+                    placeholder: (context, url) =>
+                        Container(
+                          //                            color: Colors.grey,
+                          decoration:  BoxDecoration(
+                            border:  Border.all(width: 2.0, color: Colors.black12),// 边色与边宽度
+                            color: Colors.black26,//底色
+                            borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                            // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
+                          ),
+                          child:
+                            Center(child: CircularProgressIndicator(),
+//                              Center(child: Container(),
+                            ),
+                        ),
+                    errorWidget: (context, url, error) =>
+                    //灰色边框
+                      Container(
+                        decoration:  BoxDecoration(
+                          border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+                          color: Colors.black12,//底色
+                          borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                        ),
+                      ),
+
                 ),
 //              Center(child:
 //              FloatingActionButton(
@@ -78,6 +104,7 @@ class _CourseInfoWidgetState extends State<CourseInfoWidget> {
 //              ),
               ],
             ),
+          ),
             Container(
               padding: const EdgeInsets.all(5),
               child: Text(
@@ -94,37 +121,11 @@ class _CourseInfoWidgetState extends State<CourseInfoWidget> {
                 style: TextStyle(fontSize: 18,color: Colors.red),
               ),
             ),
-            Offstage(
-              offstage: widget.course.medias[0].hDURL == null || widget.course.medias[0].hDURL.isEmpty,
-              child: Container(
-                  width: MediaQuery.of(context).size.width*0.8,
-                  height: MediaQuery.of(context).size.width*0.8/16*9,
-                  child: VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
-            ),
-            widget.course.content != null ? Html(data: """<div name='例题5'>
-          <h5>例题5-列表做调查问卷</h5>
-          <div>
-              <ol>
-                  <li>你喜欢的cp是哪一个？
-                      <ol start='1' type='A'>
-                          <li>南硕</li>
-                          <li>糖锡</li>
-                          <li>国旻</li>
-                          <li>珍锡</li>
-                      </ol>
-                  </li>
-                  <li>为什么喜欢这个cp？
-                      <ol start='2' type='A'>
-                              <li>长得好</li>
-                              <li>比较真</li>
-                              <li>太无聊</li>
-                              <li>没理由</li>
-                      </ol>
-                  </li>
-              </ol>
-          </div>""") : Container(),
+
+            widget.course.content != null ? Html(data: widget.course.content) : Container(),
             Container(
               width: MediaQuery.of(context).size.width,
+              height: 50,
               child: RaisedButton(
                   onPressed: () {
 
