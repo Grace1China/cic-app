@@ -16,14 +16,38 @@ class CourseGridWidget extends StatefulWidget {
 
 
 class _CourseGridWidgetState extends State<CourseGridWidget> {
+
+  //  Future<CourseResponse> courseResponse;
+  List<Course> courses;
+
+  String errmsg = "";
+
+  //Refresh
   EasyRefreshController _controller = EasyRefreshController();
   bool isFirstLoad = true;
   bool isloading = true;
-  String errmsg = "";
   Page page = Page.fromDefault();
 
-//  Future<CourseResponse> courseResponse;
-  List<Course> courses;
+  //Search
+  Widget _appBarTitle = new Text('课程');
+  Icon _searchIcon = Icon(Icons.search);
+  final TextEditingController _filter = new TextEditingController();
+  String searchKeyword = null;
+
+  _CourseGridWidgetState(){
+//    _filter.addListener(() {
+//      if (_filter.text.isEmpty) {
+//        setState(() {
+//          _searchText = "";
+//          filteredNames = names;
+//        });
+//      } else {
+//        setState(() {
+//          _searchText = _filter.text;
+//        });
+//      }
+//    });
+  }
 
   @override
   void initState() {
@@ -31,6 +55,7 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
 //    courseResponse = API().getCourseList(page: page,pagesize: pageSize);
     refresh(isFirst:true);
   }
+
 
 //  void _handleTap(Sunday sunday) {
 //    Navigator.push(
@@ -41,7 +66,7 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
 
   void refresh({bool isFirst = false}) async{
     try{
-      CourseResponse response = await API().getCourseList(page: 1,pagesize: page.pageSize);
+      CourseResponse response = await API().getCourseList(page: 1,pagesize: page.pageSize,keyword: searchKeyword);
       setState(() {
         isloading = false;
         page = Page(page: response.page,totalPage: response.totalPage);
@@ -62,7 +87,7 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
   void loadMore() async{
     try {
       CourseResponse r = await API().getCourseList(
-          page: page.page + 1, pagesize: page.pageSize);
+          page: page.page + 1, pagesize: page.pageSize,keyword: searchKeyword);
       setState(() {
         page.page += 1;
         courses += r.data;
@@ -119,7 +144,7 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('课程'),
+          title: _appBarTitle,
           //centerTitle: true,
           elevation:
           (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
@@ -134,6 +159,48 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
 //                );
 //              })
 //        ],
+        actions: <Widget>[
+          IconButton(
+            icon: _searchIcon,
+            onPressed: (){
+              setState(() {
+                if (this._searchIcon.icon == Icons.search) {
+                  this._searchIcon = Icon(Icons.close);
+                  this._appBarTitle = TextField(
+                    controller: _filter,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search,color: Colors.white,),
+                        hintText: 'Search...',
+                        hintStyle: TextStyle(color: Colors.white),
+                    ),
+
+                    onChanged: (searchText){
+                      searchKeyword = searchText;
+                    },
+                    onSubmitted: (String searchText){
+                      searchKeyword = searchText;
+                      print(searchText);
+                      setState(() {
+                        isloading = true;
+                      });
+                      refresh(isFirst: true);
+                    },
+                  );
+                  //handleSearchStart();
+                } else {
+                  this._searchIcon = Icon(Icons.search);
+                  this._appBarTitle = Text('课程');
+                  _filter.clear();
+                  //handleSearchEnd();
+                }
+              });
+            },
+
+          )
+        ],
         ),
 //        backgroundColor: Colors.black12,
         body:buildBody(context),

@@ -50,6 +50,8 @@ dependencies:
   date_format: ^1.0.8
   flutter_easyrefresh:
 
+  dio:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

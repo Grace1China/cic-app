@@ -18,7 +18,8 @@ import 'ChurchResponse.dart';
 
 
 class API{
-  static final String HOST = "http://13.231.255.163";//"""http://l3.community";
+  static final String HOST_NAME = "13.231.255.163";//"""http://l3.community";
+  static final String HOST = "http://" + HOST_NAME;//"""http://l3.community";
   static final String APIS = "/rapi";
 
   HttpClient _httpClient = HttpClient();
@@ -127,10 +128,20 @@ class API{
     }
   }
 
-  Future<CourseResponse> getCourseList({int page,int pagesize}) async {
+  Future<CourseResponse> getCourseList({int page,int pagesize,String keyword = null}) async {
 
     final token = await SharedPreferencesUtils.getToken();
-    final response = await http.get(HOST + APIS + "/courses/pagesize/$pagesize/page/$page",
+    var queryParameters = {
+      "pagesize" : pagesize.toString(),
+      "page" : page.toString(),
+    };
+
+    if(keyword != null && keyword.isNotEmpty){
+      queryParameters["keyword"] = keyword;
+    }
+
+    var uri = Uri.http(HOST_NAME, APIS + "/courses",queryParameters);
+    final response = await http.get(uri,
       headers: token != null && token.isNotEmpty ? {HttpHeaders.authorizationHeader: "Bearer " + token,} : {},
     );
 
