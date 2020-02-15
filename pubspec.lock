@@ -317,13 +317,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.2+2"
-  simple_search_bar:
-    dependency: "direct main"
-    description:
-      name: simple_search_bar
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.1.7"
   sky_engine:
     dependency: transitive
     description: flutter
