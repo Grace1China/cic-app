@@ -52,6 +52,11 @@ dependencies:
 
   dio:
 
+  in_app_purchase:
+
+#  flutter_light_storekit:
+#    path: /Users/kevin/myopensource/flutter/flutter_light_storekit/
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

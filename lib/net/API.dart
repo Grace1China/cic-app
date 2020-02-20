@@ -18,7 +18,9 @@ import 'ChurchResponse.dart';
 
 
 class API{
-  static final String HOST_NAME = "13.231.255.163";//"""http://l3.community";
+  static final String HOST_NAME = "192.168.43.196:8000";
+//  static final String HOST_NAME = "127.0.1.101:8000";
+//  static final String HOST_NAME = "13.231.255.163";//"""http://l3.community";
   static final String HOST = "http://" + HOST_NAME;//"""http://l3.community";
   static final String APIS = "/rapi";
 

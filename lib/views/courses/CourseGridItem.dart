@@ -91,7 +91,7 @@ class CourseGridItem extends StatelessWidget {
                     child: Center(
                       child: Row(
                         children: <Widget>[
-                          Text("￥${course.price}"),
+                          Text("￥${course.platformPrice()}"),
                           Spacer(),
                           Expanded(
                             child:Text("999已售",overflow: TextOverflow.ellipsis,maxLines: 1,textAlign: TextAlign.end,),
