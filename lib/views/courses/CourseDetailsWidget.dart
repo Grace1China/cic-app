@@ -1,9 +1,15 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/CourseResponse.dart';
-import 'package:church_platform/vedio/VedioPlayerWidget.dart';
-import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
+import 'package:church_platform/utils/AlertDialogUrils.dart';
+import 'package:church_platform/utils/IAPUnCompletePurchaseStore.dart';
+import 'package:church_platform/utils/IAPUtils.dart';
+import 'package:church_platform/utils/LoggerUtils.dart';
+import 'package:church_platform/utils/SharedPreferencesUtils.dart';
+import 'package:church_platform/views/account/LoginWidget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/foundation.dart';
@@ -11,7 +17,7 @@ import 'package:flutter/foundation.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'consumable_store.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 const String coursejson = """{
     "id": 59,
@@ -68,11 +74,12 @@ const bool kAutoConsume = true;
 const String ConsumableId = 'com.silverlinings.ios.NobelPrize.c.12';
 ////const String _kConsumableId = 'com.churchplatform.churchplatform.iap.c.tier2';
 
+
 void main() {
   // For play billing library 2.0 on Android, it is mandatory to call
   // [enablePendingPurchases](https://developer.android.com/reference/com/android/billingclient/api/BillingClient.Builder.html#enablependingpurchases)
   // as part of initializing the app.
-//  InAppPurchaseConnection.enablePendingPurchases();
+  InAppPurchaseConnection.enablePendingPurchases();
 
  var c = Course.fromJson(json.decode(coursejson));
   runApp(MaterialApp(
@@ -91,194 +98,254 @@ class CourseDetailsWidget extends StatefulWidget {
 }
 
 class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
+  String order_no;
+  String _kConsumableId = ConsumableId; //当前产品的id
+  bool _isPurchased = false; //是否已购买
 
   //苹果内购相关。
   final InAppPurchaseConnection _connection = InAppPurchaseConnection.instance;
   StreamSubscription<List<PurchaseDetails>> _subscription;
-  List<String> _notFoundIds = [];
-  List<ProductDetails> _products = [];
-  List<PurchaseDetails> _purchases = [];
-  List<String> _consumables = [];
-  bool _isAvailable = false;  //是否可以连接到商店
-  bool _purchasePending = false;
-  bool _loading = true;
-  String _queryProductError; //是否查询产品错误
-
-  String _kConsumableId = ConsumableId; //当前产品的id
+  ProductDetails _product; //查到的产品
+  bool _loading = false;
 
   @override
   void initState() {
 
     _kConsumableId = widget.course.iapCharge.productId;
 
-    //购买payment状况的监听
-    Stream purchaseUpdated = InAppPurchaseConnection.instance.purchaseUpdatedStream;
-    _subscription = purchaseUpdated.listen((purchaseDetailsList) {
-      print("------支付监听-----个数${purchaseDetailsList.lenght}");
-      _listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      print("------支付完成-----: done");
-      _subscription.cancel();
-    }, onError: (error) {
-      // handle error here.
-      print("------支付错误-----:" + error);
-    });
+    _listenToPurchaseStart();
     
-    initStoreInfo();
+    _initStoreInfo();
 
     super.initState();
   }
 
-  Future<void> initStoreInfo() async {
+  Future<void> _initStoreInfo() async {
 
-    final bool isAvailable = await _connection.isAvailable();
-    print("print连接是否可用： isAvailable = ${isAvailable == true}");
-    debugPrint("debugprint连接是否可用： isAvailable = ${isAvailable == true}");
+    //查询产品
+    bool isAvailable = await _connection.isAvailable();
+    Log.i("Log.i连接是否可用： isAvailable = ${isAvailable == true}");
     if (!isAvailable) {
-      setState(() {
-        _isAvailable = isAvailable;
-        _products = [];
-        _purchases = [];
-        _notFoundIds = [];
-        _consumables = [];
-        _purchasePending = false;
-        _loading = false;
-      });
       return;
     }
 
-    ProductDetailsResponse productDetailResponse =
-    await _connection.queryProductDetails([_kConsumableId].toSet());
+    ProductDetailsResponse productDetailResponse = await _connection.queryProductDetails([_kConsumableId].toSet());
     if (productDetailResponse.error != null) {
-      print("查询产品错误：" + productDetailResponse.error.message);
-      setState(() {
-        _queryProductError = productDetailResponse.error.message;
-        _isAvailable = isAvailable;
-        _products = productDetailResponse.productDetails;
-        _purchases = [];
-        _notFoundIds = productDetailResponse.notFoundIDs;
-        _consumables = [];
-        _purchasePending = false;
-        _loading = false;
-      });
+      Log.i("查询产品错误：" + productDetailResponse.error.message);
       return;
     }
-    productDetailResponse.productDetails.forEach((p){
-      print("查询到产品：${p.id} ${p.title}");
-    });
-
 
     if (productDetailResponse.productDetails.isEmpty) {
-      setState(() {
-        _queryProductError = null;
-        _isAvailable = isAvailable;
-        _products = productDetailResponse.productDetails;
-        _purchases = [];
-        _notFoundIds = productDetailResponse.notFoundIDs;
-        _consumables = [];
-        _purchasePending = false;
-        _loading = false;
-      });
+      Log.i("未查询到产品：${_kConsumableId.toString()}");
       return;
     }
 
-    final QueryPurchaseDetailsResponse purchaseResponse =
-    await _connection.queryPastPurchases();
-    if (purchaseResponse.error != null) {
-      // handle query past purchase error..
-    }
-    final List<PurchaseDetails> verifiedPurchases = [];
-    for (PurchaseDetails purchase in purchaseResponse.pastPurchases) {
-      if (await _verifyPurchase(purchase)) {
-        verifiedPurchases.add(purchase);
-      }
-    }
-    List<String> consumables = await ConsumableStore.load();
+    productDetailResponse.productDetails.forEach((p){
+      Log.i("查询到产品：${p.id} ${p.title}");
+    });
     setState(() {
-      _isAvailable = isAvailable;
-      _products = productDetailResponse.productDetails;
-      _purchases = verifiedPurchases;
-      _notFoundIds = productDetailResponse.notFoundIDs;
-      _consumables = consumables;
-      _purchasePending = false;
+      _product = productDetailResponse.productDetails.first;
       _loading = false;
     });
-//    fetchProducts([_kConsumableId]);
-//    toPayment();
+
+    //重新进行上一次未完成的充值。
+    Map<String,Map<String,String>> unComplete = await IAPUnCompletePurchaseStore.loadMap();
+    if(unComplete.length > 0){
+
+      //同步编程失败。现在用户每次只能进行一个未完成的购买。
+      for (var entry in unComplete.entries) {
+//2      await Future.forEach(unComplete.entries, (MapEntry entry) async {
+        String key = entry.key;
+        Map<String,String> courseMap = entry.value;
+
+//      unComplete.forEach((key,courseMap) async {
+        if(Platform.isIOS){
+          String purchaseid = key.replaceAll(IAPUnCompletePurchaseStore.PREFIX,"");
+          int lastCourseID = int.parse(courseMap["courseid"]);
+          String lastCourseName = courseMap["coursename"];
+          String lastCoursePrice = courseMap["courseprice"];
+
+          AlertDialogUtils.show(context,
+              title:"你有一笔交易还未完成",
+              content:"花费${lastCoursePrice}元，购买课程${lastCourseName}。若已经扣款，则不会重复扣款。",
+              canCancel:false,
+              okTitle:"继续",
+              okHandler: () async {
+
+            bool valid = await _verifyPurchaseLast(lastCourseID);
+            if(valid){
+              IAPUnCompletePurchaseStore.remove(purchaseid);
+              Log.i("购买成功");
+              hideLoading();
+              AlertDialogUtils.show(context, title:"提示", content:"购买成功");
+              await InAppPurchaseConnection.instance.completePurchaseWithID(purchaseid);
+              if(widget.course.id == lastCourseID){
+                setState(() {
+                  _isPurchased = true;
+                });
+              }
+            } else {
+              Log.i("购买验证不合法：" + purchaseid);
+              hideLoading();
+              AlertDialogUtils.show(context, title:"提示", content:"购买验证失败，请重试。");
+            }
+          });
+          return; //只进行一条购买就返回。
+        }
+      }
+    }
   }
-//  //添加的获取产品方法
-//  Future<void> fetchProducts(List<String> productIds) async{
-//    final bool isAvailable = await _connection.isAvailable();
-//    if (!isAvailable) {
-//      setState(() {
-//        _isAvailable = isAvailable;
-//        _products = [];
-//        _purchases = [];
-//        _notFoundIds = [];
-//        _consumables = [];
-//        _purchasePending = false;
-//        _loading = false;
-//      });
-//      return;
-//    }
-//
-//    ProductDetailsResponse productDetailResponse =
-//        await _connection.queryProductDetails(productIds.toSet());
-//    if (productDetailResponse.error != null) {
-//      setState(() {
-//        _queryProductError = productDetailResponse.error.message;
-//        _isAvailable = isAvailable;
-//        _products = productDetailResponse.productDetails;
-//        _purchases = [];
-//        _notFoundIds = productDetailResponse.notFoundIDs;
-//        _consumables = [];
-//        _purchasePending = false;
-//        _loading = false;
-//      });
-//      return;
-//    }
-//
-//    if (productDetailResponse.productDetails.isEmpty) {
-//      setState(() {
-//        _queryProductError = null;
-//        _isAvailable = isAvailable;
-//        _products = productDetailResponse.productDetails;
-//        _purchases = [];
-//        _notFoundIds = productDetailResponse.notFoundIDs;
-//        _consumables = [];
-//        _purchasePending = false;
-//        _loading = false;
-//      });
-//      return;
-//    }
-//  }
-//
-//  //添加的支付方法
-//  Future<void> toPayment() async {
-//
-//
-//    final QueryPurchaseDetailsResponse purchaseResponse =
-//    await _connection.queryPastPurchases();
-//    if (purchaseResponse.error != null) {
-//      // handle query past purchase error..
-//    }
-//    final List<PurchaseDetails> verifiedPurchases = [];
-//    for (PurchaseDetails purchase in purchaseResponse.pastPurchases) {
-//      if (await _verifyPurchase(purchase)) {
-//        verifiedPurchases.add(purchase);
-//      }
-//    }
-//    List<String> consumables = await ConsumableStore.load();
-//    setState(() {
-////      _isAvailable = isAvailable;
-////      _products = productDetailResponse.productDetails;
-//      _purchases = verifiedPurchases;
-////      _notFoundIds = productDetailResponse.notFoundIDs;
-//      _consumables = consumables;
-//      _purchasePending = false;
-//      _loading = false;
-//    });
-//  }
+
+  void tapPurchase() async{
+    //有产品才会可点击。
+    try{
+      if(!await SharedPreferencesUtils.isLogin()){
+        Navigator.push(context, CupertinoPageRoute(
+            fullscreenDialog: true,
+            builder: (context) => LoginWidget()
+        ));
+        return;
+      }
+
+      showLoading();
+      order_no = await API().createOrder(widget.course.id);
+      PurchaseParam purchaseParam = PurchaseParam( productDetails: _product,applicationUserName: null,sandboxTesting: true);
+      _connection.buyConsumable(purchaseParam: purchaseParam,autoConsume: kAutoConsume || Platform.isIOS);
+    }catch(e){
+      hideLoading();
+      AlertDialogUtils.show(context, title:"提示", content:e.toString());
+    }
+  }
+
+  void showLoading() {
+    setState(() {
+      _loading = true;
+    });
+  }
+
+  void hideLoading(){
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  //验证凭证
+  Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) async {
+    if(Platform.isIOS){
+      try{
+        showLoading();
+        if(order_no == null){
+          order_no = await API().createOrder(widget.course.id);
+        }
+        //此处会输入密码，显示支付完成。--- 操作完成。----等待很长时间。
+        PurchaseVerificationData receiptData = await InAppPurchaseConnection.instance.refreshPurchaseVerificationData();
+        Log.i("待验证数据" + receiptData.localVerificationData);
+
+        bool valid = await API().iapVerify(receiptData.localVerificationData,order_no);
+        return Future<bool>.value(valid);
+      }catch(e){
+        return Future<bool>.value(false);
+      }
+    }
+  }
+
+  Future<bool> _verifyPurchaseLast(int lastCourseID) async {
+    if(Platform.isIOS){
+      try{
+        showLoading();
+        String order_no = await API().createOrder(lastCourseID);
+        PurchaseVerificationData receiptData = await InAppPurchaseConnection.instance.refreshPurchaseVerificationData();
+        bool valid = await API().iapVerify(receiptData.localVerificationData,order_no);
+        return Future<bool>.value(valid);
+      }catch(e){
+        return Future<bool>.value(false);
+      }
+    }
+  }
+
+  //成功失败监听
+  void _purchaseError(IAPError error,PurchaseDetails purchaseDetails) async{
+//    await ConsumableStore.save(purchaseDetails.purchaseID);
+    Log.i("购买错误：errpr: ${error}, " + (purchaseDetails != null ? IAPUtils.description(purchaseDetails) : ""));
+    hideLoading();
+    AlertDialogUtils.show(context, title:"提示", content:"购买失败，请重试。${error.details}");
+  }
+
+  void _purchaseInvalid(PurchaseDetails purchaseDetails) async{
+//    await ConsumableStore.save(purchaseDetails.purchaseID);
+    Log.i("购买验证不合法：" + (purchaseDetails != null ? IAPUtils.description(purchaseDetails) : ""));
+    hideLoading();
+    AlertDialogUtils.show(context, title:"提示", content:"购买验证失败，请重试。");
+  }
+
+  void _purchaseSuccess(PurchaseDetails purchaseDetails) async {
+//    await ConsumableStore.remove(purchaseDetails.purchaseID);
+    Log.i("购买成功：" + (purchaseDetails != null ? IAPUtils.description(purchaseDetails) : ""));
+    hideLoading();
+    AlertDialogUtils.show(context, title:"提示", content:"购买成功");
+    setState(() {
+      _isPurchased = true;
+    });
+    _finishPurchase(purchaseDetails);
+  }
+
+  void _finishPurchase(PurchaseDetails purchaseDetails) async{
+    if (Platform.isAndroid) {
+      if (!kAutoConsume && purchaseDetails.productID == _kConsumableId) {
+        await InAppPurchaseConnection.instance.consumePurchase(purchaseDetails);
+      }
+    }
+    if (purchaseDetails.pendingCompletePurchase) {
+      await InAppPurchaseConnection.instance.completePurchase(purchaseDetails);
+    }
+  }
+
+  //监听逻辑
+  void _listenToPurchaseStart(){
+    //购买payment状况的监听
+    Stream purchaseUpdated = InAppPurchaseConnection.instance.purchaseUpdatedStream;
+    _subscription = purchaseUpdated.listen((purchaseDetailsList) {
+
+//      Log.i("------购买监听-----个数${purchaseDetailsList.length.toString()}");
+      _listenToPurchaseUpdated(purchaseDetailsList);
+
+    }, onDone: () {
+
+      Log.i("------购买完成-----: done");
+//      _subscription.cancel();
+      hideLoading();
+      //TODO:_purchaseSuccess();???
+    }, onError: (error) {
+
+      Log.i("------购买错误-----:" + error.toString());
+      _purchaseError(error, null);
+    });
+  }
+  void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
+    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+      Log.i("购买监听：${IAPUtils.description(purchaseDetails)}");
+
+      switch (purchaseDetails.status){
+        case PurchaseStatus.pending:
+//          showLoading();
+          break;
+        case PurchaseStatus.error:
+          _purchaseError(purchaseDetails.error,purchaseDetails);
+          break;
+        case PurchaseStatus.purchased:
+          IAPUnCompletePurchaseStore.save(purchaseDetails.purchaseID, widget.course.id.toString(), widget.course.title, _product.price);
+
+          bool valid = await _verifyPurchase(purchaseDetails);
+          if (valid) {
+            IAPUnCompletePurchaseStore.remove(purchaseDetails.purchaseID);
+            _purchaseSuccess(purchaseDetails);
+          } else {
+            _purchaseInvalid(purchaseDetails);
+          }
+          break;
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -288,37 +355,6 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> stack = [];
-    if (_queryProductError == null) {
-      stack.add(
-        ListView(
-          children: [
-            _buildConnectionCheckTile(),
-            _buildProductList(),
-            _buildConsumableBox(),
-          ],
-        ),
-      );
-    } else {
-      stack.add(Center(
-        child: Text(_queryProductError),
-      ));
-    }
-    if (_purchasePending) {
-      stack.add(
-        Stack(
-          children: [
-            Opacity(
-              opacity: 0.3,
-              child: const ModalBarrier(dismissible: false, color: Colors.grey),
-            ),
-            Center(
-              child: CircularProgressIndicator(),
-            ),
-          ],
-        ),
-      );
-    }
 
     return  Scaffold(
       appBar: AppBar(
@@ -329,25 +365,31 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
       ),
       // Use a FutureBuilder to display a loading spinner while waiting for the
       // VideoPlayerController to finish initializing.
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+      body: ModalProgressHUD(
+        inAsyncCall: _loading,
+        // demo of some additional parameters
+        opacity: 0.5,
+        progressIndicator: CircularProgressIndicator(),
+
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
 //          VedioPlayerWidget(url:widget.course.video),
 //          VedioPlayerWidget(url:widget.course.medias[0].hDURL),
-          Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.width,
-              decoration:  BoxDecoration(
-                border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+            Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.width,
+                decoration:  BoxDecoration(
+                  border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
 //                color: Colors.black26,//底色
-                borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
-                // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
-              ),
-              child:
+                  borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                  // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
+                ),
+                child:
 //              VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
-            Stack(alignment: AlignmentDirectional.center,
-              children: <Widget>[
+              Stack(alignment: AlignmentDirectional.center,
+                children: <Widget>[
 //              Offstage(
 //                offstage: true,
 //                child: Container(
@@ -355,323 +397,96 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
 //                    height: MediaQuery.of(context).size.width*0.8/16*9,
 //                    child: VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
 //              ),
-                CachedNetworkImage(
-                    imageUrl: widget.course.medias[0].image,
-                    imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
-                      children: <Widget>[
-                        Image(image: imageProvider,
-                          fit: BoxFit.cover,),
+                  CachedNetworkImage(
+                      imageUrl: widget.course.medias[0].image,
+                      imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+                        children: <Widget>[
+                          Image(image: imageProvider,
+                            fit: BoxFit.cover,),
 
-                      ],),
-                    placeholder: (context, url) =>
-                        Container(
-                          //                            color: Colors.grey,
-                          decoration:  BoxDecoration(
-                            border:  Border.all(width: 2.0, color: Colors.black12),// 边色与边宽度
-                            color: Colors.black26,//底色
-                            borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
-                            // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
-                          ),
-                          child:
-                            Center(child: CircularProgressIndicator(),
-//                              Center(child: Container(),
+                        ],),
+                      placeholder: (context, url) =>
+                          Container(
+                            //color: Colors.grey,
+                            decoration:  BoxDecoration(
+                              border:  Border.all(width: 2.0, color: Colors.black12),// 边色与边宽度
+                              color: Colors.black26,//底色
+                              borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                              // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
                             ),
+                            child:
+                              Center(child: CircularProgressIndicator(),
+//                              Center(child: Container(),
+                              ),
+                          ),
+                      errorWidget: (context, url, error) =>
+                      //灰色边框
+                        Container(
+                          decoration:  BoxDecoration(
+                            border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+                            color: Colors.black12,//底色
+                            borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                          ),
                         ),
-                    errorWidget: (context, url, error) =>
-                    //灰色边框
-                      Container(
-                        decoration:  BoxDecoration(
-                          border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
-                          color: Colors.black12,//底色
-                          borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
-                        ),
-                      ),
 
-                ),
+                  ),
 //              Center(child:
 //              FloatingActionButton(
 //                heroTag: "btn${widget.course.id}",
 ////                            onPressed: () {},
 //                child:  Icon(Icons.play_arrow,),),
 //              ),
-              ],
-            ),
-          ),
-            Container(
-              padding: const EdgeInsets.all(5),
-              child: Text(
-                widget.course.title,
-//              softWrap: true,
-                style: TextStyle(fontSize: 20),
+                ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(5),
-              child: Text( _isAvailable && _products.length > 0 ?
-                _products[0].price : "￥" + widget.course.platformPrice(),
+              Container(
+                padding: const EdgeInsets.all(5),
+                child: Text(
+                  widget.course.title,
 //              softWrap: true,
-                style: TextStyle(fontSize: 18,color: Colors.red),
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
-            ),
+              Container(
+                padding: const EdgeInsets.all(5),
+                child: Text( _product != null ?
+                  _product.price : "￥" + widget.course.platformPrice(),
+//              softWrap: true,
+                  style: TextStyle(fontSize: 18,color: Colors.red),
+                ),
+              ),
 
-            widget.course.content != null ? Html(data: widget.course.content) : Container(),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 50,
-              child: RaisedButton(
-                  onPressed: () {
-                    if(_isAvailable && _products.length > 0){
-                       print("可以支付");
-                       PurchaseParam purchaseParam = PurchaseParam(
-                           productDetails: _products[0],
-                           applicationUserName: null,
-                           sandboxTesting: true);
-                       if (_products[0].id == _kConsumableId) {
-                         _connection.buyConsumable(
-                             purchaseParam: purchaseParam,
-                             autoConsume: kAutoConsume || Platform.isIOS);
-                       } else {
-                         //没有非消耗。注释掉
-//                         _connection.buyNonConsumable(
-//                             purchaseParam: purchaseParam);
-                       }
-                    }else{
-                      print("不可支付");
-                    }
-                  },
-                  child: Text('购买',
-                      style: TextStyle(
-                          color: Colors.white)),
-                  color: _isAvailable && _products.length > 0 ? Theme.of(context).buttonColor : Colors.grey
-              ),
+              widget.course.content != null ? Html(data: widget.course.content) : Container(),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                child: RaisedButton(
+                    onPressed:_product != null ? () {
+                      if(_isPurchased){
+
+                      }else{
+                        tapPurchase();
+                      }
+                    } : null,
+                    child: Stack(
+                      children: <Widget>[
+                        Center(child: Text(_isPurchased ? '去观看' : '去支付',style: TextStyle(color: Colors.white))),
+                        _product != null ? Container() : Center(child: CircularProgressIndicator(),),
+                      ],
+                    ),
+                    color:Theme.of(context).buttonColor,
+                    disabledColor: Colors.grey
+                ),
 //              margin: new EdgeInsets.only(
 //                  top: 20.0
 //              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 400,
-              child: Stack(
-                children: stack,
               ),
-            ),
-
-          ],
+            ],
+          ),
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
-    );;
-  }
-
-  //内购其他
-  Card _buildConnectionCheckTile() {
-    if (_loading) {
-      return Card(child: ListTile(title: const Text('Trying to connect...')));
-    }
-    final Widget storeHeader = ListTile(
-      leading: Icon(_isAvailable ? Icons.check : Icons.block,
-          color: _isAvailable ? Colors.green : ThemeData.light().errorColor),
-      title: Text(
-          'The store is ' + (_isAvailable ? 'available' : 'unavailable') + '.'),
     );
-    final List<Widget> children = <Widget>[storeHeader];
-
-    if (!_isAvailable) {
-      children.addAll([
-        Divider(),
-        ListTile(
-          title: Text('Not connected',
-              style: TextStyle(color: ThemeData.light().errorColor)),
-          subtitle: const Text(
-              'Unable to connect to the payments processor. Has this app been configured correctly? See the example README for instructions.'),
-        ),
-      ]);
-    }
-    return Card(child: Column(children: children));
   }
 
-  Card _buildProductList() {
-    if (_loading) {
-      return Card(
-          child: (ListTile(
-              leading: CircularProgressIndicator(),
-              title: Text('Fetching products...'))));
-    }
-    if (!_isAvailable) {
-      return Card();
-    }
-    final ListTile productHeader = ListTile(title: Text('Products for Sale'));
-    List<ListTile> productList = <ListTile>[];
-    if (_notFoundIds.isNotEmpty) {
-      productList.add(ListTile(
-          title: Text('[${_notFoundIds.join(", ")}] not found',
-              style: TextStyle(color: ThemeData.light().errorColor)),
-          subtitle: Text(
-              'This app needs special configuration to run. Please see example/README.md for instructions.')));
-    }
 
-    // This loading previous purchases code is just a demo. Please do not use this as it is.
-    // In your app you should always verify the purchase data using the `verificationData` inside the [PurchaseDetails] object before trusting it.
-    // We recommend that you use your own server to verity the purchase data.
-    Map<String, PurchaseDetails> purchases =
-    Map.fromEntries(_purchases.map((PurchaseDetails purchase) {
-      if (purchase.pendingCompletePurchase) {
-        InAppPurchaseConnection.instance.completePurchase(purchase);
-      }
-      return MapEntry<String, PurchaseDetails>(purchase.productID, purchase);
-    }));
-    productList.addAll(_products.map(
-          (ProductDetails productDetails) {
-        PurchaseDetails previousPurchase = purchases[productDetails.id];
-        return ListTile(
-            title: Text(
-              productDetails.title,
-            ),
-            subtitle: Text(
-              productDetails.description,
-            ),
-            trailing: previousPurchase != null
-                ? Icon(Icons.check)
-                : FlatButton(
-              child: Text(productDetails.price),
-              color: Colors.green[800],
-              textColor: Colors.white,
-              onPressed: () {
-                PurchaseParam purchaseParam = PurchaseParam(
-                    productDetails: productDetails,
-                    applicationUserName: null,
-                    sandboxTesting: true);
-                if (productDetails.id == _kConsumableId) {
-                  _connection.buyConsumable(
-                      purchaseParam: purchaseParam,
-                      autoConsume: kAutoConsume || Platform.isIOS);
-                } else {
-                  _connection.buyNonConsumable(
-                      purchaseParam: purchaseParam);
-                }
-              },
-            ));
-      },
-    ));
-
-    return Card(
-        child:
-        Column(children: <Widget>[productHeader, Divider()] + productList));
-  }
-
-  Card _buildConsumableBox() {
-    if (_loading) {
-      return Card(
-          child: (ListTile(
-              leading: CircularProgressIndicator(),
-              title: Text('Fetching consumables...'))));
-    }
-    if (!_isAvailable || _notFoundIds.contains(_kConsumableId)) {
-      return Card();
-    }
-    final ListTile consumableHeader =
-    ListTile(title: Text('Purchased consumables'));
-    final List<Widget> tokens = _consumables.map((String id) {
-      return GridTile(
-        child: IconButton(
-          icon: Icon(
-            Icons.stars,
-            size: 42.0,
-            color: Colors.orange,
-          ),
-          splashColor: Colors.yellowAccent,
-          onPressed: () => consume(id),
-        ),
-      );
-    }).toList();
-    return Card(
-        child: Column(children: <Widget>[
-          consumableHeader,
-          Divider(),
-          GridView.count(
-            crossAxisCount: 5,
-            children: tokens,
-            shrinkWrap: true,
-            padding: EdgeInsets.all(16.0),
-          )
-        ]));
-  }
-
-  Future<void> consume(String id) async {
-    await ConsumableStore.consume(id);
-    final List<String> consumables = await ConsumableStore.load();
-    setState(() {
-      _consumables = consumables;
-    });
-  }
-
-  void showPendingUI() {
-    setState(() {
-      _purchasePending = true;
-    });
-  }
-
-  void deliverProduct(PurchaseDetails purchaseDetails) async {
-    // IMPORTANT!! Always verify a purchase purchase details before delivering the product.
-    if (purchaseDetails.productID == _kConsumableId) {
-      await ConsumableStore.save(purchaseDetails.purchaseID);
-      List<String> consumables = await ConsumableStore.load();
-      setState(() {
-        _purchasePending = false;
-        _consumables = consumables;
-      });
-    } else {
-      setState(() {
-        _purchases.add(purchaseDetails);
-        _purchasePending = false;
-      });
-    }
-  }
-
-  void handleError(IAPError error) {
-    setState(() {
-      _purchasePending = false;
-    });
-  }
-
-  Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) {
-    // IMPORTANT!! Always verify a purchase before delivering the product.
-    // For the purpose of an example, we directly return true.
-    return Future<bool>.value(true);
-  }
-
-  void _handleInvalidPurchase(PurchaseDetails purchaseDetails) {
-    // handle invalid purchase here if  _verifyPurchase` failed.
-  }
-
-  void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
-    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
-      print("支付监听：产品id:${purchaseDetails.productID},purchaseID:${purchaseDetails.purchaseID},状态：${purchaseDetails.status}，错误：${purchaseDetails.error}");
-      if (purchaseDetails.status == PurchaseStatus.pending) {
-//        print("支付监听_listenToPurchaseUpdated：产品id:${purchaseDetails.productID}");
-        showPendingUI();
-      } else {
-        if (purchaseDetails.status == PurchaseStatus.error) {
-          handleError(purchaseDetails.error);
-        } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-          bool valid = await _verifyPurchase(purchaseDetails);
-          if (valid) {
-            deliverProduct(purchaseDetails);
-          } else {
-            _handleInvalidPurchase(purchaseDetails);
-            return;
-          }
-        }
-        if (Platform.isAndroid) {
-          if (!kAutoConsume && purchaseDetails.productID == _kConsumableId) {
-            await InAppPurchaseConnection.instance
-                .consumePurchase(purchaseDetails);
-          }
-        }
-        if (purchaseDetails.pendingCompletePurchase) {
-          await InAppPurchaseConnection.instance
-              .completePurchase(purchaseDetails);
-        }
-      }
-    });
-  }
 }

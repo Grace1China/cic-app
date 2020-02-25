@@ -1,3 +1,4 @@
+import 'package:church_platform/utils/LoggerUtils.dart';
 import 'package:church_platform/views/account/LoginWidget.dart';
 import 'package:church_platform/views/courses/CourseGridWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
 //    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(  没反应
 //        statusBarColor: Colors.white
 //    ));

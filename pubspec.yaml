@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: #^0.1.2
   transparent_image: #^1.0.0
   shared_preferences: #^0.5.4+3
+  logger: #^0.8.3
   http:
   provider:
   path_provider:
@@ -47,13 +48,13 @@ dependencies:
 
   cached_network_image: ^2.0.0-rc
 
-  date_format: ^1.0.8
+  date_format: #^1.0.8
   flutter_easyrefresh:
 
   dio:
 
   in_app_purchase:
-
+    path: ../plugins/packages/in_app_purchase
 #  flutter_light_storekit:
 #    path: /Users/kevin/myopensource/flutter/flutter_light_storekit/
 
