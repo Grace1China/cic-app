@@ -50,7 +50,7 @@ DEPENDENCIES:
   - video_player_web (from `.symlinks/plugins/video_player_web/ios`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - FIJKPlayer
     - FMDB
 
@@ -102,6 +102,6 @@ SPEC CHECKSUMS:
   video_player: 69c5f029fac4ffe4fc8a85ea7f7b793709661549
   video_player_web: da8cadb8274ed4f8dbee8d7171b420dedd437ce7
 
-PODFILE CHECKSUM: 9edc347499ceabf88ba94457527d502f1c602d16
+PODFILE CHECKSUM: f38b6bb1ace1b41a0c8d48aaf58efff222d720a0
 
 COCOAPODS: 1.8.4

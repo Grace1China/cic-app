@@ -149,6 +149,15 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
     });
 
     //重新进行上一次未完成的充值。
+    await doLastPurchase();
+  }
+
+  Future<bool> hasLastPurchase() async {
+    Map<String,Map<String,String>> unComplete = await IAPUnCompletePurchaseStore.loadMap();
+    return unComplete.length > 0;
+  }
+
+  Future<void> doLastPurchase() async{
     Map<String,Map<String,String>> unComplete = await IAPUnCompletePurchaseStore.loadMap();
     if(unComplete.length > 0){
 
@@ -172,34 +181,34 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
               okTitle:"继续",
               okHandler: () async {
 
-            bool valid = await _verifyPurchaseLast(lastCourseID);
-            if(valid){
-              IAPUnCompletePurchaseStore.remove(purchaseid);
-              Log.i("购买成功");
-              hideLoading();
-              AlertDialogUtils.show(context, title:"提示", content:"购买成功");
-              await InAppPurchaseConnection.instance.completePurchaseWithID(purchaseid);
-              if(widget.course.id == lastCourseID){
-                setState(() {
-                  _isPurchased = true;
-                });
-              }
-            } else {
-              Log.i("购买验证不合法：" + purchaseid);
-              hideLoading();
-              AlertDialogUtils.show(context, title:"提示", content:"购买验证失败，请重试。");
-            }
-          });
+                bool valid = await _verifyPurchaseLast(lastCourseID);
+                if(valid){
+                  IAPUnCompletePurchaseStore.remove(purchaseid);
+                  Log.i("购买成功");
+                  hideLoading();
+                  AlertDialogUtils.show(context, title:"提示", content:"购买成功");
+                  await InAppPurchaseConnection.instance.completePurchaseWithID(purchaseid);
+                  if(widget.course.id == lastCourseID){
+                    setState(() {
+                      _isPurchased = true;
+                    });
+                  }
+                } else {
+                  Log.i("购买验证不合法：purchaseid: " + purchaseid);
+                  hideLoading();
+                  AlertDialogUtils.show(context, title:"提示", content:"购买验证失败，请重试。");
+                }
+              });
           return; //只进行一条购买就返回。
         }
       }
     }
   }
 
-  void tapPurchase() async{
+  Future<void> tapPurchase() async{
     //有产品才会可点击。
-    try{
-      if(!await SharedPreferencesUtils.isLogin()){
+    try {
+      if (!await SharedPreferencesUtils.isLogin()) {
         Navigator.push(context, CupertinoPageRoute(
             fullscreenDialog: true,
             builder: (context) => LoginWidget()
@@ -207,6 +216,19 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
         return;
       }
 
+      if (await hasLastPurchase()) {
+        await doLastPurchase();
+      } else {
+        await doPurchase();
+      }
+    }catch(e){
+      hideLoading();
+      AlertDialogUtils.show(context, title:"提示", content:e.toString());
+    }
+  }
+
+  Future<void> doPurchase() async{
+    try{
       showLoading();
       order_no = await API().createOrder(widget.course.id);
       PurchaseParam purchaseParam = PurchaseParam( productDetails: _product,applicationUserName: null,sandboxTesting: true);
