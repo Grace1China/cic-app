@@ -1,12 +1,13 @@
-class OrderResponse {
+
+class IAPVerifyResponse {
   String errCode;
-  OrderResult data;
+  IAPVerifyResult data;
 
-  OrderResponse({this.errCode, this.data});
+  IAPVerifyResponse({this.errCode, this.data});
 
-  OrderResponse.fromJson(Map<String, dynamic> json) {
+  IAPVerifyResponse.fromJson(Map<String, dynamic> json) {
     errCode = json['errCode'];
-    data = json['data'] != null ? new OrderResult.fromJson(json['data']) : null;
+    data = json['data'] != null ? new IAPVerifyResult.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -19,24 +20,24 @@ class OrderResponse {
   }
 }
 
-class OrderResult {
+class IAPVerifyResult {
   String order_no;
-  String client_token; //paypal专有
+  int course_id;
 
-  OrderResult(
+  IAPVerifyResult(
       {this.order_no,
-        this.client_token
+        this.course_id,
       });
 
-  OrderResult.fromJson(Map<String, dynamic> json) {
+  IAPVerifyResult.fromJson(Map<String, dynamic> json) {
     order_no = json['order_no'];
-    client_token = json['client_token'];
+    course_id = json['course_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['order_no'] = this.order_no;
-    data['client_token'] = this.client_token;
+    data['course_id'] = this.course_id;
     return data;
   }
 }

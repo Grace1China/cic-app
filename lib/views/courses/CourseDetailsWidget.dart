@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/CourseResponse.dart';
+import 'package:church_platform/net/IAPVerifyResponse.dart';
+import 'package:church_platform/net/OrderResponse.dart';
+import 'package:church_platform/net/PaypalResponse.dart';
 import 'package:church_platform/utils/AlertDialogUrils.dart';
 import 'package:church_platform/utils/IAPUnCompletePurchaseStore.dart';
 import 'package:church_platform/utils/IAPUtils.dart';
@@ -18,6 +21,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:flutter_braintree/flutter_braintree.dart';
 
 const String coursejson = """{
     "id": 59,
@@ -79,7 +83,7 @@ void main() {
   // For play billing library 2.0 on Android, it is mandatory to call
   // [enablePendingPurchases](https://developer.android.com/reference/com/android/billingclient/api/BillingClient.Builder.html#enablependingpurchases)
   // as part of initializing the app.
-  InAppPurchaseConnection.enablePendingPurchases();
+//  InAppPurchaseConnection.enablePendingPurchases();
 
  var c = Course.fromJson(json.decode(coursejson));
   runApp(MaterialApp(
@@ -99,23 +103,41 @@ class CourseDetailsWidget extends StatefulWidget {
 
 class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
   String order_no;
+//  String client_token;
   String _kConsumableId = ConsumableId; //当前产品的id
   bool _isPurchased = false; //是否已购买
 
   //苹果内购相关。
-  final InAppPurchaseConnection _connection = InAppPurchaseConnection.instance;
+  InAppPurchaseConnection _connection;
   StreamSubscription<List<PurchaseDetails>> _subscription;
   ProductDetails _product; //查到的产品
   bool _loading = false;
 
+  _CourseDetailsWidgetState(){
+    if(Platform.isIOS){
+//      InAppPurchaseConnection.enablePendingPurchases();
+      _connection = InAppPurchaseConnection.instance;
+      Log.i("ios");
+    }else{
+      Log.i("android");
+    }
+  }
   @override
   void initState() {
 
-    _kConsumableId = widget.course.iapCharge.productId;
 
-    _listenToPurchaseStart();
-    
-    _initStoreInfo();
+    if(Platform.isIOS){
+      _kConsumableId = widget.course.iapCharge.productId;
+
+      _listenToPurchaseStart();
+
+      _initStoreInfo();
+    }else{
+      setState(() {
+        _product = null;
+      });
+    }
+
 
     super.initState();
   }
@@ -230,7 +252,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
   Future<void> doPurchase() async{
     try{
       showLoading();
-      order_no = await API().createOrder(widget.course.id);
+      order_no = await API().iapCreateOrder(widget.course.id);
       PurchaseParam purchaseParam = PurchaseParam( productDetails: _product,applicationUserName: null,sandboxTesting: true);
       _connection.buyConsumable(purchaseParam: purchaseParam,autoConsume: kAutoConsume || Platform.isIOS);
     }catch(e){
@@ -257,14 +279,14 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
       try{
         showLoading();
         if(order_no == null){
-          order_no = await API().createOrder(widget.course.id);
+          order_no = await API().iapCreateOrder(widget.course.id);
         }
         //此处会输入密码，显示支付完成。--- 操作完成。----等待很长时间。
         PurchaseVerificationData receiptData = await InAppPurchaseConnection.instance.refreshPurchaseVerificationData();
         Log.i("待验证数据" + receiptData.localVerificationData);
 
-        bool valid = await API().iapVerify(receiptData.localVerificationData,order_no);
-        return Future<bool>.value(valid);
+        IAPVerifyResult result = await API().iapVerify(receiptData.localVerificationData,order_no);
+        return Future<bool>.value(true);
       }catch(e){
         return Future<bool>.value(false);
       }
@@ -275,10 +297,10 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
     if(Platform.isIOS){
       try{
         showLoading();
-        String order_no = await API().createOrder(lastCourseID);
+        String order_no = await API().iapCreateOrder(lastCourseID);
         PurchaseVerificationData receiptData = await InAppPurchaseConnection.instance.refreshPurchaseVerificationData();
-        bool valid = await API().iapVerify(receiptData.localVerificationData,order_no);
-        return Future<bool>.value(valid);
+        IAPVerifyResult result = await API().iapVerify(receiptData.localVerificationData,order_no);
+        return Future<bool>.value(true);
       }catch(e){
         return Future<bool>.value(false);
       }
@@ -312,13 +334,10 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
   }
 
   void _finishPurchase(PurchaseDetails purchaseDetails) async{
-    if (Platform.isAndroid) {
-      if (!kAutoConsume && purchaseDetails.productID == _kConsumableId) {
-        await InAppPurchaseConnection.instance.consumePurchase(purchaseDetails);
+    if(Platform.isIOS){
+      if (purchaseDetails.pendingCompletePurchase) {
+        await InAppPurchaseConnection.instance.completePurchase(purchaseDetails);
       }
-    }
-    if (purchaseDetails.pendingCompletePurchase) {
-      await InAppPurchaseConnection.instance.completePurchase(purchaseDetails);
     }
   }
 
@@ -369,12 +388,115 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
     });
   }
 
+  //--------------paypal支付相关----------
+  Future<void> tapPurchase4Paypal() async{
+    //有产品才会可点击。
+
+      if (!await SharedPreferencesUtils.isLogin()) {
+        Navigator.push(context, CupertinoPageRoute(
+            fullscreenDialog: true,
+            builder: (context) => LoginWidget()
+        ));
+        return;
+      }
+
+      //1、提示文案
+      AlertDialogUtils.show(context,
+            title:"确认支付",
+            content:"您是否花费\$${widget.course.price_usd}，购买课程《${widget.course.title}》？",
+            canCancel:true,
+            okTitle:"继续",
+            okHandler: () async {
+              await _doPaypalPurchase();
+            });
+  }
+
+  Future<void> _doPaypalPurchase() async{
+    try{
+
+      showLoading();
+      //2、请求server, get client_token
+      OrderResult orderResult = await API().paypalGetClientToken(widget.course.id);
+//        order_no = orderResult.order_no;
+      String client_token = orderResult.client_token;
+      hideLoading();
+
+      //3、显示dropIn。请求braintree server，get nonce
+      var request = BraintreeDropInRequest(
+//          tokenizationKey: tokenizationKey,
+        clientToken: client_token,
+        collectDeviceData: true,
+//          googlePaymentRequest: BraintreeGooglePaymentRequest(
+//            totalPrice: '4.20',
+//            currencyCode: 'USD',
+//            billingAddressRequired: false,
+//          ),
+        paypalRequest: BraintreePayPalRequest(
+          amount: widget.course.price_usd.toString(), //'4.20'
+          displayName: 'bicf公司名字',
+        ),
+      );
+
+      BraintreeDropInResult result = await BraintreeDropIn.start(request);
+
+      //有结果。
+      if (result != null) {
+        showLoading();
+        BraintreePaymentMethodNonce nonce = result.paymentMethodNonce;
+        Log.i("Noce:${nonce.nonce}, Type label:${nonce.typeLabel}, Description:${nonce.description}");
+
+        //4、请求server，支付
+        PaypalResult paypalResult = await API().paypalPostNonce(nonce.nonce, orderResult.order_no);
+//          if(paypalResult.course_id == widget.course.id){
+        setState(() {
+          _isPurchased = true;
+        });
+        Log.i("购买成功：课程id：${widget.course.id}，订单no：${orderResult.order_no}");
+        hideLoading();
+        AlertDialogUtils.show(context, title:"提示", content:"购买成功");
+//          }
+
+        //点空白处，dropin消失
+      }else{
+        hideLoading();
+      }
+
+    }catch(e){
+      hideLoading();
+      AlertDialogUtils.show(context, title:"提示", content:e.toString());
+    }
+  }
+
   @override
   void dispose() {
     _subscription.cancel();
     super.dispose();
   }
 
+  Widget buildPayBtn(BuildContext context){
+    return RaisedButton(
+        onPressed: Platform.isIOS && _product == null ? null : () {
+          if(_isPurchased){
+
+          }else{
+            if(Platform.isIOS){
+              tapPurchase();
+            }else{
+              tapPurchase4Paypal();
+            }
+
+          }
+        } ,
+        child: Stack(
+          children: <Widget>[
+            Center(child: Text(_isPurchased ? '去观看' : '去支付',style: TextStyle(color: Colors.white))),
+            Platform.isIOS && _product == null ?  Center(child: CircularProgressIndicator(),) : Container(),
+          ],
+        ),
+        color:Theme.of(context).buttonColor,
+        disabledColor: Colors.grey
+    );
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -482,23 +604,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 50,
-                child: RaisedButton(
-                    onPressed:_product != null ? () {
-                      if(_isPurchased){
-
-                      }else{
-                        tapPurchase();
-                      }
-                    } : null,
-                    child: Stack(
-                      children: <Widget>[
-                        Center(child: Text(_isPurchased ? '去观看' : '去支付',style: TextStyle(color: Colors.white))),
-                        _product != null ? Container() : Center(child: CircularProgressIndicator(),),
-                      ],
-                    ),
-                    color:Theme.of(context).buttonColor,
-                    disabledColor: Colors.grey
-                ),
+                child: buildPayBtn(context),
 //              margin: new EdgeInsets.only(
 //                  top: 20.0
 //              ),

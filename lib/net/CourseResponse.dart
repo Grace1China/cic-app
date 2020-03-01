@@ -45,6 +45,7 @@ class Course {
   String description;
   String content;
   String price;
+  String price_usd;
   IapCharge iapCharge;
   List<Medias> medias;
   String createTime;
@@ -58,6 +59,7 @@ class Course {
         this.description,
         this.content,
         this.price,
+        this.price_usd,
         this.iapCharge,
         this.medias,
         this.createTime,
@@ -87,6 +89,7 @@ class Course {
     description = json['description'];
     content = json['content'];
     price = json['price'];
+    price_usd = json['price_usd'];
     if (json['medias'] != null) {
       medias = new List<Medias>();
       json['medias'].forEach((v) {
@@ -113,6 +116,7 @@ class Course {
     data['description'] = this.description;
     data['content'] = this.content;
     data['price'] = this.price;
+    data['price_usd'] = this.price_usd;
     if (this.medias != null) {
       data['medias'] = this.medias.map((v) => v.toJson()).toList();
     }

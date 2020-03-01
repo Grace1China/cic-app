@@ -105,7 +105,7 @@ packages:
       name: dio
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.8"
+    version: "3.0.9"
   fijkplayer:
     dependency: "direct main"
     description:
@@ -118,6 +118,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_braintree:
+    dependency: "direct main"
+    description:
+      name: flutter_braintree
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.5.3+2"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -145,7 +152,7 @@ packages:
       name: flutter_pdfview
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0+10"
+    version: "1.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -464,4 +471,4 @@ packages:
     version: "3.5.0"
 sdks:
   dart: ">=2.6.0 <3.0.0"
-  flutter: ">=1.12.13+hotfix.4 <2.0.0"
+  flutter: ">=1.12.13+hotfix.5 <2.0.0"
