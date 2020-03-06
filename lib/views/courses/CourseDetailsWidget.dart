@@ -105,13 +105,13 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
   String order_no;
 //  String client_token;
   String _kConsumableId = ConsumableId; //当前产品的id
-  bool _isPurchased = false; //是否已购买
 
   //苹果内购相关。
   InAppPurchaseConnection _connection;
   StreamSubscription<List<PurchaseDetails>> _subscription;
   ProductDetails _product; //查到的产品
   bool _loading = false;
+  bool isBuySuccess; //是否在该页完成一次购买。
 
   _CourseDetailsWidgetState(){
     if(Platform.isIOS){
@@ -127,7 +127,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
 
 
     if(Platform.isIOS){
-      _kConsumableId = widget.course.iapCharge.productId;
+      _kConsumableId = widget.course.iapCharge != null ? widget.course.iapCharge.productId : "";
 
       _listenToPurchaseStart();
 
@@ -203,23 +203,25 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
               okTitle:"继续",
               okHandler: () async {
 
-                bool valid = await _verifyPurchaseLast(lastCourseID);
-                if(valid){
+                try {
+                  bool valid = await _verifyPurchaseLast(lastCourseID);
                   IAPUnCompletePurchaseStore.remove(purchaseid);
                   Log.i("购买成功");
+                  isBuySuccess = true;
                   hideLoading();
                   AlertDialogUtils.show(context, title:"提示", content:"购买成功");
                   await InAppPurchaseConnection.instance.completePurchaseWithID(purchaseid);
                   if(widget.course.id == lastCourseID){
                     setState(() {
-                      _isPurchased = true;
+                      widget.course.is_buy = true;
                     });
                   }
-                } else {
+                }catch(e){
                   Log.i("购买验证不合法：purchaseid: " + purchaseid);
                   hideLoading();
-                  AlertDialogUtils.show(context, title:"提示", content:"购买验证失败，请重试。");
+                  AlertDialogUtils.show(context, title:"提示", content:"购买验证失败，请重试。${e}");
                 }
+
               });
           return; //只进行一条购买就返回。
         }
@@ -288,7 +290,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
         IAPVerifyResult result = await API().iapVerify(receiptData.localVerificationData,order_no);
         return Future<bool>.value(true);
       }catch(e){
-        return Future<bool>.value(false);
+        throw e;
       }
     }
   }
@@ -302,7 +304,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
         IAPVerifyResult result = await API().iapVerify(receiptData.localVerificationData,order_no);
         return Future<bool>.value(true);
       }catch(e){
-        return Future<bool>.value(false);
+        throw e;
       }
     }
   }
@@ -312,23 +314,24 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
 //    await ConsumableStore.save(purchaseDetails.purchaseID);
     Log.i("购买错误：errpr: ${error}, " + (purchaseDetails != null ? IAPUtils.description(purchaseDetails) : ""));
     hideLoading();
-    AlertDialogUtils.show(context, title:"提示", content:"购买失败，请重试。${error.details}");
+    AlertDialogUtils.show(context, title:"提示", content:"购买失败，请重试。${error.message}");
   }
 
-  void _purchaseInvalid(PurchaseDetails purchaseDetails) async{
+  void _purchaseInvalid(Exception e,PurchaseDetails purchaseDetails) async{
 //    await ConsumableStore.save(purchaseDetails.purchaseID);
     Log.i("购买验证不合法：" + (purchaseDetails != null ? IAPUtils.description(purchaseDetails) : ""));
     hideLoading();
-    AlertDialogUtils.show(context, title:"提示", content:"购买验证失败，请重试。");
+    AlertDialogUtils.show(context, title:"提示", content:"购买验证失败，请重试。${e.toString()}");
   }
 
   void _purchaseSuccess(PurchaseDetails purchaseDetails) async {
 //    await ConsumableStore.remove(purchaseDetails.purchaseID);
     Log.i("购买成功：" + (purchaseDetails != null ? IAPUtils.description(purchaseDetails) : ""));
+    isBuySuccess = true;
     hideLoading();
     AlertDialogUtils.show(context, title:"提示", content:"购买成功");
     setState(() {
-      _isPurchased = true;
+      widget.course.is_buy = true;
     });
     _finishPurchase(purchaseDetails);
   }
@@ -376,13 +379,15 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
         case PurchaseStatus.purchased:
           IAPUnCompletePurchaseStore.save(purchaseDetails.purchaseID, widget.course.id.toString(), widget.course.title, _product.price);
 
-          bool valid = await _verifyPurchase(purchaseDetails);
-          if (valid) {
+          try{
+            bool valid = await _verifyPurchase(purchaseDetails);
+
             IAPUnCompletePurchaseStore.remove(purchaseDetails.purchaseID);
             _purchaseSuccess(purchaseDetails);
-          } else {
-            _purchaseInvalid(purchaseDetails);
+          }catch(e){
+            _purchaseInvalid(e,purchaseDetails);
           }
+
           break;
       }
     });
@@ -433,7 +438,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
 //          ),
         paypalRequest: BraintreePayPalRequest(
           amount: widget.course.price_usd.toString(), //'4.20'
-          displayName: 'bicf公司名字',
+          displayName: 'BICF国际教会',
         ),
       );
 
@@ -443,15 +448,18 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
       if (result != null) {
         showLoading();
         BraintreePaymentMethodNonce nonce = result.paymentMethodNonce;
-        Log.i("Noce:${nonce.nonce}, Type label:${nonce.typeLabel}, Description:${nonce.description}");
+        String deviceData = result.deviceData;
+
+        Log.i("Noce:${nonce.nonce}, Type label:${nonce.typeLabel}, Description:${nonce.description}. DeviceData:${deviceData}");
 
         //4、请求server，支付
-        PaypalResult paypalResult = await API().paypalPostNonce(nonce.nonce, orderResult.order_no);
+        PaypalResult paypalResult = await API().paypalPostNonce(nonce.nonce, orderResult.order_no,deviceData);
 //          if(paypalResult.course_id == widget.course.id){
         setState(() {
-          _isPurchased = true;
+          widget.course.is_buy = true;
         });
         Log.i("购买成功：课程id：${widget.course.id}，订单no：${orderResult.order_no}");
+        isBuySuccess = true;
         hideLoading();
         AlertDialogUtils.show(context, title:"提示", content:"购买成功");
 //          }
@@ -469,14 +477,18 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
 
   @override
   void dispose() {
-    _subscription.cancel();
+    if(_subscription != null){
+      _subscription.cancel();
+    }
     super.dispose();
   }
 
   Widget buildPayBtn(BuildContext context){
+    var circle = Container();
+
     return RaisedButton(
         onPressed: Platform.isIOS && _product == null ? null : () {
-          if(_isPurchased){
+          if(widget.course.is_buy){
 
           }else{
             if(Platform.isIOS){
@@ -489,8 +501,8 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
         } ,
         child: Stack(
           children: <Widget>[
-            Center(child: Text(_isPurchased ? '去观看' : '去支付',style: TextStyle(color: Colors.white))),
-            Platform.isIOS && _product == null ?  Center(child: CircularProgressIndicator(),) : Container(),
+            Center(child: Text(widget.course.is_buy ? '去观看' : '去支付',style: TextStyle(color: Colors.white))),
+            Platform.isIOS && _product == null && _kConsumableId != "" && !widget.course.is_buy ?  Center(child: CircularProgressIndicator(),) : Container(),
           ],
         ),
         color:Theme.of(context).buttonColor,
@@ -500,40 +512,44 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
   @override
   Widget build(BuildContext context) {
 
-    return  Scaffold(
-      appBar: AppBar(
-        title: Text(widget.course.title),
-        //centerTitle: true,
-        elevation:
-        (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
-      ),
-      // Use a FutureBuilder to display a loading spinner while waiting for the
-      // VideoPlayerController to finish initializing.
-      body: ModalProgressHUD(
-        inAsyncCall: _loading,
-        // demo of some additional parameters
-        opacity: 0.5,
-        progressIndicator: CircularProgressIndicator(),
+    return  WillPopScope(
+      onWillPop: (){
+        Navigator.pop(context,isBuySuccess);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.course.title),
+          //centerTitle: true,
+          elevation:
+          (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
+        ),
+        // Use a FutureBuilder to display a loading spinner while waiting for the
+        // VideoPlayerController to finish initializing.
+        body: ModalProgressHUD(
+          inAsyncCall: _loading,
+          // demo of some additional parameters
+          opacity: 0.5,
+          progressIndicator: CircularProgressIndicator(),
 
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
 //          VedioPlayerWidget(url:widget.course.video),
 //          VedioPlayerWidget(url:widget.course.medias[0].hDURL),
-            Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.width,
-                decoration:  BoxDecoration(
-                  border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+              Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.width,
+                  decoration:  BoxDecoration(
+                    border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
 //                color: Colors.black26,//底色
-                  borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
-                  // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
-                ),
-                child:
+                    borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                    // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
+                  ),
+                  child:
 //              VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
-              Stack(alignment: AlignmentDirectional.center,
-                children: <Widget>[
+                Stack(alignment: AlignmentDirectional.center,
+                  children: <Widget>[
 //              Offstage(
 //                offstage: true,
 //                child: Container(
@@ -541,78 +557,79 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
 //                    height: MediaQuery.of(context).size.width*0.8/16*9,
 //                    child: VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
 //              ),
-                  CachedNetworkImage(
-                      imageUrl: widget.course.medias[0].image,
-                      imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
-                        children: <Widget>[
-                          Image(image: imageProvider,
-                            fit: BoxFit.cover,),
+                    CachedNetworkImage(
+                        imageUrl: widget.course.medias[0].image,
+                        imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+                          children: <Widget>[
+                            Image(image: imageProvider,
+                              fit: BoxFit.cover,),
 
-                        ],),
-                      placeholder: (context, url) =>
-                          Container(
-                            //color: Colors.grey,
-                            decoration:  BoxDecoration(
-                              border:  Border.all(width: 2.0, color: Colors.black12),// 边色与边宽度
-                              color: Colors.black26,//底色
-                              borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
-                              // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
-                            ),
-                            child:
-                              Center(child: CircularProgressIndicator(),
-//                              Center(child: Container(),
+                          ],),
+                        placeholder: (context, url) =>
+                            Container(
+                              //color: Colors.grey,
+                              decoration:  BoxDecoration(
+                                border:  Border.all(width: 2.0, color: Colors.black12),// 边色与边宽度
+                                color: Colors.black26,//底色
+                                borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                                // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
                               ),
+                              child:
+                                Center(child: CircularProgressIndicator(),
+//                              Center(child: Container(),
+                                ),
+                            ),
+                        errorWidget: (context, url, error) =>
+                        //灰色边框
+                          Container(
+                            decoration:  BoxDecoration(
+                              border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+                              color: Colors.black12,//底色
+                              borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                            ),
                           ),
-                      errorWidget: (context, url, error) =>
-                      //灰色边框
-                        Container(
-                          decoration:  BoxDecoration(
-                            border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
-                            color: Colors.black12,//底色
-                            borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
-                          ),
-                        ),
 
-                  ),
+                    ),
 //              Center(child:
 //              FloatingActionButton(
 //                heroTag: "btn${widget.course.id}",
 ////                            onPressed: () {},
 //                child:  Icon(Icons.play_arrow,),),
 //              ),
-                ],
-              ),
-            ),
-              Container(
-                padding: const EdgeInsets.all(5),
-                child: Text(
-                  widget.course.title,
-//              softWrap: true,
-                  style: TextStyle(fontSize: 20),
+                  ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(5),
-                child: Text( _product != null ?
-                  _product.price : "￥" + widget.course.platformPrice(),
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  child: Text(
+                    widget.course.title,
 //              softWrap: true,
-                  style: TextStyle(fontSize: 18,color: Colors.red),
+                    style: TextStyle(fontSize: 20),
+                  ),
                 ),
-              ),
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  child: Text( _product != null ?
+                    _product.price : "￥" + widget.course.platformPrice(),
+//              softWrap: true,
+                    style: TextStyle(fontSize: 18,color: Colors.red),
+                  ),
+                ),
 
-              widget.course.content != null ? Html(data: widget.course.content) : Container(),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: buildPayBtn(context),
+                widget.course.content != null ? Html(data: widget.course.content) : Container(),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: buildPayBtn(context),
 //              margin: new EdgeInsets.only(
 //                  top: 20.0
 //              ),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 

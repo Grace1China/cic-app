@@ -5,15 +5,17 @@ import 'package:flutter/foundation.dart';
 class CourseResponse {
   String errCode;
   String errMsg;
+  String detail;
   List<Course> data;
   int page;
   int totalPage;
 
-  CourseResponse({this.errCode, this.errMsg,this.data, this.page, this.totalPage});
+  CourseResponse({this.errCode, this.errMsg, this.detail,this.data, this.page, this.totalPage});
 
   CourseResponse.fromJson(Map<String, dynamic> json) {
     errCode = json['errCode'];
     errMsg = json['errMsg'];
+    detail = json['detail'];
     if (json['data'] != null) {
       data = new List<Course>();
       json['data'].forEach((v) {
@@ -28,6 +30,7 @@ class CourseResponse {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['errCode'] = this.errCode;
     data['errMsg'] = this.errMsg;
+    data['detail'] = this.detail;
     if (this.data != null) {
       data['data'] = this.data.map((v) => v.toJson()).toList();
     }
@@ -46,6 +49,8 @@ class Course {
   String content;
   String price;
   String price_usd;
+  int sales_num;
+  bool is_buy;
   IapCharge iapCharge;
   List<Medias> medias;
   String createTime;
@@ -60,6 +65,8 @@ class Course {
         this.content,
         this.price,
         this.price_usd,
+        this.sales_num,
+        this.is_buy,
         this.iapCharge,
         this.medias,
         this.createTime,
@@ -90,6 +97,8 @@ class Course {
     content = json['content'];
     price = json['price'];
     price_usd = json['price_usd'];
+    sales_num = json['sales_num'];
+    is_buy = json['is_buy'];
     if (json['medias'] != null) {
       medias = new List<Medias>();
       json['medias'].forEach((v) {
@@ -117,6 +126,8 @@ class Course {
     data['content'] = this.content;
     data['price'] = this.price;
     data['price_usd'] = this.price_usd;
+    data['sales_num'] = this.sales_num;
+    data['is_buy'] = this.is_buy;
     if (this.medias != null) {
       data['medias'] = this.medias.map((v) => v.toJson()).toList();
     }

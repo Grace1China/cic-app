@@ -1,11 +1,46 @@
 PODS:
   - audioplayers (0.0.1):
     - Flutter
+  - Braintree/Card (4.32.1):
+    - Braintree/Core
+  - Braintree/Core (4.32.1)
+  - Braintree/PaymentFlow (4.32.1):
+    - Braintree/Card
+    - Braintree/Core
+    - Braintree/PayPalOneTouch
+  - Braintree/PayPal (4.32.1):
+    - Braintree/Core
+    - Braintree/PayPalOneTouch
+  - Braintree/PayPalDataCollector (4.32.1):
+    - Braintree/Core
+    - Braintree/PayPalUtils
+  - Braintree/PayPalOneTouch (4.32.1):
+    - Braintree/Core
+    - Braintree/PayPalDataCollector
+    - Braintree/PayPalUtils
+  - Braintree/PayPalUtils (4.32.1)
+  - Braintree/UnionPay (4.32.1):
+    - Braintree/Card
+    - Braintree/Core
+  - BraintreeDropIn (8.0.0):
+    - BraintreeDropIn/DropIn (= 8.0.0)
+  - BraintreeDropIn/DropIn (8.0.0):
+    - Braintree/Card (~> 4.31)
+    - Braintree/Core (~> 4.31)
+    - Braintree/PaymentFlow (~> 4.31)
+    - Braintree/PayPal (~> 4.31)
+    - Braintree/UnionPay (~> 4.31)
+    - BraintreeDropIn/UIKit
+  - BraintreeDropIn/UIKit (8.0.0)
   - fijkplayer (0.4.2):
     - FIJKPlayer (~> 0.4.4)
     - Flutter
   - FIJKPlayer (0.4.4)
   - Flutter (1.0.0)
+  - flutter_braintree (0.2.0):
+    - Braintree/PayPal
+    - BraintreeDropIn
+    - Flutter
   - flutter_pdfview (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
@@ -37,6 +72,7 @@ DEPENDENCIES:
   - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
   - fijkplayer (from `.symlinks/plugins/fijkplayer/ios`)
   - Flutter (from `Flutter`)
+  - flutter_braintree (from `.symlinks/plugins/flutter_braintree/ios`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - in_app_purchase (from `.symlinks/plugins/in_app_purchase/ios`)
@@ -51,6 +87,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - Braintree
+    - BraintreeDropIn
     - FIJKPlayer
     - FMDB
 
@@ -61,6 +99,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fijkplayer/ios"
   Flutter:
     :path: Flutter
+  flutter_braintree:
+    :path: ".symlinks/plugins/flutter_braintree/ios"
   flutter_pdfview:
     :path: ".symlinks/plugins/flutter_pdfview/ios"
   fluttertoast:
@@ -86,9 +126,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   audioplayers: 84f968cea3f2deab00ec4f8ff53358b3c0b3992c
+  Braintree: b06d2b42f0c591e508f7f538a7cc6715af1958b7
+  BraintreeDropIn: 441ad16190e20548a2544652bffef66d457eb70a
   FIJKPlayer: b3a44750f39db82a99d5099ac6ae71c4aeac774c
   fijkplayer: 0df23ba12768de84627f82e76fbb2ac1039e1130
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_braintree: 101b66de3f3ae397c9ee3593c2e24ed67a41eeab
   flutter_pdfview: bdf86972519a15c6d8f50ad34e5b0429b255cbb4
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a

@@ -23,7 +23,7 @@ import 'ChurchResponse.dart';
 class API {
 
 //  static final String HOST_NAME = "192.168.43.196:8000";
-  static final String HOST_NAME = "192.168.1.102:8000";
+  static final String HOST_NAME = "192.168.1.101:8000";
 
 //  static final String HOST_NAME = "127.0.1.101:8000";
 //  static final String HOST_NAME = "13.231.255.163";//"""http://l3.community";
@@ -48,7 +48,7 @@ class API {
       }
       throw Exception('没有教会信息');
     } else {
-      throw Exception(response.statusCode.toString() + ":" + json.decode(response.body));
+      throw Exception(response.statusCode.toString() + ":" + response.body);
     }
   }
 
@@ -68,7 +68,7 @@ class API {
       }
       throw Exception('没有日报');
     } else {
-      throw Exception(response.statusCode.toString() + ":" + json.decode(response.body));
+      throw Exception(response.statusCode.toString() + ":" + response.body);
     }
   }
 
@@ -96,7 +96,7 @@ class API {
 //        MyApp.myTabbedPageKey.currentState.changeIndex(4);
 //        Navigator.of(context).pop();
       }
-      throw Exception(response.statusCode.toString() + ":" + json.decode(response.body));
+      throw Exception(response.statusCode.toString() + ":" + response.body);
     }
   }
 
@@ -114,7 +114,7 @@ class API {
       }
       throw Exception('没有主日信息');
     } else {
-      throw Exception(response.statusCode.toString() + ":" + json.decode(response.body));
+      throw Exception(response.statusCode.toString() + ":" + response.body);
     }
   }
 
@@ -129,7 +129,7 @@ class API {
       }
       throw Exception('没有主日信息');
     } else {
-      throw Exception(response.statusCode.toString() + ":" + json.decode(response.body));
+      throw Exception(response.statusCode.toString() + ":" + response.body);
     }
   }
 
@@ -159,7 +159,7 @@ class API {
       }
       throw Exception('没有课程信息');
     } else {
-      throw Exception(response.statusCode.toString() + ":" + json.decode(response.body));
+      throw Exception(response.statusCode.toString() + ":" + response.body);
     }
 
 /*    var url = HOST + APIS + "/courses/pagesize/$pagesize/page/$page";
@@ -211,7 +211,7 @@ class API {
       }
       throw Exception('没有token');
     } else {
-      throw Exception(response.statusCode.toString() + ":" + json.decode(response.body));
+      throw Exception(response.statusCode.toString() + ":" + response.body);
     }
   }
 
@@ -269,9 +269,9 @@ class API {
       if(baseResponse.errCode == "0"){
         return baseResponse.data.order_no;
       }
-      throw Exception('创建订单失败。${response.statusCode},${response.reasonPhrase},${json.decode(response.body)}');
+      throw Exception('创建订单失败。${response.statusCode},${response.reasonPhrase},${response.body}');
     } else {
-      throw Exception('创建订单失败。状态码：${response.statusCode},${response.reasonPhrase},${json.decode(response.body)}');
+      throw Exception('创建订单失败。状态码：${response.statusCode},${response.reasonPhrase},${response.body}');
     }
   }
 
@@ -292,9 +292,9 @@ class API {
       if(baseResponse.errCode == "0"){
         return baseResponse.data;
       }
-      throw Exception('验证失败。');
+      throw Exception('验证失败。${response.statusCode},${response.reasonPhrase},${response.body}');
     } else {
-      throw Exception(response.statusCode.toString() + ":" + response.reasonPhrase + "." + json.decode(response.body));
+      throw Exception('验证失败。状态码：${response.statusCode},${response.reasonPhrase},${response.body}');
     }
 
 //    var url = HOST + APIS + "/payments/iap/verify";
@@ -343,9 +343,9 @@ class API {
     }
   }
 
-  Future<PaypalResult> paypalPostNonce(String nonce,String orderNO) async {
+  Future<PaypalResult> paypalPostNonce(String nonce,String orderNO,String deviceData) async {
     final token = await SharedPreferencesUtils.getToken();
-    var body = json.encode({'payment_method_nonce': nonce, "order_no": orderNO});
+    var body = json.encode({'payment_method_nonce': nonce, "order_no": orderNO,"":deviceData});
 
     final response = await http.post(
         HOST + APIS + "/payments/paypal/methon_nonce",

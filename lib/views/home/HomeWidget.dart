@@ -86,7 +86,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                           Offstage(
                             offstage: snapshot.data.promotCover == null || snapshot.data.promotCover.isEmpty,
                             child: CachedNetworkImage(
-                                imageUrl: snapshot.data.promotCover,
+                                imageUrl: snapshot.data.promotCover != null && snapshot.data.promotCover.isNotEmpty ? snapshot.data.promotCover : "",
                                 imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
                                   children: <Widget>[
                                     Image(image: imageProvider,
@@ -114,7 +114,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                             child: Container(
                                 width: double.infinity,
                                 height: MediaQuery.of(context).size.width/16*9,
-                                child:  VideofijkplayerWidget(url: snapshot.data.promotVideo)),
+                                child:  VideofijkplayerWidget(url: snapshot.data.promotVideo)), //传入null无影响
                           ),
                           Container(
                             padding: const EdgeInsets.all(5),
