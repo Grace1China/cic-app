@@ -19,13 +19,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import 'ChurchResponse.dart';
+import 'LorddayInfoResponse.dart';
 
 class API {
 
 //  static final String HOST_NAME = "192.168.43.196:8000";
-  static final String HOST_NAME = "192.168.1.101:8000";
+//  static final String HOST_NAME = "192.168.1.101:8000";
 
-//  static final String HOST_NAME = "127.0.1.101:8000";
+  static final String HOST_NAME = "192.168.1.103:8000";
 //  static final String HOST_NAME = "13.231.255.163";//"""http://l3.community";
   static final String HOST = "http://" + HOST_NAME; //"""http://l3.community";
   static final String APIS = "/rapi";
@@ -100,7 +101,7 @@ class API {
     }
   }
 
-  Future<LorddayInfo> getLorddayInfo() async {
+  Future<Sermon> getLorddayInfo() async {
     final token = await SharedPreferencesUtils.getToken();
     final response = await http.get(HOST + APIS + "/lorddayinfo",
       headers: {HttpHeaders.authorizationHeader: "Bearer " + token,},
@@ -118,7 +119,7 @@ class API {
     }
   }
 
-  Future<LorddayInfo> getLorddayInfoL3() async {
+  Future<Sermon> getLorddayInfoL3() async {
     final response = await http.get(HOST + APIS + "/lorddayinfo/l3");
 
     if (response.statusCode == 200) {
@@ -133,8 +134,10 @@ class API {
     }
   }
 
+  static const String RequestCourseOrderByPrice = "price";
+  static const String RequestCourseOrderBySale = "sales_num";
   Future<CourseResponse> getCourseList(
-      {int page, int pagesize, String keyword = null}) async {
+      {int page, int pagesize, String keyword = null,String orderby = null,bool asc = false,bool bought = false}) async {
     final token = await SharedPreferencesUtils.getToken();
     var queryParameters = {
       "pagesize": pagesize.toString(),
@@ -144,6 +147,18 @@ class API {
     if (keyword != null && keyword.isNotEmpty) {
       queryParameters["keyword"] = keyword;
     }
+
+    if(orderby != null && orderby.isNotEmpty){
+      if(asc){
+        queryParameters["orderby"] = orderby + " asc";
+      }else{
+        queryParameters["orderby"] = orderby + " desc";
+      }
+    }
+
+    //已购
+    queryParameters["bought"] = bought.toString();
+
 
     var uri = Uri.http(HOST_NAME, APIS + "/courses", queryParameters);
     final response = await http.get(uri,

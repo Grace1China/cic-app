@@ -41,7 +41,7 @@ class LorddayInfoWidget extends StatefulWidget {
 class _LorddayInfoWidgetState extends State<LorddayInfoWidget> with WidgetsBindingObserver
 {
   AppLifecycleState state;
-  Future<LorddayInfo> lorddayInfo;
+  Future<Sermon> lorddayInfo;
 
   List<Medias> canShowMedias;
   List<Medias> canPlayMedias;
@@ -100,7 +100,7 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> with WidgetsBindi
   }
 
 //  返回一个item元素的list
-  List<Widget> itemWidgets(LorddayInfo lorddayInfo,Medias media,int index){
+  List<Widget> itemWidgets(Sermon lorddayInfo,Medias media,int index){
     List<Widget> widgets = List<Widget>();
     widgets.add(Container(
       padding: const EdgeInsets.all(5),
@@ -197,7 +197,7 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> with WidgetsBindi
     return widgets;
   }
 
-  List<Widget> contentWidgets(LorddayInfo lorddayInfo){
+  List<Widget> contentWidgets(Sermon lorddayInfo){
     List<Widget> contentWidgets = List<Widget>();
     //                  RaisedButton(
 //                      onPressed: () {
@@ -284,7 +284,7 @@ class _LorddayInfoWidgetState extends State<LorddayInfoWidget> with WidgetsBindi
       ),
       // Use a FutureBuilder to display a loading spinner while waiting for the
       // VideoPlayerController to finish initializing.
-      body: FutureBuilder<LorddayInfo>(
+      body: FutureBuilder<Sermon>(
         future: lorddayInfo,
         builder: (context, snapshot) {
           if (snapshot.hasData) {

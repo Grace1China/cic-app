@@ -90,9 +90,10 @@ class CourseGridItem extends StatelessWidget {
 //                    margin: EdgeInsets.all(5.0),
                     child: Center(
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text("￥${course.platformPrice()}"),
-                          Spacer(),
+//                          Text("￥${course.platformPrice()}"),
+                          Text("￥${course.price}"),
                           Expanded(
                             child:Text("${course.sales_num}已售",overflow: TextOverflow.ellipsis,maxLines: 1,textAlign: TextAlign.end,),
                           ),

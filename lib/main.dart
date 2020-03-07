@@ -1,6 +1,6 @@
 import 'package:church_platform/utils/LoggerUtils.dart';
 import 'package:church_platform/views/account/LoginWidget.dart';
-import 'package:church_platform/views/courses/CourseGridWidget.dart';
+import 'package:church_platform/views/courses/store/CourseGridWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
 import 'package:church_platform/views/lordday/LorddayInfoWidget.dart';
 import 'package:church_platform/views/spiritual/SpiritualMainWidget.dart';
@@ -12,7 +12,6 @@ import 'package:oktoast/oktoast.dart';
 import 'utils/CPTheme.dart';
 import 'utils/SharedPreferencesUtils.dart';
 import 'views/home/HomeWidget.dart';
-//import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 void main() => runApp(MyApp());
 

@@ -5,14 +5,14 @@ import 'package:church_platform/net/models/Speaker.dart';
 class LorddayInfoResponse {
   String errCode;
   String errMsg;
-  LorddayInfo data;
+  Sermon data;
 
   LorddayInfoResponse({this.errCode,this.errMsg, this.data});
 
   LorddayInfoResponse.fromJson(Map<String, dynamic> json) {
     errCode = json['errCode'];
     errMsg = json['errMsg'];
-    data = json['data'] != null ? new LorddayInfo.fromJson(json['data']) : null;
+    data = json['data'] != null ? new Sermon.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -26,7 +26,7 @@ class LorddayInfoResponse {
   }
 }
 
-class LorddayInfo {
+class Sermon {
   int id;
   Church church;
   int user;
@@ -40,7 +40,7 @@ class LorddayInfo {
   String pubTime;
   int status;
 
-  LorddayInfo(
+  Sermon(
       {this.id,
         this.church,
         this.user,
@@ -54,7 +54,7 @@ class LorddayInfo {
         this.pubTime,
         this.status});
 
-  LorddayInfo.fromJson(Map<String, dynamic> json) {
+  Sermon.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     church =
     json['church'] != null ? new Church.fromJson(json['church']) : null;

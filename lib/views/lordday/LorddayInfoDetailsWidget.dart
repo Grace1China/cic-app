@@ -13,7 +13,7 @@ import 'package:flutter/rendering.dart';
 
 class LorddayInfoDetailsWidget extends StatefulWidget {
 
-  LorddayInfo lorddayInfo;
+  Sermon lorddayInfo;
   int selectedIndex;
   List<Medias> medias;
 

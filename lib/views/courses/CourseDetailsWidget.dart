@@ -11,7 +11,9 @@ import 'package:church_platform/utils/IAPUnCompletePurchaseStore.dart';
 import 'package:church_platform/utils/IAPUtils.dart';
 import 'package:church_platform/utils/LoggerUtils.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
+import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:church_platform/views/account/LoginWidget.dart';
+import 'package:church_platform/views/courses/CoursePlayWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -487,9 +489,12 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
     var circle = Container();
 
     return RaisedButton(
-        onPressed: Platform.isIOS && _product == null ? null : () {
+        onPressed: Platform.isIOS && !widget.course.is_buy && _product == null ? null : () {
           if(widget.course.is_buy){
-
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CoursePlayWidget(course: widget.course,)),
+            );
           }else{
             if(Platform.isIOS){
               tapPurchase();
@@ -550,13 +555,14 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
 //              VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
                 Stack(alignment: AlignmentDirectional.center,
                   children: <Widget>[
-//              Offstage(
-//                offstage: true,
-//                child: Container(
-//                    width: MediaQuery.of(context).size.width*0.8,
-//                    height: MediaQuery.of(context).size.width*0.8/16*9,
-//                    child: VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
-//              ),
+                    widget.course.medias.length > 0 && widget.course.medias[0].hDURL != null && widget.course.medias[0].hDURL.isNotEmpty && widget.course.is_buy?
+                      Offstage(
+                        offstage: true,
+                        child: Container(
+                            width: MediaQuery.of(context).size.width*0.8,
+                            height: MediaQuery.of(context).size.width*0.8/16*9,
+                            child: VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
+                      ):Container(),
                     CachedNetworkImage(
                         imageUrl: widget.course.medias[0].image,
                         imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
@@ -599,6 +605,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
                   ],
                 ),
               ),
+                //名字
                 Container(
                   padding: const EdgeInsets.all(5),
                   child: Text(
@@ -607,6 +614,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
+                //价格
                 Container(
                   padding: const EdgeInsets.all(5),
                   child: Text( _product != null ?
@@ -615,8 +623,9 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
                     style: TextStyle(fontSize: 18,color: Colors.red),
                   ),
                 ),
-
+                //详情
                 widget.course.content != null ? Html(data: widget.course.content) : Container(),
+                //支付/观看
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 50,

@@ -1,14 +1,13 @@
 import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/CourseResponse.dart';
 import 'package:church_platform/net/models/Page.dart';
-import 'package:church_platform/views/courses/CourseGridItem.dart';
+import 'package:church_platform/views/courses/store/CourseGridItem.dart';
 import 'package:church_platform/views/courses/CourseDetailsWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import '../../utils/LoggerUtils.dart';
-
+import '../../../utils/LoggerUtils.dart';
 
 class CourseGridWidget extends StatefulWidget {
   @override
@@ -37,6 +36,19 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
   String searchKeyword = null;
   FocusNode searchNode = FocusNode();
 
+  //横向选择索引
+  List<String> segmentTitles = <String>["综合","销量","已购"];
+  int segmentIndex = 0;
+  //最左边筛选竖向选择索引
+  bool showItemSelectedView = false;
+  List<String> itemTitles = <String>["综合","价格降序","价格升序"];
+  int itemIndex = 0;
+
+  //排序规则
+  String requestOrderBy = null;
+  bool requestAsc = false;
+  bool requestBought = false;
+
   _CourseGridWidgetState(){
 //    _filter.addListener(() {
 //      if (_filter.text.isEmpty) {
@@ -55,21 +67,37 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
   @override
   void initState() {
     super.initState();
-//    courseResponse = API().getCourseList(page: page,pagesize: pageSize);
     refresh(isFirst:true);
   }
 
+  //计算排序规则
+  void calculateOrderRules(){
+    requestOrderBy = null;
+    requestAsc = false;
+    requestBought = false;
 
-//  void _handleTap(Sunday sunday) {
-//    Navigator.push(
-//                context,
-//                SundayDetailsWidget(sunday: sunday)
-//              );
-//  }
-
+    if(segmentIndex == 0){
+      if(itemIndex == 0){
+        requestOrderBy = null;
+      }else if(itemIndex == 1){
+        requestOrderBy = API.RequestCourseOrderByPrice;
+        requestAsc = false;
+      }else if(itemIndex == 2){
+        requestOrderBy = API.RequestCourseOrderByPrice;
+        requestAsc = true;
+      }
+    }else if(segmentIndex == 1){
+      requestOrderBy = API.RequestCourseOrderBySale;
+      requestAsc = false;
+    }else{
+      requestOrderBy = null;
+      requestBought = true;
+    }
+  }
   //TODO:刷新完后滚动到起始位置。
   void refresh({bool isFirst = false}) async{
     try{
+      calculateOrderRules();
 //      if(isFirst){
 //        setState(() {
 //          isloading = true;
@@ -79,7 +107,7 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
 //          isRefreshLoading = true;
 //        });
 //      }
-      CourseResponse response = await API().getCourseList(page: 1,pagesize: page.pageSize,keyword: searchKeyword);
+      CourseResponse response = await API().getCourseList(page: 1,pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
       setState(() {
         isloading = false;
         page = Page(page: response.page,totalPage: response.totalPage);
@@ -97,7 +125,7 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
       });
 
     }catch (e) {
-      if(isFirst){
+//      if(isFirst){
         setState(() {
           isloading = false;
           errmsg = "$e";
@@ -106,17 +134,17 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
 
           isRefreshLoading = false;
         });
-      }
+//      }
     }
   }
 
   void loadMore() async{
     try {
+      calculateOrderRules();
 //      setState(() {
 //        isRefreshLoading = true;
 //      });
-      CourseResponse r = await API().getCourseList(
-          page: page.page + 1, pagesize: page.pageSize,keyword: searchKeyword);
+      CourseResponse r = await API().getCourseList(page: page.page + 1, pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
       setState(() {
         page.page += 1;
         courses += r.data;
@@ -136,54 +164,166 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
 
   }
 
-  Widget buildBody(BuildContext context){
 
-        if (isloading) {
-          return Center(child: CircularProgressIndicator());
-        }else if(errmsg != null && errmsg.isNotEmpty) {
-          return Text(errmsg);
-        }else{
-          return  ModalProgressHUD(
-            inAsyncCall: isRefreshLoading,
-            // demo of some additional parameters
-            opacity: 0.5,
-            progressIndicator: CircularProgressIndicator(),
-                child: EasyRefresh(
-                  controller: _controller,
-                  enableControlFinishRefresh: true,
-                  enableControlFinishLoad: true,
-                  onRefresh:() async {this.refresh();},
-                  onLoad:() async {this.loadMore();},
-                  child: GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.75),
-                      itemCount:courses.length,
-                      itemBuilder: (context,index){
+  Widget buildBody(BuildContext context){
+//    List<Widget> widgets = List<Widget>();
+//    widgets.add(buildContent(context));
+//    if(showItemSelectedView){
+//      widgets.add(Container(
+//        color: Color(0x4d000000),
+//      ));
+//
+//    }
+    return Column(
+      children: <Widget>[
+        buildTabBar(context),
+        Expanded(
+          child: Stack(
+            children: <Widget>[
+              buildContent(context),
+              showItemSelectedView ? GestureDetector(
+                child: Container(
+                  color: Color(0x4d000000),
+                ),onTap: (){
+                  setState(() {
+                    showItemSelectedView = false;
+                  });
+              },
+              ):Container(),
+              showItemSelectedView ? Container(
+                height: 60.0 * 3,
+                color: Colors.white,
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) {
+
+                    return ListTile(
+                      title: Text(itemTitles[index]),
+                      selected: index == itemIndex,
+                      trailing: index == itemIndex ? IconButton(icon: Icon(Icons.check,color:Theme.of(context).primaryColor),) : null,
+                      onTap: () {
+                        Log.i("${index}");
+                        setState(() {
+                          if(itemIndex != index){
+                            segmentIndex = 0;
+                            itemIndex = index;
+                            isRefreshLoading = true;
+                            refresh();
+                          }
+                          showItemSelectedView = false;
+                        });
+                      },
+                    );
+                  },
+                  itemCount: 3,
+                ),
+              ):Container(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildTabBar(BuildContext context){
+
+    return Row(mainAxisAlignment:MainAxisAlignment.spaceAround,children: segmentTitles.asMap().keys.map((index){
+      String segmentTitle = segmentTitles[index];
+
+      if(index == 0){
+        segmentTitle = itemTitles[itemIndex];
+      }
+
+      Text text = Text(segmentTitle,style: TextStyle(color: (segmentIndex == index ? Theme.of(context).primaryColor : Colors.black),));
+
+      VoidCallback onPressed = (){
+        setState(() {
+          if(index == 0){
+
+            if(segmentIndex == index){
+
+              showItemSelectedView = !showItemSelectedView;
+            }else{
+              showItemSelectedView = !showItemSelectedView;
+            }
+          }else{
+            showItemSelectedView = false;
+
+            //刷新
+            if(segmentIndex != index){
+
+              segmentIndex = index;
+              isRefreshLoading = true;
+              refresh();
+            }
+          }
+
+        });
+      };
+
+      if(index == 0){
+        return FlatButton(child:Container(width:80,
+                    child: Row(mainAxisAlignment:MainAxisAlignment.center,children: <Widget>[
+                      text,
+                      Icon( showItemSelectedView ? Icons.arrow_drop_up : Icons.arrow_drop_down, color: segmentIndex == 0 ? Theme.of(context).primaryColor :Colors.black ,),
+                    ],)) ,onPressed:onPressed);
+      }else{
+        return FlatButton(child:Container(width:80,child: Center(child: text)) ,onPressed:onPressed);
+      }
+
+    }).toList());
+  }
+
+  Widget buildItemSelected(BuildContext content){
+
+  }
+  Widget buildContent(BuildContext context){
+
+    if (isloading) {
+      return Center(child: CircularProgressIndicator());
+    }else if(errmsg != null && errmsg.isNotEmpty) {
+      return Text(errmsg);
+    }else{
+      return  ModalProgressHUD(
+        inAsyncCall: isRefreshLoading,
+        // demo of some additional parameters
+        opacity: 0.5,
+        progressIndicator: CircularProgressIndicator(),
+        child: EasyRefresh(
+          controller: _controller,
+          enableControlFinishRefresh: true,
+          enableControlFinishLoad: true,
+          onRefresh:() async {this.refresh();},
+          onLoad:() async {this.loadMore();},
+          child: GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.75),
+              itemCount:courses.length,
+              itemBuilder: (context,index){
 /*                  //如果显示到最后一个并且Icon总数小于200时继续获取数据
                         if (index == courses.length - 1 && courses.length < 200) {
 //              _retrieveIcons();
                         }*/
-                        return GestureDetector(
-                          child: CourseGridItem(
-                              course: courses[index]
-                          ),
-                          onTap: () async {
-                            bool isBuySuccess = await Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => CourseDetailsWidget(course: courses[index])
-                              ),
-                            );
-                            if(isBuySuccess){
-                              isRefreshLoading = true;
-                              refresh();
-                            }
-                          },
-                        );
-                      }),
-                ),
-          );
-        }
+                return GestureDetector(
+                  child: CourseGridItem(
+                      course: courses[index]
+                  ),
+                  onTap: () async {
+                    bool isBuySuccess = await Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => CourseDetailsWidget(course: courses[index])
+                      ),
+                    );
+                    if(isBuySuccess){
+                      isRefreshLoading = true;
+                      refresh();
+                    }
+                  },
+                );
+              }),
+        ),
+      );
+    }
 
   }
 
@@ -208,11 +348,15 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
 //              })
 //        ],
         actions: <Widget>[
-          IconButton(
+          segmentIndex != 2 ? IconButton(
             icon: _searchIcon,
             onPressed: (){
               setState(() {
                 if (this._searchIcon.icon == Icons.search) {
+//                  //已购情况，禁用查询。
+//                  if(segmentIndex == 2){
+//                    return;
+//                  }
                   this._searchIcon = Icon(Icons.close);
                   this._appBarTitle = TextField(
                     autofocus: true,
@@ -242,6 +386,7 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
                       refresh();
                     },
                   );
+                  showItemSelectedView = false;
 //                  FocusScope.of(context).requestFocus(searchNode);
                   //handleSearchStart();
                 } else {
@@ -255,11 +400,12 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
               });
             },
 
-          )
+          ):Container()
         ],
         ),
 //        backgroundColor: Colors.black12,
         body:buildBody(context),
+
 
     );
   }
