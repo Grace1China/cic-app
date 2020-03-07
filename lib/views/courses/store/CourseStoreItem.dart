@@ -2,10 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/net/CourseResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:transparent_image/transparent_image.dart';
 
-class CourseGridItem extends StatelessWidget {
-  CourseGridItem({Course course})
+class CourseStoreItem extends StatelessWidget {
+  CourseStoreItem({Course course})
       : course = course,
         super(key: ObjectKey(course));
 

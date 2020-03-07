@@ -1,8 +1,7 @@
-import 'package:church_platform/utils/LoggerUtils.dart';
 import 'package:church_platform/views/account/LoginWidget.dart';
-import 'package:church_platform/views/courses/store/CourseGridWidget.dart';
+import 'package:church_platform/views/courses/store/CourseStoreWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
-import 'package:church_platform/views/lordday/LorddayInfoWidget.dart';
+import 'package:church_platform/views/lordday/LorddayInfoMainWidget.dart';
 import 'package:church_platform/views/spiritual/SpiritualMainWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -11,13 +10,13 @@ import 'package:oktoast/oktoast.dart';
 
 import 'utils/CPTheme.dart';
 import 'utils/SharedPreferencesUtils.dart';
-import 'views/home/HomeWidget.dart';
+import 'views/church/ChurchWidget.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  static final myTabbedPageKey = new GlobalKey<_MyHomePageState>();
+  static final myTabbedPageKey = new GlobalKey<_HomeTabBarWidgetState>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,35 +28,35 @@ class MyApp extends StatelessWidget {
 //    FlutterStatusbarcolor.setStatusBarColor(Colors.white);
     return OKToast(
       child:  MaterialApp(
-        title: 'Flutter Demo',
+        title: '教会平台',
         themeMode: ThemeMode.light,
         theme: defaultTargetPlatform == TargetPlatform.iOS         //new
             ? kIOSTheme                                              //new
             : kAndroidTheme,
-        home: MyHomePage(key:myTabbedPageKey,title: 'Flutter Demo Home Page'),
+        home: HomeTabBarWidget(key:myTabbedPageKey,title: '主页'),
       ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class HomeTabBarWidget extends StatefulWidget {
+  HomeTabBarWidget({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomeTabBarWidgetState createState() => _HomeTabBarWidgetState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
   int _selectedIndex = 4;
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static  List<Widget> _widgetOptions = <Widget>[
-    HomeWidget(),
+    ChurchWidget(),
     DonateWidget(),
     SpiritualMainWidget(),
-    LorddayInfoWidget(key:LorddayInfoWidget.myLorddayInfoWidgetKey),
-    CourseGridWidget(),
+    LorddayInfoMainWidget(key:LorddayInfoMainWidget.myLorddayInfoWidgetKey),
+    CourseStoreWidget(),
   ];
 
   void changeIndex(int index){

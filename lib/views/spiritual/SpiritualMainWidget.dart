@@ -1,9 +1,7 @@
-import 'package:church_platform/audio/AudioPlayerWidget.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:church_platform/views/spiritual/SpiritualDetailsWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 
 class SpiritualMainWidget extends StatefulWidget {

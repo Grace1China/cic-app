@@ -1,9 +1,8 @@
-import 'package:church_platform/views/lordday/LorddayInfoWidget.dart';
+import 'package:church_platform/main.dart';
+import 'package:church_platform/utils//SharedPreferencesUtils.dart';
+import 'package:church_platform/views/lordday/LorddayInfoMainWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
-import 'package:church_platform/utils//SharedPreferencesUtils.dart';
-import 'package:church_platform/main.dart';
 
 
 class AccountWidget extends StatefulWidget {
@@ -121,8 +120,8 @@ class _AccountWidgetState extends State<AccountWidget> {
                   SharedPreferencesUtils.logout();
                   MyApp.myTabbedPageKey.currentState.changeIndex(4);
                   Navigator.of(context).pop(); //先pop。后refresh。refresh可能会出错
-                  if(LorddayInfoWidget.myLorddayInfoWidgetKey.currentState != null){
-                    LorddayInfoWidget.myLorddayInfoWidgetKey.currentState.refreshRemoteData();
+                  if(LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState != null){
+                    LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState.refreshRemoteData();
                   }
               },),
             ],

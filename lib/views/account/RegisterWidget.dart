@@ -1,13 +1,8 @@
-import 'dart:async';
-
 import 'package:church_platform/net/API.dart';
-import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//import 'package:validate/validate.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:oktoast/oktoast.dart';
 
 
 class RegisterWidget extends StatelessWidget {

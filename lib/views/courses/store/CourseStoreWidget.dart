@@ -1,21 +1,22 @@
 import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/CourseResponse.dart';
 import 'package:church_platform/net/models/Page.dart';
-import 'package:church_platform/views/courses/store/CourseGridItem.dart';
 import 'package:church_platform/views/courses/CourseDetailsWidget.dart';
+import 'package:church_platform/views/courses/store/CourseStoreItem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+
 import '../../../utils/LoggerUtils.dart';
 
-class CourseGridWidget extends StatefulWidget {
+class CourseStoreWidget extends StatefulWidget {
   @override
-  _CourseGridWidgetState createState() => _CourseGridWidgetState();
+  _CourseStoreWidgetState createState() => _CourseStoreWidgetState();
 }
 
 
-class _CourseGridWidgetState extends State<CourseGridWidget> {
+class _CourseStoreWidgetState extends State<CourseStoreWidget> {
 
   //  Future<CourseResponse> courseResponse;
   List<Course> courses;
@@ -49,7 +50,7 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
   bool requestAsc = false;
   bool requestBought = false;
 
-  _CourseGridWidgetState(){
+  _CourseStoreWidgetState(){
 //    _filter.addListener(() {
 //      if (_filter.text.isEmpty) {
 //        setState(() {
@@ -131,6 +132,7 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
           errmsg = "$e";
 
           _controller.finishRefresh(success: true);
+          _controller.finishLoad(success: true,noMore: !page.hasNext());
 
           isRefreshLoading = false;
         });
@@ -304,7 +306,7 @@ class _CourseGridWidgetState extends State<CourseGridWidget> {
 //              _retrieveIcons();
                         }*/
                 return GestureDetector(
-                  child: CourseGridItem(
+                  child: CourseStoreItem(
                       course: courses[index]
                   ),
                   onTap: () async {

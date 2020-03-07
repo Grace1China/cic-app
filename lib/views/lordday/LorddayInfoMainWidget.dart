@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 
 
 void main() {
-  runApp(new MaterialApp(home: new LorddayInfoWidget()));
+  runApp(new MaterialApp(home: new LorddayInfoMainWidget()));
 }
 
 class RefreshLorddayWidgetNotifier with ChangeNotifier{
@@ -29,16 +29,16 @@ class RefreshLorddayWidgetNotifier with ChangeNotifier{
   }
 }
 
-class LorddayInfoWidget extends StatefulWidget {
-  static final myLorddayInfoWidgetKey = new GlobalKey<_LorddayInfoWidgetState>();
+class LorddayInfoMainWidget extends StatefulWidget {
+  static final myLorddayInfoWidgetKey = new GlobalKey<_LorddayInfoMainWidgetState>();
 
-  LorddayInfoWidget({Key key}) : super(key: key);
+  LorddayInfoMainWidget({Key key}) : super(key: key);
 
   @override
-  _LorddayInfoWidgetState createState() => _LorddayInfoWidgetState();
+  _LorddayInfoMainWidgetState createState() => _LorddayInfoMainWidgetState();
 }
 
-class _LorddayInfoWidgetState extends State<LorddayInfoWidget> with WidgetsBindingObserver
+class _LorddayInfoMainWidgetState extends State<LorddayInfoMainWidget> with WidgetsBindingObserver
 {
   AppLifecycleState state;
   Future<Sermon> lorddayInfo;

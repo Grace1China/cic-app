@@ -9,12 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class HomeWidget extends StatefulWidget {
+class ChurchWidget extends StatefulWidget {
   @override
-  _HomeWidgetState createState() => _HomeWidgetState();
+  _ChurchWidgetState createState() => _ChurchWidgetState();
 }
 
-class _HomeWidgetState extends State<HomeWidget> {
+class _ChurchWidgetState extends State<ChurchWidget> {
 
   Future<Church> church;
   Future<WeaklyReport> weaklyl3;
