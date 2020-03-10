@@ -49,14 +49,14 @@ class HomeTabBarWidget extends StatefulWidget {
 }
 
 class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
-  int _selectedIndex = 4;
+  int _selectedIndex = 0;
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static  List<Widget> _widgetOptions = <Widget>[
     ChurchWidget(),
     DonateWidget(),
-    SpiritualMainWidget(),
+//    SpiritualMainWidget(),
     LorddayInfoMainWidget(key:LorddayInfoMainWidget.myLorddayInfoWidgetKey),
-    CourseStoreWidget(),
+//    CourseStoreWidget(),
   ];
 
   void changeIndex(int index){
@@ -64,14 +64,14 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
   }
   void _onItemTapped(int index) async {
     bool b = await SharedPreferencesUtils.isLogin();
-    if(!b && [0,1,2].contains(index)){
-//      Navigator.of(context).push(route)
-      Navigator.push(context, CupertinoPageRoute(
-          fullscreenDialog: true,
-          builder: (context) => LoginWidget()
-      ));
-      return;
-    }
+//    if(!b && [0,1,2].contains(index)){
+////      Navigator.of(context).push(route)
+//      Navigator.push(context, CupertinoPageRoute(
+//          fullscreenDialog: true,
+//          builder: (context) => LoginWidget()
+//      ));
+//      return;
+//    }
     
     setState(() {
       _selectedIndex = index;
@@ -95,18 +95,18 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
             icon: Icon(Icons.monetization_on),
             title: Text('奉献'),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.markunread_mailbox),
-            title: Text('L3'),
-          ),
+//          BottomNavigationBarItem(
+//            icon: Icon(Icons.markunread_mailbox),
+//            title: Text('L3'),
+//          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.live_tv),
             title: Text('主日'),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_books),
-            title: Text('课程'),
-          ),
+//          BottomNavigationBarItem(
+//            icon: Icon(Icons.library_books),
+//            title: Text('课程'),
+//          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Theme.of(context).accentColor,

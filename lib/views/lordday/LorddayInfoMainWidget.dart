@@ -266,21 +266,21 @@ class _LorddayInfoMainWidgetState extends State<LorddayInfoMainWidget> with Widg
         elevation:
         (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
 
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.account_circle),
-              onPressed: () async{
-                //效果同等
-//              Navigator.push(context,
-//                  MaterialPageRoute(builder: (context) => DonateWidget(), fullscreenDialog: true));
-              bool isLogin = await SharedPreferencesUtils.isLogin();
-                Navigator.of(context).push(CupertinoPageRoute(
-                    fullscreenDialog: true,
-                    builder: (context) => isLogin ? AccountWidget() : LoginWidget()));
-
-
-              })
-        ],
+//        actions: <Widget>[
+//          IconButton(
+//              icon: Icon(Icons.account_circle),
+//              onPressed: () async{
+//                //效果同等
+////              Navigator.push(context,
+////                  MaterialPageRoute(builder: (context) => DonateWidget(), fullscreenDialog: true));
+//              bool isLogin = await SharedPreferencesUtils.isLogin();
+//                Navigator.of(context).push(CupertinoPageRoute(
+//                    fullscreenDialog: true,
+//                    builder: (context) => isLogin ? AccountWidget() : LoginWidget()));
+//
+//
+//              })
+//        ],
       ),
       // Use a FutureBuilder to display a loading spinner while waiting for the
       // VideoPlayerController to finish initializing.
@@ -316,7 +316,7 @@ class _LorddayInfoMainWidgetState extends State<LorddayInfoMainWidget> with Widg
               ),
             );
           } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
+            return Center(child: Text("${snapshot.error}"));
           }
 
           // By default, show a loading spinner.
@@ -325,6 +325,6 @@ class _LorddayInfoMainWidgetState extends State<LorddayInfoMainWidget> with Widg
       ),
 
       // This trailing comma makes auto-formatting nicer for build methods.
-    );;
+    );
   }
 }

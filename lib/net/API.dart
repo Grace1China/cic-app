@@ -23,10 +23,11 @@ import 'LorddayInfoResponse.dart';
 
 class API {
 
-//  static final String HOST_NAME = "192.168.43.196:8000";
+  //测试环境
+  static final String HOST_NAME = "13.231.255.163:8201";
 //  static final String HOST_NAME = "192.168.1.101:8000";
 
-  static final String HOST_NAME = "192.168.1.103:8000";
+//  static final String HOST_NAME = "192.168.1.100:8000";
 //  static final String HOST_NAME = "13.231.255.163";//"""http://l3.community";
   static final String HOST = "http://" + HOST_NAME; //"""http://l3.community";
   static final String APIS = "/rapi";
@@ -36,7 +37,9 @@ class API {
   Future<Church> getChurch() async {
     final token = await SharedPreferencesUtils.getToken();
     final response = await http.get(HOST + APIS + "/getmychurch",
-      headers: {HttpHeaders.authorizationHeader: "Bearer " + token},
+      headers: token != null && token.isNotEmpty ? {
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      } : {},
     );
 
     debugPrint("网络请求：" + response.request.toString() + "，Header:" +
@@ -56,7 +59,9 @@ class API {
   Future<WeaklyReport> getWeaklyReportL3() async {
     final token = await SharedPreferencesUtils.getToken();
     final response = await http.get(HOST + APIS + "/eweekly/l3",
-      headers: {HttpHeaders.authorizationHeader: "Bearer " + token},
+      headers: token != null && token.isNotEmpty ? {
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      } : {},
     );
 
     debugPrint("网络请求：" + response.request.toString() + "，Header:" +
@@ -77,7 +82,9 @@ class API {
   Future<WeaklyReport> getWeaklyReport() async {
     final token = await SharedPreferencesUtils.getToken();
     final response = await http.get(HOST + APIS + "/eweekly/0",
-      headers: {HttpHeaders.authorizationHeader: "Bearer " + token},
+      headers: token != null && token.isNotEmpty ? {
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      } : {},
     );
 
     debugPrint("网络请求：" + response.request.toString() + "，Header:" +
@@ -104,7 +111,9 @@ class API {
   Future<Sermon> getLorddayInfo() async {
     final token = await SharedPreferencesUtils.getToken();
     final response = await http.get(HOST + APIS + "/lorddayinfo",
-      headers: {HttpHeaders.authorizationHeader: "Bearer " + token,},
+      headers: token != null && token.isNotEmpty ? {
+      HttpHeaders.authorizationHeader: "Bearer " + token,
+      } : {},
     );
 
     if (response.statusCode == 200) {
