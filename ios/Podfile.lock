@@ -32,10 +32,10 @@ PODS:
     - Braintree/UnionPay (~> 4.31)
     - BraintreeDropIn/UIKit
   - BraintreeDropIn/UIKit (8.0.0)
-  - fijkplayer (0.4.2):
-    - FIJKPlayer (~> 0.4.4)
+  - FIJKPlayer (0.5.1)
+  - fijkplayer (0.6.2):
+    - FIJKPlayer (~> 0.5.0)
     - Flutter
-  - FIJKPlayer (0.4.4)
   - Flutter (1.0.0)
   - flutter_braintree (0.2.0):
     - Braintree/PayPal
@@ -52,7 +52,7 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - screen (0.0.1):
+  - path_provider_macos (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
@@ -67,6 +67,8 @@ PODS:
     - Flutter
   - video_player_web (0.0.1):
     - Flutter
+  - wakelock (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
@@ -77,13 +79,14 @@ DEPENDENCIES:
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - in_app_purchase (from `.symlinks/plugins/in_app_purchase/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - screen (from `.symlinks/plugins/screen/ios`)
+  - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - shared_preferences_macos (from `.symlinks/plugins/shared_preferences_macos/ios`)
   - shared_preferences_web (from `.symlinks/plugins/shared_preferences_web/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - video_player_web (from `.symlinks/plugins/video_player_web/ios`)
+  - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -109,8 +112,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/in_app_purchase/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
-  screen:
-    :path: ".symlinks/plugins/screen/ios"
+  path_provider_macos:
+    :path: ".symlinks/plugins/path_provider_macos/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   shared_preferences_macos:
@@ -123,13 +126,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/video_player/ios"
   video_player_web:
     :path: ".symlinks/plugins/video_player_web/ios"
+  wakelock:
+    :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
   audioplayers: 84f968cea3f2deab00ec4f8ff53358b3c0b3992c
   Braintree: b06d2b42f0c591e508f7f538a7cc6715af1958b7
   BraintreeDropIn: 441ad16190e20548a2544652bffef66d457eb70a
-  FIJKPlayer: b3a44750f39db82a99d5099ac6ae71c4aeac774c
-  fijkplayer: 0df23ba12768de84627f82e76fbb2ac1039e1130
+  FIJKPlayer: dfe6148363ac3ba46b722890bf3c5ddd00c1dd78
+  fijkplayer: df74008d2937c092aba6a7d56d24186b328edd82
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_braintree: 101b66de3f3ae397c9ee3593c2e24ed67a41eeab
   flutter_pdfview: bdf86972519a15c6d8f50ad34e5b0429b255cbb4
@@ -137,14 +142,15 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   in_app_purchase: 6b3a6d6944354f353d59eb1f2a0db3fd7a40917b
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
-  screen: abd91ca7bf3426e1cc3646d27e9b2358d6bf07b0
+  path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
   shared_preferences: 430726339841afefe5142b9c1f50cb6bd7793e01
   shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
   shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   video_player: 69c5f029fac4ffe4fc8a85ea7f7b793709661549
   video_player_web: da8cadb8274ed4f8dbee8d7171b420dedd437ce7
+  wakelock: bd3dcc6a8bcf53a1c0309780ff192dcee67c6ccb
 
-PODFILE CHECKSUM: f38b6bb1ace1b41a0c8d48aaf58efff222d720a0
+PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.7.5

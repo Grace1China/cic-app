@@ -32,7 +32,8 @@ dependencies:
 
   video_player:  #不再使用
   chewie:  #不再使用
-  fijkplayer: ^0.4.2
+  fijkplayer: #^0.4.2
+#      path: ../fijkplayer/
   #    path: ../fijkplayer_mycustom/
 
   audioplayers: ^0.14.0
