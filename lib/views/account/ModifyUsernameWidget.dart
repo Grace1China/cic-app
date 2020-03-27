@@ -9,16 +9,16 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:oktoast/oktoast.dart';
 
 
-class ModifyNicknameWidget extends StatefulWidget {
+class ModifyUsernameWidget extends StatefulWidget {
   CustomUser user;
-  ModifyNicknameWidget({Key key, this.user}) : super(key: key);
+  ModifyUsernameWidget({Key key, this.user}) : super(key: key);
 
   @override
-  _ModifyNicknameWidgetState createState() => _ModifyNicknameWidgetState();
+  _ModifyUsernameWidgetState createState() => _ModifyUsernameWidgetState();
 }
 
 
-class _ModifyNicknameWidgetState extends State<ModifyNicknameWidget> {
+class _ModifyUsernameWidgetState extends State<ModifyUsernameWidget> {
   bool _loading = false;
   String errmsg;
   String username;
@@ -49,7 +49,7 @@ class _ModifyNicknameWidgetState extends State<ModifyNicknameWidget> {
       return Text(errmsg);
     } else {
       return ListView(
-        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
         children: [
           TextFormField(
             keyboardType: TextInputType.text,
@@ -71,7 +71,7 @@ class _ModifyNicknameWidgetState extends State<ModifyNicknameWidget> {
             onSaved: (String value) => username = value,
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+//            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
             width: MediaQuery.of(context).size.width,
             child: FlatButton(
                 onPressed: () async {
@@ -106,7 +106,7 @@ class _ModifyNicknameWidgetState extends State<ModifyNicknameWidget> {
                     });
 
                     showToast(
-                      "修改失败-" + e.toString(),
+                      e.toString(),
                       duration: Duration(seconds: 5),
                       position: ToastPosition.center,
                       backgroundColor: Colors.black.withOpacity(0.8),

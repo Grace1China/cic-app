@@ -139,7 +139,31 @@ class API {
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
       }
-      throw Exception('更新失败');
+      throw Exception('修改失败:' + baseResponse.msg);
+    } else {
+      throw Exception(response.statusCode.toString() + ":" + response.body);
+    }
+  }
+
+  Future<bool> updateUserPWD(String oldpwd,String newpwd,String confirmpwd) async {
+    final token = await SharedPreferencesUtils.getToken();
+    var body = json.encode({'oldpwd': oldpwd,'newpwd':newpwd,'confirmpwd':confirmpwd});
+
+    final response = await http.post(HOST + APIS + "/users/updateuserpwd",
+        headers: {
+          HttpHeaders.contentTypeHeader:'application/json',
+          HttpHeaders.authorizationHeader: "Bearer " + token,},
+        body:body);
+
+    debugPrint("网络请求：" + response.request.toString() + "，Header:" +
+        response.request.headers.toString() + ",Response:" + response.body,
+        wrapWidth: 1024);
+    if (response.statusCode == 200) {
+      final baseResponse = UserResponse.fromJson(json.decode(response.body));
+      if (baseResponse.errCode == "0") {
+        return true;
+      }
+      throw Exception('修改失败:' + baseResponse.msg);
     } else {
       throw Exception(response.statusCode.toString() + ":" + response.body);
     }

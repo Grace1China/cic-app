@@ -2,7 +2,8 @@ import 'package:church_platform/main.dart';
 import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/models/CustomUser.dart';
 import 'package:church_platform/utils//SharedPreferencesUtils.dart';
-import 'package:church_platform/views/account/ModifyNicknameWidget.dart';
+import 'package:church_platform/views/account/ModifyUsernameWidget.dart';
+import 'package:church_platform/views/account/ModifyPWDWidget.dart';
 import 'package:church_platform/views/lordday/LorddayInfoMainWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -179,7 +180,7 @@ Widget buildContent(BuildContext context) {
 //                  fullscreenDialog: true,
 //                  builder: (context) => AccountWidget()));
             String username = await Navigator.push(context,MaterialPageRoute(
-              builder: (context) => ModifyNicknameWidget(user: user,),)
+              builder: (context) => ModifyUsernameWidget(user: user,),)
             );
             if(user.username != username){
               setState(() {
@@ -207,6 +208,11 @@ Widget buildContent(BuildContext context) {
               ],
             ),
           ),
+          onTap: () async{
+            Navigator.push(context,MaterialPageRoute(
+              builder: (context) => ModifyPWDWidget(user: user,),)
+            );
+          },
         ),
         Container(padding:EdgeInsets.only(left:0),child: Divider(color: Colors.grey,)),
 //        Container(
