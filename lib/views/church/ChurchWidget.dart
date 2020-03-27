@@ -46,18 +46,18 @@ class _ChurchWidgetState extends State<ChurchWidget> {
         //centerTitle: true, //ios默认居中，android需要制定为true。
         elevation:
         (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
-//        actions: <Widget>[
-//          IconButton(
-//              icon: Icon(Icons.account_circle),
-//              onPressed: () {
-//                //效果同等
-////              Navigator.push(context,
-////                  MaterialPageRoute(builder: (context) => DonateWidget(), fullscreenDialog: true));
-//                Navigator.of(context).push(CupertinoPageRoute(
-//                    fullscreenDialog: true,
-//                    builder: (context) => AccountWidget()));
-//              })
-//        ],
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.account_circle),
+              onPressed: () {
+                //效果同等
+//              Navigator.push(context,
+//                  MaterialPageRoute(builder: (context) => DonateWidget(), fullscreenDialog: true));
+                Navigator.of(context).push(CupertinoPageRoute(
+                    fullscreenDialog: true,
+                    builder: (context) => AccountWidget()));
+              })
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

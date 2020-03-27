@@ -13,6 +13,7 @@ import 'package:church_platform/net/PaypalResponse.dart';
 import 'package:church_platform/net/RegisterResponse.dart';
 import 'package:church_platform/net/WeaklyReport.dart';
 import 'package:church_platform/net/models/Church.dart';
+import 'package:church_platform/net/models/CustomUser.dart';
 import 'package:church_platform/utils/LoggerUtils.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,16 +25,127 @@ import 'LorddayInfoResponse.dart';
 class API {
 
   //测试环境
-  static final String HOST_NAME = "13.231.255.163:8201";
-//  static final String HOST_NAME = "192.168.1.101:8000";
+//  static final String HOST_NAME = "13.231.255.163:8201";
+//  static final String HOST_NAME = "172.20.10.3:8000";
+  static final String HOST_NAME = "192.168.43.196:8000";
 
-//  static final String HOST_NAME = "192.168.1.100:8000";
+
 //  static final String HOST_NAME = "13.231.255.163";//"""http://l3.community";
   static final String HOST = "http://" + HOST_NAME; //"""http://l3.community";
   static final String APIS = "/rapi";
 
   HttpClient _httpClient = HttpClient();
 
+  //----------账户--------------
+  Future<String> login(String email, String pwd) async {
+    var body = json.encode({'email': email, 'password': pwd});
+//    var body = {'username':username, 'password':pwd};
+
+//1。增加查用户信息。
+    //2。修改username。
+    //3。改密码。传老密码，新密码。
+
+    final response = await http.post(HOST + APIS + "/auth/jwt/create",
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json'},
+        body: body);
+
+    if (response.statusCode == 200) {
+      final baseResponse = LoginResponse.fromJson(json.decode(response.body));
+      if (baseResponse.access != null) {
+        SharedPreferencesUtils.saveToken(baseResponse.access);
+        return baseResponse.access;
+      }
+      throw Exception('没有token');
+    } else {
+      throw Exception(response.statusCode.toString() + ":" + response.body); //eg: 401,details
+    }
+  }
+
+  Future<bool> register(String churchCode, String username, String email,
+      String pwd) async {
+    var body = json.encode({'username': username,
+      'email': email,
+      'church_code': churchCode,
+      'password': pwd
+    });
+
+    final response = await http.post(HOST + APIS + "/user_create",
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json'},
+        body: body);
+
+    if (response.statusCode == 200) {
+      final baseResponse = RegisterResponse.fromJson(
+          json.decode(response.body));
+      if (baseResponse.errCode == "0") {
+        return true;
+      }
+      throw Exception('注册失败');
+    } else {
+      throw Exception(
+          response.statusCode.toString() + ":" + response.reasonPhrase + "." +
+              response.body);
+    }
+
+//    if (response.statusCode == 201) {
+//      final baseResponse = RegisterResponse.fromJson(json.decode(response.body));
+//      if(baseResponse != null){
+//        return true;
+//      }
+//      throw Exception('注册失败');
+//    } else {
+//      throw Exception(response.statusCode.toString() + ":" + response.reasonPhrase + "." + json.decode(response.body));
+//    }
+  }
+
+  Future<CustomUser> getUserInfo() async {
+    final token = await SharedPreferencesUtils.getToken();
+    final response = await http.get(HOST + APIS + "/users/getuserinfo",
+      headers: token != null && token.isNotEmpty ? {
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      } : {},
+    );
+
+    debugPrint("网络请求：" + response.request.toString() + "，Header:" +
+        response.request.headers.toString() + ",Response:" + response.body,
+        wrapWidth: 1024);
+    if (response.statusCode == 200) {
+      final baseResponse = UserResponse.fromJson(json.decode(response.body));
+      if (baseResponse.errCode == "0") {
+        return baseResponse.data;
+      }
+      throw Exception('没有用户信息');
+    } else {
+      throw Exception(response.statusCode.toString() + ":" + response.body);
+    }
+  }
+
+  Future<CustomUser> updateUserInfo(String username) async {
+    final token = await SharedPreferencesUtils.getToken();
+    var body = json.encode({'username': username});
+
+    final response = await http.post(HOST + APIS + "/users/updateuserinfo",
+        headers: {
+          HttpHeaders.contentTypeHeader:'application/json',
+          HttpHeaders.authorizationHeader: "Bearer " + token,},
+        body:body);
+
+    debugPrint("网络请求：" + response.request.toString() + "，Header:" +
+        response.request.headers.toString() + ",Response:" + response.body,
+        wrapWidth: 1024);
+    if (response.statusCode == 200) {
+      final baseResponse = UserResponse.fromJson(json.decode(response.body));
+      if (baseResponse.errCode == "0") {
+        return baseResponse.data;
+      }
+      throw Exception('更新失败');
+    } else {
+      throw Exception(response.statusCode.toString() + ":" + response.body);
+    }
+  }
+
+  //----------教会，周报----------
   Future<Church> getChurch() async {
     final token = await SharedPreferencesUtils.getToken();
     final response = await http.get(HOST + APIS + "/getmychurch",
@@ -108,6 +220,7 @@ class API {
     }
   }
 
+  //---------主日-----------
   Future<Sermon> getLorddayInfo() async {
     final token = await SharedPreferencesUtils.getToken();
     final response = await http.get(HOST + APIS + "/lorddayinfo",
@@ -143,6 +256,7 @@ class API {
     }
   }
 
+  //------------课程-----------
   static const String RequestCourseOrderByPrice = "price";
   static const String RequestCourseOrderBySale = "sales_num";
   Future<CourseResponse> getCourseList(
@@ -217,66 +331,8 @@ class API {
 
   }
 
-  Future<String> login(String email, String pwd) async {
-    var body = json.encode({'email': email, 'password': pwd});
-//    var body = {'username':username, 'password':pwd};
 
-
-    final response = await http.post(HOST + APIS + "/auth/jwt/create",
-        headers: {
-          HttpHeaders.contentTypeHeader: 'application/json'},
-        body: body);
-
-    if (response.statusCode == 200) {
-      final baseResponse = LoginResponse.fromJson(json.decode(response.body));
-      if (baseResponse.access != null) {
-        SharedPreferencesUtils.saveToken(baseResponse.access);
-        return baseResponse.access;
-      }
-      throw Exception('没有token');
-    } else {
-      throw Exception(response.statusCode.toString() + ":" + response.body);
-    }
-  }
-
-  Future<bool> register(String churchCode, String username, String email,
-      String pwd) async {
-    var body = json.encode({'username': username,
-      'email': email,
-      'church_code': churchCode,
-      'password': pwd,
-      'role': "2",
-    });
-
-    final response = await http.post(HOST + APIS + "/user_create",
-        headers: {
-          HttpHeaders.contentTypeHeader: 'application/json'},
-        body: body);
-
-    if (response.statusCode == 200) {
-      final baseResponse = RegisterResponse.fromJson(
-          json.decode(response.body));
-      if (baseResponse.errCode == "0") {
-        return true;
-      }
-      throw Exception('注册失败');
-    } else {
-      throw Exception(
-          response.statusCode.toString() + ":" + response.reasonPhrase + "." +
-              response.body);
-    }
-
-//    if (response.statusCode == 201) {
-//      final baseResponse = RegisterResponse.fromJson(json.decode(response.body));
-//      if(baseResponse != null){
-//        return true;
-//      }
-//      throw Exception('注册失败');
-//    } else {
-//      throw Exception(response.statusCode.toString() + ":" + response.reasonPhrase + "." + json.decode(response.body));
-//    }
-  }
-
+//-----------支付-------------
   Future<String> iapCreateOrder(int courseID) async {
     final token = await SharedPreferencesUtils.getToken();
     var body = json.encode({'course_id': courseID});

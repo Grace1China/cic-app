@@ -12,17 +12,17 @@ class DonateWidget extends StatelessWidget {
         elevation:
         (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
 
-//        actions: <Widget>[
-//          IconButton(icon: Icon(Icons.account_circle),
-//              onPressed: (){
-//                Navigator.of(context).push(
-//                    CupertinoPageRoute(
-//                        fullscreenDialog: true,
-//                        builder: (context) => AccountWidget()
-//                    )
-//                );
-//              })
-//        ],
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.account_circle),
+              onPressed: (){
+                Navigator.of(context).push(
+                    CupertinoPageRoute(
+                        fullscreenDialog: true,
+                        builder: (context) => AccountWidget()
+                    )
+                );
+              })
+        ],
       ),
       body: Center(
           child: Column(

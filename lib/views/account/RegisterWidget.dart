@@ -111,6 +111,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
             onChanged: (text) {
 //              print("教会码: $text");
+              _data.churchCode = text;
             },
             onSaved: (String value) => _data.churchCode = value,
           ),
@@ -129,6 +130,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
             onChanged: (text) {
 //              print("用户名: $text");
+              _data.username = text;
             },
             onSaved: (String value) => _data.username = value,
           ),
@@ -147,6 +149,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
             onChanged: (text) {
 //              print("邮箱: $text");
+              _data.email = text;
             },
             onSaved: (String value) => _data.email = value,
           ),
