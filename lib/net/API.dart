@@ -63,11 +63,12 @@ class API {
   }
 
   Future<bool> register(String churchCode, String username, String email,
-      String pwd) async {
+      String pwd,String confirmpwd) async {
     var body = json.encode({'username': username,
       'email': email,
       'church_code': churchCode,
-      'password': pwd
+      'password': pwd,
+      'confirmpwd': confirmpwd
     });
 
     final response = await http.post(HOST + APIS + "/user_create",
@@ -81,7 +82,7 @@ class API {
       if (baseResponse.errCode == "0") {
         return true;
       }
-      throw Exception('注册失败');
+      throw Exception('注册失败:' + baseResponse.msg);
     } else {
       throw Exception(
           response.statusCode.toString() + ":" + response.reasonPhrase + "." +
@@ -115,7 +116,7 @@ class API {
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
       }
-      throw Exception('没有用户信息');
+      throw Exception('没有用户信息:' + baseResponse.msg);
     } else {
       throw Exception(response.statusCode.toString() + ":" + response.body);
     }

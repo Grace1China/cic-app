@@ -47,6 +47,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
 
   final myController = TextEditingController();
+  final myconfpwdController = TextEditingController();
 
   _RegisterData _data = new _RegisterData();
 
@@ -156,6 +157,17 @@ class MyCustomFormState extends State<MyCustomForm> {
             validator:ValidatePWD,
             controller: myController,
           ),
+          TextFormField(
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: true,
+            decoration: InputDecoration(
+//              border: InputBorder.none,
+                hintText: '请再次输入密码',
+                labelText: '再次输入密码'
+            ),
+            validator: ValidatePWD,
+            controller: myconfpwdController,
+          ),
           Container(
             width: MediaQuery.of(context).size.width,
             child: RaisedButton(
@@ -170,7 +182,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
                     try{
                       
-                      bool success = await API().register(_data.churchCode,_data.username, _data.email, myController.text);
+                      bool success = await API().register(_data.churchCode,_data.username, _data.email, myController.text,myconfpwdController.text);
 
                       setState(() {
                         _saving = false;
@@ -207,7 +219,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                       });
 
                       showToast(
-                        "注册失败-" + e.toString(),
+                        e.toString(),
                         duration: Duration(seconds: 5),
                         position: ToastPosition.center,
                         backgroundColor: Colors.black.withOpacity(0.8),

@@ -1,18 +1,21 @@
 
 class RegisterResponse {
   String errCode;
+  String msg;
   RegisterResult data;
 
-  RegisterResponse({this.errCode, this.data});
+  RegisterResponse({this.errCode,this.msg, this.data});
 
   RegisterResponse.fromJson(Map<String, dynamic> json) {
     errCode = json['errCode'];
+    msg = json['msg'];
     data = json['data'] != null ? new RegisterResult.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['errCode'] = this.errCode;
+    data['msg'] = this.msg;
     if (this.data != null) {
       data['data'] = this.data.toJson();
     }
