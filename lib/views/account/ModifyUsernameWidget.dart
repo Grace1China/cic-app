@@ -2,6 +2,7 @@ import 'package:church_platform/main.dart';
 import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/models/CustomUser.dart';
 import 'package:church_platform/utils//SharedPreferencesUtils.dart';
+import 'package:church_platform/utils/ValidateUtils.dart';
 import 'package:church_platform/views/lordday/LorddayInfoMainWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -53,18 +54,14 @@ class _ModifyUsernameWidgetState extends State<ModifyUsernameWidget> {
         children: [
           TextFormField(
             keyboardType: TextInputType.text,
+            maxLength: 30,
 //            autofocus: true,
             initialValue:widget.user.username,
             decoration: InputDecoration(
                 hintText: '请输入用户名',
                 labelText: '用户名'
             ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return '用户名不能为空';
-              }
-              return null;
-            },
+            validator: ValidateUsername,
             onChanged: (text) {
               username = text;
             },

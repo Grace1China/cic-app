@@ -2,6 +2,8 @@ import 'package:church_platform/main.dart';
 import 'package:church_platform/net/API.dart';
 import 'package:church_platform/net/models/CustomUser.dart';
 import 'package:church_platform/utils//SharedPreferencesUtils.dart';
+import 'package:church_platform/utils/RegExpUtils.dart';
+import 'package:church_platform/utils/ValidateUtils.dart';
 import 'package:church_platform/views/lordday/LorddayInfoMainWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -64,57 +66,39 @@ class _ModifyPWDWidgetState extends State<ModifyPWDWidget> {
           padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
           children: [
             TextFormField(
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: true,
 //            autofocus: true,
               decoration: InputDecoration(
                   hintText: '请输入旧密码',
                   labelText: '旧密码'
               ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return '旧密码不能为空';
-                }
-                return null;
-              },
+              validator: ValidatePWD,
               onChanged: (text) {
                 oldpwd = text;
               },
               onSaved: (String value) => oldpwd = value,
             ),
             TextFormField(
+              keyboardType: TextInputType.visiblePassword,
               obscureText: true,
               decoration: InputDecoration(
 //              border: InputBorder.none,
                   hintText: '请输入新密码',
                   labelText: '新密码'
               ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return '密码不能为空';
-                }
-//                  if (value != "123456"){
-//                    return '密码错误';
-//                  }
-                return null;
-              },
+              validator:ValidatePWD,
               controller: mypwdController,
             ),
             TextFormField(
+              keyboardType: TextInputType.visiblePassword,
               obscureText: true,
               decoration: InputDecoration(
 //              border: InputBorder.none,
                   hintText: '请再次输入新密码',
                   labelText: '再次输入新密码'
               ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return '密码不能为空';
-                }
-//                  if (value != "123456"){
-//                    return '密码错误';
-//                  }
-                return null;
-              },
+              validator: ValidatePWD,
               controller: myconfpwdController,
             ),
             Container(

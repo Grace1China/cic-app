@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:church_platform/net/API.dart';
+import 'package:church_platform/utils/RegExpUtils.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
+import 'package:church_platform/utils/ValidateUtils.dart';
 import 'package:church_platform/views/account/RegisterWidget.dart';
 import 'package:church_platform/views/lordday/LorddayInfoMainWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -117,36 +119,21 @@ class MyCustomFormState extends State<MyCustomForm> {
                 hintText: '请输入邮箱',
                 labelText: '邮箱'
             ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return '邮箱不能为空';
-              }
-//                  if (value != "Daniel"){
-//                    return '用户名错误';
-//                  }
-              return null;
-            },
+            validator: ValidateEmail,
             onChanged: (text) {
-//              print("First text field: $text");
+              _data.email = text;
             },
             onSaved: (String value) => _data.email = value,
           ),
           TextFormField(
+            keyboardType: TextInputType.visiblePassword,
             obscureText: true,
             decoration: InputDecoration(
 //              border: InputBorder.none,
                 hintText: '请输入密码',
                 labelText: '密码'
             ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return '密码不能为空';
-              }
-//                  if (value != "123456"){
-//                    return '密码错误';
-//                  }
-              return null;
-            },
+            validator:ValidatePWD,
             controller: myController,
           ),
           Container(

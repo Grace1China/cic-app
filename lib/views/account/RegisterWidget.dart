@@ -1,4 +1,6 @@
 import 'package:church_platform/net/API.dart';
+import 'package:church_platform/utils/RegExpUtils.dart';
+import 'package:church_platform/utils/ValidateUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -19,7 +21,7 @@ class RegisterWidget extends StatelessWidget {
           (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
           
         ),
-        body: MyCustomForm()
+        body: SingleChildScrollView(child: MyCustomForm())
     );
   }
 }
@@ -118,16 +120,12 @@ class MyCustomFormState extends State<MyCustomForm> {
           TextFormField(
             keyboardType: TextInputType.text,
             autofocus: true,
+            maxLength: 30,
             decoration: InputDecoration(
                 hintText: '请输入用户名',
                 labelText: '用户名'
             ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return '用户名不能为空';
-              }
-              return null;
-            },
+            validator:ValidateUsername,
             onChanged: (text) {
 //              print("用户名: $text");
               _data.username = text;
@@ -141,12 +139,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 hintText: '请输入邮箱',
                 labelText: '邮箱'
             ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return '邮箱不能为空';
-              }
-              return null;
-            },
+            validator: ValidateEmail,
             onChanged: (text) {
 //              print("邮箱: $text");
               _data.email = text;
@@ -160,15 +153,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 hintText: '请输入密码',
                 labelText: '密码'
             ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return '密码不能为空';
-              }
-//                  if (value != "123456"){
-//                    return '密码错误';
-//                  }
-              return null;
-            },
+            validator:ValidatePWD,
             controller: myController,
           ),
           Container(
