@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:church_platform/net/CourseResponse.dart';
+import 'package:church_platform/net/results/Course.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 

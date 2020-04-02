@@ -1,5 +1,7 @@
 
-class Church {
+import 'package:church_platform/net/common/BaseResponse.dart';
+
+class Church extends BaseResult {
   int id;
   String name;
   String code;

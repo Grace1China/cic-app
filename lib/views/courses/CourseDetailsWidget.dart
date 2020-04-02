@@ -1,11 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:church_platform/net/API.dart';
-import 'package:church_platform/net/CourseResponse.dart';
-import 'package:church_platform/net/IAPVerifyResponse.dart';
-import 'package:church_platform/net/OrderResponse.dart';
-import 'package:church_platform/net/PaypalResponse.dart';
+import 'package:church_platform/net/results/PaypalResult.dart';
+import 'package:church_platform/net/common/API.dart';
+import 'package:church_platform/net/results/Course.dart';
+import 'package:church_platform/net/results/IAPVerifyResult.dart';
+import 'package:church_platform/net/results/OrderResult.dart';
 import 'package:church_platform/utils/AlertDialogUrils.dart';
 import 'package:church_platform/utils/IAPUnCompletePurchaseStore.dart';
 import 'package:church_platform/utils/IAPUtils.dart';
@@ -15,15 +17,12 @@ import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:church_platform/views/account/LoginWidget.dart';
 import 'package:church_platform/views/courses/CoursePlayWidget.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/foundation.dart';
-
-import 'dart:async';
-import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:flutter_braintree/flutter_braintree.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:flutter_braintree/flutter_braintree.dart';
 
 const String coursejson = """{
     "id": 59,

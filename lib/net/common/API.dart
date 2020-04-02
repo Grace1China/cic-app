@@ -4,30 +4,30 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:church_platform/net/CourseResponse.dart';
-import 'package:church_platform/net/IAPVerifyResponse.dart';
-import 'package:church_platform/net/LoginResponse.dart';
-import 'package:church_platform/net/LorddayInfoResponse.dart';
-import 'package:church_platform/net/OrderResponse.dart';
-import 'package:church_platform/net/PaypalResponse.dart';
-import 'package:church_platform/net/RegisterResponse.dart';
-import 'package:church_platform/net/WeaklyReport.dart';
+import 'package:church_platform/net/common/BaseResponse.dart';
+import 'package:church_platform/net/common/BaseResponseWithPage.dart';
 import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/net/models/CustomUser.dart';
-import 'package:church_platform/utils/LoggerUtils.dart';
+import 'package:church_platform/net/results/Course.dart';
+import 'package:church_platform/net/results/IAPVerifyResult.dart';
+import 'package:church_platform/net/results/LoginResult.dart';
+import 'package:church_platform/net/results/OrderResult.dart';
+import 'package:church_platform/net/results/PaypalResult.dart';
+import 'package:church_platform/net/results/RegisterResult.dart';
+import 'package:church_platform/net/results/Sermon.dart';
+import 'package:church_platform/net/results/WeaklyReport.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-import 'ChurchResponse.dart';
-import 'LorddayInfoResponse.dart';
+import '../results/Sermon.dart';
 
 class API {
 
   //测试环境
 //  static final String HOST_NAME = "13.231.255.163:8201";
 //  static final String HOST_NAME = "172.20.10.3:8000";
-  static final String HOST_NAME = "192.168.43.196:8000";
+  static final String HOST_NAME = "192.168.0.101:8000";
 
 
 //  static final String HOST_NAME = "13.231.255.163";//"""http://l3.community";
@@ -39,22 +39,16 @@ class API {
   //----------账户--------------
   Future<String> login(String email, String pwd) async {
     var body = json.encode({'email': email, 'password': pwd});
-//    var body = {'username':username, 'password':pwd};
-
-//1。增加查用户信息。
-    //2。修改username。
-    //3。改密码。传老密码，新密码。
-
-    final response = await http.post(HOST + APIS + "/auth/jwt/create",
+    final response = await http.post(HOST + APIS + "/users/login",
         headers: {
           HttpHeaders.contentTypeHeader: 'application/json'},
         body: body);
 
     if (response.statusCode == 200) {
-      final baseResponse = LoginResponse.fromJson(json.decode(response.body));
-      if (baseResponse.access != null) {
-        SharedPreferencesUtils.saveToken(baseResponse.access);
-        return baseResponse.access;
+      final baseResponse = BaseResponse<LoginResult>.fromJson(json.decode(response.body));
+      if (baseResponse.data.access != null) {
+        SharedPreferencesUtils.saveToken(baseResponse.data.access);
+        return baseResponse.data.access;
       }
       throw Exception('没有token');
     } else {
@@ -77,7 +71,7 @@ class API {
         body: body);
 
     if (response.statusCode == 200) {
-      final baseResponse = RegisterResponse.fromJson(
+      final baseResponse = BaseResponse<RegisterResult>.fromJson(
           json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return true;
@@ -183,7 +177,7 @@ class API {
         response.request.headers.toString() + ",Response:" + response.body,
         wrapWidth: 1024);
     if (response.statusCode == 200) {
-      final baseResponse = ChurchResponse.fromJson(json.decode(response.body));
+      final baseResponse = BaseResponse<Church>.fromJson(json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
       }
@@ -204,7 +198,7 @@ class API {
     debugPrint("网络请求：" + response.request.toString() + "，Header:" +
         response.request.headers.toString() + ",Response:" + response.body);
     if (response.statusCode == 200) {
-      final baseResponse = BaseResponse.fromJson(json.decode(response.body));
+      final baseResponse = BaseResponse<WeaklyReport>.fromJson(json.decode(response.body));
 
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
@@ -228,7 +222,7 @@ class API {
         response.request.headers.toString() + ",Response:" + response.body,
         wrapWidth: 1024);
     if (response.statusCode == 200) {
-      final baseResponse = BaseResponse.fromJson(json.decode(response.body));
+      final baseResponse = BaseResponse<WeaklyReport>.fromJson(json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
       }
@@ -255,7 +249,7 @@ class API {
     );
 
     if (response.statusCode == 200) {
-      final baseResponse = LorddayInfoResponse.fromJson(
+      final baseResponse = BaseResponse<Sermon>.fromJson(
           json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
@@ -270,7 +264,7 @@ class API {
     final response = await http.get(HOST + APIS + "/lorddayinfo/l3");
 
     if (response.statusCode == 200) {
-      final baseResponse = LorddayInfoResponse.fromJson(
+      final baseResponse = BaseResponse<Sermon>.fromJson(
           json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
@@ -284,7 +278,7 @@ class API {
   //------------课程-----------
   static const String RequestCourseOrderByPrice = "price";
   static const String RequestCourseOrderBySale = "sales_num";
-  Future<CourseResponse> getCourseList(
+  Future<BaseResponseWithPage<Course>> getCourseList(
       {int page, int pagesize, String keyword = null,String orderby = null,bool asc = false,bool bought = false}) async {
     final token = await SharedPreferencesUtils.getToken();
     var queryParameters = {
@@ -316,7 +310,7 @@ class API {
     );
 
     if (response.statusCode == 200) {
-      final baseResponse = CourseResponse.fromJson(json.decode(response.body));
+      final baseResponse = BaseResponseWithPage<Course>.fromJson(json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse;
       }
@@ -370,7 +364,7 @@ class API {
 
     if (response.statusCode == 200) {
 
-      final baseResponse = OrderResponse.fromJson(json.decode(response.body));
+      final baseResponse = BaseResponse<OrderResult>.fromJson(json.decode(response.body));
       if(baseResponse.errCode == "0"){
         return baseResponse.data.order_no;
       }
@@ -393,7 +387,7 @@ class API {
 
     if (response.statusCode == 200) {
 
-      final baseResponse = IAPVerifyResponse.fromJson(json.decode(response.body));
+      final baseResponse = BaseResponse<IAPVerifyResult>.fromJson(json.decode(response.body));
       if(baseResponse.errCode == "0"){
         return baseResponse.data;
       }
@@ -437,7 +431,7 @@ class API {
 
     if (response.statusCode == 200) {
 
-      final baseResponse = OrderResponse.fromJson(json.decode(response.body));
+      final baseResponse = BaseResponse<OrderResult>.fromJson(json.decode(response.body));
       if(baseResponse.errCode == "0"){
         return baseResponse.data;
       }
@@ -460,7 +454,7 @@ class API {
         body: body);
 
     if (response.statusCode == 200) {
-      final baseResponse = PaypalResponse.fromJson(json.decode(response.body));
+      final baseResponse = BaseResponse<PaypalResult>.fromJson(json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
       }

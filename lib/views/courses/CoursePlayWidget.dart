@@ -4,7 +4,7 @@ import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import '../../net/CourseResponse.dart';
+import '../../net/results/Course.dart';
 
 
 class CoursePlayWidget extends StatefulWidget {

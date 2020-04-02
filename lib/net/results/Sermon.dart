@@ -1,32 +1,9 @@
+import 'package:church_platform/net/common/BaseResponse.dart';
 import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/net/models/Medias.dart';
 import 'package:church_platform/net/models/Speaker.dart';
 
-class LorddayInfoResponse {
-  String errCode;
-  String errMsg;
-  Sermon data;
-
-  LorddayInfoResponse({this.errCode,this.errMsg, this.data});
-
-  LorddayInfoResponse.fromJson(Map<String, dynamic> json) {
-    errCode = json['errCode'];
-    errMsg = json['errMsg'];
-    data = json['data'] != null ? new Sermon.fromJson(json['data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['errCode'] = this.errCode;
-    data['errMsg'] = this.errMsg;
-    if (this.data != null) {
-      data['data'] = this.data.toJson();
-    }
-    return data;
-  }
-}
-
-class Sermon {
+class Sermon extends BaseResult {
   int id;
   Church church;
   int user;

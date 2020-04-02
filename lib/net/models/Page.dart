@@ -3,11 +3,8 @@ class Page {
   int pageSize = 10;
   int totalPage = 1000;
 
-  Page(
-      {this.page,
+  Page({this.page,
         this.totalPage});
-
-  Page.fromDefault(){}
 
   bool hasNext(){
     return page < totalPage;

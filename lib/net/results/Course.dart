@@ -1,46 +1,10 @@
+import 'package:church_platform/net/common/BaseResponse.dart';
 import 'package:church_platform/net/models/Church.dart';
+import 'package:church_platform/net/models/IAPCharge.dart';
 import 'package:church_platform/net/models/Medias.dart';
 import 'package:flutter/foundation.dart';
 
-class CourseResponse {
-  String errCode;
-  String errMsg;
-  String detail;
-  List<Course> data;
-  int page;
-  int totalPage;
-
-  CourseResponse({this.errCode, this.errMsg, this.detail,this.data, this.page, this.totalPage});
-
-  CourseResponse.fromJson(Map<String, dynamic> json) {
-    errCode = json['errCode'];
-    errMsg = json['errMsg'];
-    detail = json['detail'];
-    if (json['data'] != null) {
-      data = new List<Course>();
-      json['data'].forEach((v) {
-        data.add(new Course.fromJson(v));
-      });
-    }
-    page = json['page'];
-    totalPage = json['totalPage'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['errCode'] = this.errCode;
-    data['errMsg'] = this.errMsg;
-    data['detail'] = this.detail;
-    if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
-    }
-    data['page'] = this.page;
-    data['totalPage'] = this.totalPage;
-    return data;
-  }
-}
-
-class Course {
+class Course extends BaseResult {
   int id;
   Church church;
 //  Speaker speaker;
@@ -133,31 +97,6 @@ class Course {
     }
     data['create_time'] = this.createTime;
     data['update_time'] = this.updateTime;
-    return data;
-  }
-}
-
-class IapCharge {
-  String productId;
-  String priceCode;
-  String desc;
-  String price;
-
-  IapCharge({this.productId, this.priceCode, this.desc, this.price});
-
-  IapCharge.fromJson(Map<String, dynamic> json) {
-    productId = json['product_id'];
-    priceCode = json['price_code'];
-    desc = json['desc'];
-    price = json['price'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['product_id'] = this.productId;
-    data['price_code'] = this.priceCode;
-    data['desc'] = this.desc;
-    data['price'] = this.price;
     return data;
   }
 }

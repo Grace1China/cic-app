@@ -1,5 +1,6 @@
-import 'package:church_platform/net/API.dart';
-import 'package:church_platform/net/CourseResponse.dart';
+import 'package:church_platform/net/common/API.dart';
+import 'package:church_platform/net/common/BaseResponseWithPage.dart';
+import 'package:church_platform/net/results/Course.dart';
 import 'package:church_platform/net/models/Page.dart';
 import 'package:church_platform/views/courses/CourseDetailsWidget.dart';
 import 'package:church_platform/views/courses/store/CourseStoreItem.dart';
@@ -28,7 +29,7 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
   bool isFirstLoad = true;
   bool isloading = true;
   bool isRefreshLoading = false; //刷新时候的loading，显示ui。
-  Page page = Page.fromDefault();
+  Page page = Page();
 
   //Search
   Widget _appBarTitle = new Text('课程');
@@ -108,10 +109,10 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
 //          isRefreshLoading = true;
 //        });
 //      }
-      CourseResponse response = await API().getCourseList(page: 1,pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
+      BaseResponseWithPage<Course> response = await API().getCourseList(page: 1,pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
       setState(() {
         isloading = false;
-        page = Page(page: response.page,totalPage: response.totalPage);
+        page = response.getPage();
         if(courses == null){
           courses = response.data;
         }else{
@@ -146,7 +147,7 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
 //      setState(() {
 //        isRefreshLoading = true;
 //      });
-      CourseResponse r = await API().getCourseList(page: page.page + 1, pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
+      BaseResponseWithPage<Course> r = await API().getCourseList(page: page.page + 1, pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
       setState(() {
         page.page += 1;
         courses += r.data;

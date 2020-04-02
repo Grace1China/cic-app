@@ -1,34 +1,11 @@
 
-class RegisterResponse {
-  String errCode;
-  String msg;
-  RegisterResult data;
+import 'package:church_platform/net/common/BaseResponse.dart';
 
-  RegisterResponse({this.errCode,this.msg, this.data});
-
-  RegisterResponse.fromJson(Map<String, dynamic> json) {
-    errCode = json['errCode'];
-    msg = json['msg'];
-    data = json['data'] != null ? new RegisterResult.fromJson(json['data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['errCode'] = this.errCode;
-    data['msg'] = this.msg;
-    if (this.data != null) {
-      data['data'] = this.data.toJson();
-    }
-    return data;
-  }
-}
-
-class RegisterResult {
+class RegisterResult extends BaseResult {
   String email;
   String username;
   String password;
   String church_code;
-
 
   RegisterResult(
       {this.email,
@@ -42,7 +19,6 @@ class RegisterResult {
     username = json['username'];
     password = json['password'];
     church_code = json['church_code'];
-
   }
 
   Map<String, dynamic> toJson() {

@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:church_platform/net/API.dart';
-import 'package:church_platform/net/LorddayInfoResponse.dart';
+import 'package:church_platform/net/common/API.dart';
+import 'package:church_platform/net/results/Sermon.dart';
 import 'package:church_platform/net/models/Medias.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/vedio/VideoPlayerManager.dart';

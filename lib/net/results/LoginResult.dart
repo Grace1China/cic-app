@@ -1,10 +1,12 @@
-class LoginResponse {
+import 'package:church_platform/net/common/BaseResponse.dart';
+
+class LoginResult extends BaseResult {
   String refresh;
   String access;
 
-  LoginResponse({this.refresh, this.access});
+  LoginResult({this.refresh, this.access});
 
-  LoginResponse.fromJson(Map<String, dynamic> json) {
+  LoginResult.fromJson(Map<String, dynamic> json) {
     refresh = json['refresh'];
     access = json['access'];
   }

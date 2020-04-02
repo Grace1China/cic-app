@@ -1,4 +1,4 @@
-import 'package:church_platform/net/CourseResponse.dart';
+import 'package:church_platform/net/results/Course.dart';
 import 'package:flutter/foundation.dart';
 
 class PayUtils{
