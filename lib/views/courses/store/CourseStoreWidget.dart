@@ -1,7 +1,7 @@
 import 'package:church_platform/net/common/API.dart';
-import 'package:church_platform/net/common/BaseResponseWithPage.dart';
-import 'package:church_platform/net/results/Course.dart';
+import 'package:church_platform/net/common/NetBasePageResponse.dart';
 import 'package:church_platform/net/models/Page.dart';
+import 'package:church_platform/net/results/Course.dart';
 import 'package:church_platform/views/courses/CourseDetailsWidget.dart';
 import 'package:church_platform/views/courses/store/CourseStoreItem.dart';
 import 'package:flutter/cupertino.dart';
@@ -109,7 +109,7 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
 //          isRefreshLoading = true;
 //        });
 //      }
-      BaseResponseWithPage<Course> response = await API().getCourseList(page: 1,pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
+      NetResponseWithPage<Course> response = await API().getCourseList(page: 1,pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
       setState(() {
         isloading = false;
         page = response.getPage();
@@ -147,7 +147,7 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
 //      setState(() {
 //        isRefreshLoading = true;
 //      });
-      BaseResponseWithPage<Course> r = await API().getCourseList(page: page.page + 1, pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
+      NetResponseWithPage<Course> r = await API().getCourseList(page: page.page + 1, pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
       setState(() {
         page.page += 1;
         courses += r.data;

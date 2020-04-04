@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:church_platform/main.dart';
 import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/net/results/Sermon.dart';
 import 'package:church_platform/net/models/Medias.dart';
@@ -274,9 +275,7 @@ class _LorddayInfoMainWidgetState extends State<LorddayInfoMainWidget> with Widg
 //              Navigator.push(context,
 //                  MaterialPageRoute(builder: (context) => DonateWidget(), fullscreenDialog: true));
                 bool isLogin = await SharedPreferencesUtils.isLogin();
-                Navigator.of(context).push(CupertinoPageRoute(
-                    fullscreenDialog: true,
-                    builder: (context) => isLogin ? AccountWidget() : LoginWidget()));
+                Navigator.of(context).pushNamed(RouteNames.LOGIN);
 
 
               })

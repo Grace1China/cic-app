@@ -4,8 +4,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:church_platform/net/common/BaseResponse.dart';
-import 'package:church_platform/net/common/BaseResponseWithPage.dart';
+import 'package:church_platform/net/common/NetBaseResponse.dart';
+import 'package:church_platform/net/common/NetBasePageResponse.dart';
+import 'package:church_platform/net/common/NetClient.dart';
 import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/net/models/CustomUser.dart';
 import 'package:church_platform/net/results/Course.dart';
@@ -45,7 +46,7 @@ class API {
         body: body);
 
     if (response.statusCode == 200) {
-      final baseResponse = BaseResponse<LoginResult>.fromJson(json.decode(response.body));
+      final baseResponse = NetResponse<LoginResult>.fromJson(json.decode(response.body));
       if (baseResponse.data.access != null) {
         SharedPreferencesUtils.saveToken(baseResponse.data.access);
         return baseResponse.data.access;
@@ -71,12 +72,12 @@ class API {
         body: body);
 
     if (response.statusCode == 200) {
-      final baseResponse = BaseResponse<RegisterResult>.fromJson(
+      final baseResponse = NetResponse<RegisterResult>.fromJson(
           json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return true;
       }
-      throw Exception('注册失败:' + baseResponse.msg);
+      throw Exception('注册失败:' + baseResponse.errMsg);
     } else {
       throw Exception(
           response.statusCode.toString() + ":" + response.reasonPhrase + "." +
@@ -106,11 +107,11 @@ class API {
         response.request.headers.toString() + ",Response:" + response.body,
         wrapWidth: 1024);
     if (response.statusCode == 200) {
-      final baseResponse = UserResponse.fromJson(json.decode(response.body));
+      final baseResponse = NetResponse<CustomUser>.fromJson(json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
       }
-      throw Exception('没有用户信息:' + baseResponse.msg);
+      throw Exception('没有用户信息:' + baseResponse.errMsg);
     } else {
       throw Exception(response.statusCode.toString() + ":" + response.body);
     }
@@ -130,11 +131,11 @@ class API {
         response.request.headers.toString() + ",Response:" + response.body,
         wrapWidth: 1024);
     if (response.statusCode == 200) {
-      final baseResponse = UserResponse.fromJson(json.decode(response.body));
+      final baseResponse = NetResponse<CustomUser>.fromJson(json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
       }
-      throw Exception('修改失败:' + baseResponse.msg);
+      throw Exception('修改失败:' + baseResponse.errMsg);
     } else {
       throw Exception(response.statusCode.toString() + ":" + response.body);
     }
@@ -154,11 +155,11 @@ class API {
         response.request.headers.toString() + ",Response:" + response.body,
         wrapWidth: 1024);
     if (response.statusCode == 200) {
-      final baseResponse = UserResponse.fromJson(json.decode(response.body));
+      final baseResponse = NetResponse<CustomUser>.fromJson(json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return true;
       }
-      throw Exception('修改失败:' + baseResponse.msg);
+      throw Exception('修改失败:' + baseResponse.errMsg);
     } else {
       throw Exception(response.statusCode.toString() + ":" + response.body);
     }
@@ -166,25 +167,29 @@ class API {
 
   //----------教会，周报----------
   Future<Church> getChurch() async {
-    final token = await SharedPreferencesUtils.getToken();
-    final response = await http.get(HOST + APIS + "/getmychurch",
-      headers: token != null && token.isNotEmpty ? {
-        HttpHeaders.authorizationHeader: "Bearer " + token,
-      } : {},
-    );
 
-    debugPrint("网络请求：" + response.request.toString() + "，Header:" +
-        response.request.headers.toString() + ",Response:" + response.body,
-        wrapWidth: 1024);
-    if (response.statusCode == 200) {
-      final baseResponse = BaseResponse<Church>.fromJson(json.decode(response.body));
-      if (baseResponse.errCode == "0") {
-        return baseResponse.data;
-      }
-      throw Exception('没有教会信息');
-    } else {
-      throw Exception(response.statusCode.toString() + ":" + response.body);
-    }
+    final baseResponse = await NetClient<Church>().request(url: "/getmychurch");
+    return baseResponse.data;
+
+//    final token = await SharedPreferencesUtils.getToken();
+//    final response = await http.get(HOST + APIS + "/getmychurch",
+//      headers: token != null && token.isNotEmpty ? {
+//        HttpHeaders.authorizationHeader: "Bearer " + token,
+//      } : {},
+//    );
+//
+//    debugPrint("网络请求：" + response.request.toString() + "，Header:" +
+//        response.request.headers.toString() + ",Response:" + response.body,
+//        wrapWidth: 1024);
+//    if (response.statusCode == 200) {
+//      final baseResponse = NetResponse<Church>.fromJson(json.decode(response.body));
+//      if (baseResponse.errCode == "0") {
+//        return baseResponse.data;
+//      }
+//      throw Exception('没有教会信息');
+//    } else {
+//      throw Exception(response.statusCode.toString() + ":" + response.body);
+//    }
   }
 
   Future<WeaklyReport> getWeaklyReportL3() async {
@@ -198,7 +203,7 @@ class API {
     debugPrint("网络请求：" + response.request.toString() + "，Header:" +
         response.request.headers.toString() + ",Response:" + response.body);
     if (response.statusCode == 200) {
-      final baseResponse = BaseResponse<WeaklyReport>.fromJson(json.decode(response.body));
+      final baseResponse = NetResponse<WeaklyReport>.fromJson(json.decode(response.body));
 
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
@@ -222,7 +227,7 @@ class API {
         response.request.headers.toString() + ",Response:" + response.body,
         wrapWidth: 1024);
     if (response.statusCode == 200) {
-      final baseResponse = BaseResponse<WeaklyReport>.fromJson(json.decode(response.body));
+      final baseResponse = NetResponse<WeaklyReport>.fromJson(json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
       }
@@ -249,7 +254,7 @@ class API {
     );
 
     if (response.statusCode == 200) {
-      final baseResponse = BaseResponse<Sermon>.fromJson(
+      final baseResponse = NetResponse<Sermon>.fromJson(
           json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
@@ -264,7 +269,7 @@ class API {
     final response = await http.get(HOST + APIS + "/lorddayinfo/l3");
 
     if (response.statusCode == 200) {
-      final baseResponse = BaseResponse<Sermon>.fromJson(
+      final baseResponse = NetResponse<Sermon>.fromJson(
           json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
@@ -278,7 +283,7 @@ class API {
   //------------课程-----------
   static const String RequestCourseOrderByPrice = "price";
   static const String RequestCourseOrderBySale = "sales_num";
-  Future<BaseResponseWithPage<Course>> getCourseList(
+  Future<NetResponseWithPage<Course>> getCourseList(
       {int page, int pagesize, String keyword = null,String orderby = null,bool asc = false,bool bought = false}) async {
     final token = await SharedPreferencesUtils.getToken();
     var queryParameters = {
@@ -310,7 +315,7 @@ class API {
     );
 
     if (response.statusCode == 200) {
-      final baseResponse = BaseResponseWithPage<Course>.fromJson(json.decode(response.body));
+      final baseResponse = NetResponseWithPage<Course>.fromJson(json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse;
       }
@@ -364,7 +369,7 @@ class API {
 
     if (response.statusCode == 200) {
 
-      final baseResponse = BaseResponse<OrderResult>.fromJson(json.decode(response.body));
+      final baseResponse = NetResponse<OrderResult>.fromJson(json.decode(response.body));
       if(baseResponse.errCode == "0"){
         return baseResponse.data.order_no;
       }
@@ -387,7 +392,7 @@ class API {
 
     if (response.statusCode == 200) {
 
-      final baseResponse = BaseResponse<IAPVerifyResult>.fromJson(json.decode(response.body));
+      final baseResponse = NetResponse<IAPVerifyResult>.fromJson(json.decode(response.body));
       if(baseResponse.errCode == "0"){
         return baseResponse.data;
       }
@@ -431,7 +436,7 @@ class API {
 
     if (response.statusCode == 200) {
 
-      final baseResponse = BaseResponse<OrderResult>.fromJson(json.decode(response.body));
+      final baseResponse = NetResponse<OrderResult>.fromJson(json.decode(response.body));
       if(baseResponse.errCode == "0"){
         return baseResponse.data;
       }
@@ -454,7 +459,7 @@ class API {
         body: body);
 
     if (response.statusCode == 200) {
-      final baseResponse = BaseResponse<PaypalResult>.fromJson(json.decode(response.body));
+      final baseResponse = NetResponse<PaypalResult>.fromJson(json.decode(response.body));
       if (baseResponse.errCode == "0") {
         return baseResponse.data;
       }

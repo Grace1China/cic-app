@@ -1,3 +1,4 @@
+import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/main.dart';
 import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/net/models/CustomUser.dart';
@@ -225,7 +226,7 @@ Widget buildContent(BuildContext context) {
           child: FlatButton(
               onPressed: () async {
                 SharedPreferencesUtils.logout();
-                MyApp.myTabbedPageKey.currentState.changeIndex(4);
+                HomeTabBarWidget.myTabbedPageKey.currentState.changeIndex(4);
                 Navigator.of(context).pop(); //先pop。后refresh。refresh可能会出错
                 if (LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState !=
                     null) {

@@ -1,22 +1,18 @@
+import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/views/account/LoginWidget.dart';
-import 'package:church_platform/views/courses/store/CourseStoreWidget.dart';
-import 'package:church_platform/views/donate/DonateWidget.dart';
-import 'package:church_platform/views/lordday/LorddayInfoMainWidget.dart';
-import 'package:church_platform/views/spiritual/SpiritualMainWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 
 import 'utils/CPTheme.dart';
-import 'utils/SharedPreferencesUtils.dart';
-import 'views/church/ChurchWidget.dart';
+
+//routers 博客：https://zhuanlan.zhihu.com/p/56289929
+//项目地址 /Users/kevin/FlutterProjects/mytestapps/flutter_app_routers
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  static final myTabbedPageKey = new GlobalKey<_HomeTabBarWidgetState>();
 
   @override
   Widget build(BuildContext context) {
@@ -30,88 +26,31 @@ class MyApp extends StatelessWidget {
       child:  MaterialApp(
         title: '教会平台',
         themeMode: ThemeMode.light,
-        theme: defaultTargetPlatform == TargetPlatform.iOS         //new
-            ? kIOSTheme                                              //new
-            : kAndroidTheme,
-        home: HomeTabBarWidget(key:myTabbedPageKey,title: '主页'),
+        theme: defaultTargetPlatform == TargetPlatform.iOS ? kIOSTheme: kAndroidTheme,
+//      home: HomeTabBarWidget(key:myTabbedPageKey,title: '主页'),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => HomeTabBarWidget(key:HomeTabBarWidget.myTabbedPageKey,title: '主页'),
+//          '/second': (context) => SecondScreen(), //当push多个同名字的时候，Navigator.of(context).popUntil(ModalRoute.withName("/second"));失效。
+        },
+        onGenerateRoute: (settings) {
+
+          if (settings.name == RouteNames.LOGIN) {
+//            final ScreenArguments args = settings.arguments;
+
+            return CupertinoPageRoute(
+                fullscreenDialog: true,
+                builder: (context) => LoginWidget()
+            );
+          }
+          assert(false, 'Need to implement ${settings.name}');
+          return null;
+        },
       ),
     );
   }
 }
 
-class HomeTabBarWidget extends StatefulWidget {
-  HomeTabBarWidget({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _HomeTabBarWidgetState createState() => _HomeTabBarWidgetState();
-}
-
-class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
-  int _selectedIndex = 4;
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static  List<Widget> _widgetOptions = <Widget>[
-    ChurchWidget(),
-    DonateWidget(),
-    SpiritualMainWidget(),
-    LorddayInfoMainWidget(key:LorddayInfoMainWidget.myLorddayInfoWidgetKey),
-    CourseStoreWidget(),
-  ];
-
-  void changeIndex(int index){
-    _onItemTapped(index);
-  }
-  void _onItemTapped(int index) async {
-    bool b = await SharedPreferencesUtils.isLogin();
-    if(!b && [0,1,2].contains(index)){
-//      Navigator.of(context).push(route)
-      Navigator.push(context, CupertinoPageRoute(
-          fullscreenDialog: true,
-          builder: (context) => LoginWidget()
-      ));
-      return;
-    }
-    
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance),
-            title: Text('教会'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.monetization_on),
-            title: Text('奉献'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.markunread_mailbox),
-            title: Text('L3'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.live_tv),
-            title: Text('主日'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_books),
-            title: Text('课程'),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).accentColor,
-        onTap: _onItemTapped,
-      ),
-    );
-  }
+class RouteNames{
+  static const LOGIN = '/login';
 }

@@ -15,7 +15,6 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 
 class LoginWidget extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final appTitle = '登录';

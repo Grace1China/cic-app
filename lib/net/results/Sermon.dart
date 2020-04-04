@@ -1,9 +1,9 @@
-import 'package:church_platform/net/common/BaseResponse.dart';
+import 'package:church_platform/net/common/NetBaseResponse.dart';
 import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/net/models/Medias.dart';
 import 'package:church_platform/net/models/Speaker.dart';
 
-class Sermon extends BaseResult {
+class Sermon extends NetResult {
   int id;
   Church church;
   int user;

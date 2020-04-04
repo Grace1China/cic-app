@@ -1,28 +1,7 @@
-class UserResponse {
-  String errCode;
-  String msg;
-  CustomUser data;
 
-  UserResponse({this.errCode, this.msg, this.data});
+import 'package:church_platform/net/common/NetBaseResponse.dart';
 
-  UserResponse.fromJson(Map<String, dynamic> json) {
-    errCode = json['errCode'];
-    msg = json['msg'];
-    data = json['data'] != null ? new CustomUser.fromJson(json['data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['errCode'] = this.errCode;
-    data['msg'] = this.msg;
-    if (this.data != null) {
-      data['data'] = this.data.toJson();
-    }
-    return data;
-  }
-}
-
-class CustomUser {
+class CustomUser extends NetResult{
   int id;
   String email;
   String username;

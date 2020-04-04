@@ -1,7 +1,7 @@
 
-import 'package:church_platform/net/common/BaseResponse.dart';
+import 'package:church_platform/net/common/NetBaseResponse.dart';
 
-class Church extends BaseResult {
+class Church extends NetResult {
   int id;
   String name;
   String code;

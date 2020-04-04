@@ -1,7 +1,7 @@
 
-import 'package:church_platform/net/common/BaseResponse.dart';
+import 'package:church_platform/net/common/NetBaseResponse.dart';
 
-class RegisterResult extends BaseResult {
+class RegisterResult extends NetResult {
   String email;
   String username;
   String password;

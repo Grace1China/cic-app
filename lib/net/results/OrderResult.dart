@@ -1,7 +1,7 @@
 
-import 'package:church_platform/net/common/BaseResponse.dart';
+import 'package:church_platform/net/common/NetBaseResponse.dart';
 
-class OrderResult extends BaseResult {
+class OrderResult extends NetResult {
   String order_no;
   String client_token; //paypal专有
 

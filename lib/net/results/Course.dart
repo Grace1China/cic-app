@@ -1,10 +1,10 @@
-import 'package:church_platform/net/common/BaseResponse.dart';
+import 'package:church_platform/net/common/NetBaseResponse.dart';
 import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/net/models/IAPCharge.dart';
 import 'package:church_platform/net/models/Medias.dart';
 import 'package:flutter/foundation.dart';
 
-class Course extends BaseResult {
+class Course extends NetResult {
   int id;
   Church church;
 //  Speaker speaker;

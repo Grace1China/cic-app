@@ -1,7 +1,7 @@
 
-import 'package:church_platform/net/common/BaseResponse.dart';
+import 'package:church_platform/net/common/NetBaseResponse.dart';
 
-class WeaklyReport extends BaseResult{
+class WeaklyReport extends NetResult{
   int id;
   int church;
   int creator;

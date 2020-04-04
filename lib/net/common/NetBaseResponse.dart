@@ -1,47 +1,63 @@
 
+import 'package:church_platform/net/common/NetClient.dart';
+import 'package:church_platform/net/models/Church.dart';
+import 'package:church_platform/net/models/CustomUser.dart';
 import 'package:church_platform/net/results/IAPVerifyResult.dart';
 import 'package:church_platform/net/results/LoginResult.dart';
 import 'package:church_platform/net/results/OrderResult.dart';
 import 'package:church_platform/net/results/PaypalResult.dart';
+import 'package:church_platform/net/results/RegisterResult.dart';
 import 'package:church_platform/net/results/Sermon.dart';
+import 'package:church_platform/net/results/WeaklyReport.dart';
 
-class BaseResult{
-  BaseResult();
-  BaseResult.fromJson(Map<String, dynamic> json);
+class NetResult{
+  NetResult();
+  NetResult.fromJson(Map<String, dynamic> json);
   Map<String, dynamic> toJson(){
     return null;
   }
 }
 
-class BaseResponse<T extends BaseResult> {
+class NetResponse<T extends NetResult>{
   String detail;
   String errCode;
   String msg;
   T data;
 
-  BaseResponse({this.detail, this.errCode, this.msg, this.data});
+  String get errMsg{
+    return detail + msg;
+  }
+  NetResponse({this.detail, this.errCode, this.msg, this.data});
 
-  BaseResponse.fromJson(Map<String, dynamic> json) {
+  NetResponse.fromJson(Map<String, dynamic> json) {
     detail = json['detail'];
     errCode = json['errCode'];
     msg = json['msg'];
     data = json['data'] != null ?  baseFromJson<T>(json['data']) : null;
   }
 
-  static T baseFromJson<T extends BaseResult>(dynamic json) {
+  static T baseFromJson<T extends NetResult>(dynamic json) {
 
-    if (T == BaseResult) {
-      return BaseResult.fromJson(json) as T;
+    if (T == NetResult) {
+      return NetResult.fromJson(json) as T;
     }else if (T == LoginResult) {
       return LoginResult.fromJson(json) as T;
-    }else if (T == LoginResult) {
-      return IAPVerifyResult.fromJson(json) as T;
-    }else if (T == LoginResult) {
+    }else if (T == RegisterResult) {
+      return RegisterResult.fromJson(json) as T;
+    }else if (T == CustomUser) {
+      return CustomUser.fromJson(json) as T;
+    }else if (T == Sermon) {
       return Sermon.fromJson(json) as T;
-    }else if (T == LoginResult) {
-      return OrderResult.fromJson(json) as T;
-    }else if (T == LoginResult) {
+    }else if (T == Church) {
+      return Church.fromJson(json) as T;
+    }else if (T == WeaklyReport) {
+      return WeaklyReport.fromJson(json) as T;
+    }else if (T == IAPVerifyResult) {
+      return IAPVerifyResult.fromJson(json) as T;
+    }else if (T == PaypalResult) {
       return PaypalResult.fromJson(json) as T;
+    }else if (T == OrderResult) {
+      return OrderResult.fromJson(json) as T;
     } else {
       throw Exception("Unknown class");
     }
