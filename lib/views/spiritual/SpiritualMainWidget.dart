@@ -1,3 +1,4 @@
+import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:church_platform/views/spiritual/SpiritualDetailsWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,12 +33,7 @@ class _SpiritualMainWidgetState extends State<SpiritualMainWidget> {
         actions: <Widget>[
           IconButton(icon: Icon(Icons.account_circle),
               onPressed: (){
-                Navigator.of(context).push(
-                    CupertinoPageRoute(
-                        fullscreenDialog: true,
-                        builder: (context) => AccountWidget()
-                    )
-                );
+                HomeTabBarWidget.myTabbedPageKey.currentState.tryShowAccount();
               })
         ],
       ),

@@ -61,7 +61,8 @@ class _ChurchWidgetState extends State<ChurchWidget> {
 
   Widget buildChurch(BuildContext context){
     if(errmsg != null){
-      return Text("${errmsg}");
+//      return Text("${errmsg}"); 不显示错误了。因为后两个周报接口可能会成功。
+      return Container();
     }else if(church == null) {
       return Container();
     }else{

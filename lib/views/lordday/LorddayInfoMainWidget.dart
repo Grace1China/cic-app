@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/main.dart';
 import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/net/results/Sermon.dart';
@@ -271,12 +272,7 @@ class _LorddayInfoMainWidgetState extends State<LorddayInfoMainWidget> with Widg
           IconButton(
               icon: Icon(Icons.account_circle),
               onPressed: () async{
-                //效果同等
-//              Navigator.push(context,
-//                  MaterialPageRoute(builder: (context) => DonateWidget(), fullscreenDialog: true));
-                bool isLogin = await SharedPreferencesUtils.isLogin();
-                Navigator.of(context).pushNamed(RouteNames.LOGIN);
-
+                HomeTabBarWidget.myTabbedPageKey.currentState.tryShowAccount();
 
               })
         ],

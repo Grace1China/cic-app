@@ -9,6 +9,7 @@ class Church extends NetResult {
   String description;
   String promotCover;
   String promotVideo;
+  String giving_qrcode;
 
   Church(
       {this.id,
@@ -17,7 +18,8 @@ class Church extends NetResult {
         this.venue,
         this.description,
         this.promotCover,
-        this.promotVideo});
+        this.promotVideo,
+        this.giving_qrcode});
 
   Church.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -32,6 +34,7 @@ class Church extends NetResult {
     description = json['description'];
     promotCover = json['promot_cover'];
     promotVideo = json['promot_video'];
+    giving_qrcode = json['giving_qrcode'];
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +48,7 @@ class Church extends NetResult {
     data['description'] = this.description;
     data['promot_cover'] = this.promotCover;
     data['promot_video'] = this.promotVideo;
+    data['giving_qrcode'] = this.giving_qrcode;
     return data;
   }
 }

@@ -28,9 +28,9 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
   static List<Widget> _widgetOptions = <Widget>[
     ChurchWidget(key: ChurchWidget.ChurchWidgetKey),
     DonateWidget(),
-    SpiritualMainWidget(),
+//    SpiritualMainWidget(),
     LorddayInfoMainWidget(key: LorddayInfoMainWidget.myLorddayInfoWidgetKey),
-    CourseStoreWidget(),
+//    CourseStoreWidget(),
   ];
 
   void tryShowAccount() async{
@@ -103,7 +103,7 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
 
   void _onItemTapped(int index) async {
     bool b = await SharedPreferencesUtils.isLogin();
-    if (!b && [1, 2].contains(index)) {
+    if (!b && [1].contains(index)) {
       Navigator.pushNamed(context, '/login');
       return;
     }
@@ -133,18 +133,18 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
             icon: Icon(Icons.monetization_on),
             title: Text('奉献'),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.markunread_mailbox),
-            title: Text('L3'),
-          ),
+//          BottomNavigationBarItem(
+//            icon: Icon(Icons.markunread_mailbox),
+//            title: Text('L3'),
+//          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.live_tv),
             title: Text('主日'),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_books),
-            title: Text('课程'),
-          ),
+//          BottomNavigationBarItem(
+//            icon: Icon(Icons.library_books),
+//            title: Text('课程'),
+//          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Theme.of(context).accentColor,

@@ -68,7 +68,6 @@ class API {
   Future<Church> getChurch() async { //token根据token有无，返回不同教会。
     final baseResponse = await NetClient<Church>().request(url: "/getmychurch");
     return baseResponse.data;
-
   }
 
   Future<WeaklyReport> getWeaklyReportL3() async { //token不需要
