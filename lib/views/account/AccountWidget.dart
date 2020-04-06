@@ -225,14 +225,7 @@ Widget buildContent(BuildContext context) {
           width: MediaQuery.of(context).size.width,
           child: FlatButton(
               onPressed: () async {
-                SharedPreferencesUtils.logout();
-                HomeTabBarWidget.myTabbedPageKey.currentState.changeIndex(4);
-                Navigator.of(context).pop(); //先pop。后refresh。refresh可能会出错
-                if (LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState !=
-                    null) {
-                  LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState
-                      .refreshRemoteData();
-                }
+                HomeTabBarWidget.myTabbedPageKey.currentState.logoutSuccess();
               },
               child: Text('登出',style: TextStyle(color: Colors.white)),
               color: Theme.of(context).buttonColor

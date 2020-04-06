@@ -1,4 +1,4 @@
-
+import 'package:church_platform/main.dart';
 import 'package:church_platform/utils/AlertDialogUrils.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/views/church/ChurchWidget.dart';
@@ -22,56 +22,98 @@ class HomeTabBarWidget extends StatefulWidget {
 }
 
 class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
-  int _selectedIndex = 4;
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static  List<Widget> _widgetOptions = <Widget>[
-    ChurchWidget(),
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static List<Widget> _widgetOptions = <Widget>[
+    ChurchWidget(key: ChurchWidget.ChurchWidgetKey),
     DonateWidget(),
     SpiritualMainWidget(),
-    LorddayInfoMainWidget(key:LorddayInfoMainWidget.myLorddayInfoWidgetKey),
+    LorddayInfoMainWidget(key: LorddayInfoMainWidget.myLorddayInfoWidgetKey),
     CourseStoreWidget(),
   ];
 
-  void showLogout(){
-    AlertDialogUtils.show(context,
-        title: "提示",
-        content:"登录过期，请重新登陆。",
-        okHandler: () async {
-          SharedPreferencesUtils.logout();
+  void tryShowAccount() async{
+    bool isLogin = await SharedPreferencesUtils.isLogin();
+    if(isLogin){
+      Navigator.of(context).pushNamed(RouteNames.ACCOUNT);
+    }else{
+      Navigator.of(context).pushNamed(RouteNames.LOGIN);
+    }
+  }
 
-//          if(Navigator.of(context).canPop()){
+  void loginSuccess(){
+    Navigator.of(context).pop(); //先pop。后refresh。refresh可能会出错
+    refresh();
+  }
+  void logoutSuccess(){
+    Navigator.of(context).pop();
+    _logout();
+  }
+
+  bool isShow401 = false;
+  void showLogout() {
+    if(isShow401){
+      return;
+    }
+
+    isShow401 = true;
+    AlertDialogUtils.show(context, title: "提示", content: "登录过期。",
+        okHandler: () async {
+      isShow401 = false;
+      _logout();
+    });
+
+  }
+
+  void _logout() async {
+    bool success = await SharedPreferencesUtils.logout();
+    if(success){
+      //          if(Navigator.of(context).canPop()){
 //            Navigator.of(context).pop(); //先pop。
 //          }
-          //pop
-//          Navigator.of(context).popUntil(ModalRoute.withName("/"));
-          Navigator.of(context).pushNamedAndRemoveUntil('/login',ModalRoute.withName('/'));
-          //login
-//          Navigator.push(context, CupertinoPageRoute(
-//              fullscreenDialog: true,
-//              builder: (context) => LoginWidget()
-//          ));
+      //pop
+      Navigator.of(context).popUntil(ModalRoute.withName("/"));
+      //show login
+//    Navigator.of(context)
+//        .pushNamedAndRemoveUntil('/login', ModalRoute.withName('/'));
 
-          //改变tab
-          changeIndex(4);
+//      Future.delayed(Duration(milliseconds: 100),(){
+        //改变tabÒ
+        changeIndex(0);
 //        先pop，  后refresh
-          if (LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState != null) {
-            LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState.refreshRemoteData();
-          }
-        });
+        refresh();
+//      });
+    }
   }
-  void changeIndex(int index){
+
+
+  void refresh(){
+    if (ChurchWidget.ChurchWidgetKey.currentState != null) {
+      ChurchWidget.ChurchWidgetKey.currentState.refresh();
+    }
+    if (LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState != null) {
+      LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState.refreshRemoteData();
+    }
+  }
+
+  void changeIndex(int index) {
     _onItemTapped(index);
   }
+
   void _onItemTapped(int index) async {
     bool b = await SharedPreferencesUtils.isLogin();
-    if(!b && [0,1,2].contains(index)){
+    if (!b && [1, 2].contains(index)) {
       Navigator.pushNamed(context, '/login');
       return;
     }
 
-    setState(() {
-      _selectedIndex = index;
-    });
+    if(_selectedIndex != index){
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+
   }
 
   @override

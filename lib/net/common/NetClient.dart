@@ -1,53 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:church_platform/HomeTabBarWidget.dart';
-import 'package:church_platform/main.dart';
 import 'package:church_platform/net/common/NetBaseResponse.dart';
-import 'package:church_platform/utils/AlertDialogUrils.dart';
+import 'package:church_platform/net/common/NetConfigure.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-class NetConfigure {
-  //测试环境Ø
-//  static final String HOST_NAME = "13.231.255.163:8201";
-//  static final String HOST_NAME = "172.20.10.3:8000";
-  static final String HOST_NAME = "192.168.0.101:8000";
-
-//  static final String HOST_NAME = "13.231.255.163";//"""http://l3.community";
-  static final String HOST = "http://" + HOST_NAME; //"""http://l3.community";
-  static final String APIS = "/rapi";
-}
-
-class NetAPI {
-  String subApi;
-
-  NetAPI(String subApi) {
-    this.subApi = subApi;
-  }
-
-  String get fullPath {
-    return NetConfigure.HOST + NetConfigure.APIS + subApi;
-  }
-
-  String get host {
-    return NetConfigure.HOST;
-  }
-
-  String get host_name{
-    return NetConfigure.HOST_NAME;
-  }
-
-  String get relativePath {
-    return NetConfigure.APIS + subApi;
-  }
-}
-
-enum Method { GET, POST }
-
 class NetClient<T extends NetResult> {
   Future<NetResponse<T>> request(
-      {Method method = Method.GET,
+      {NetMethod method = NetMethod.GET,
       String url,
       Map<String, Object> params,
       Map<String, String> headers,
@@ -74,7 +37,7 @@ class NetClient<T extends NetResult> {
     //GET,POST --- headers,params.
     http.Response response;
     switch (method) {
-      case Method.GET:
+      case NetMethod.GET:
         {
 //                Map<String, String> queryParams = params.cast<String, String>();
           Map<String, String> queryParams = Map<String, String>.from(requestParams);
@@ -83,7 +46,7 @@ class NetClient<T extends NetResult> {
           response = await http.get(uri, headers: requestheaders);
         }
         break;
-      case Method.POST:
+      case NetMethod.POST:
         {
           requestheaders[HttpHeaders.contentTypeHeader] = 'application/json';
           var body = json.encode(requestParams);
@@ -111,14 +74,14 @@ class NetClient<T extends NetResult> {
       if(baseResponse.msg != null){
         throw Exception(baseResponse.msg);
       }
-      throw Exception("请求失败");
+      throw Exception("没有数据");
     } else {
       //eg: 401,details
       if(response.statusCode == 401){
         HomeTabBarWidget.myTabbedPageKey.currentState.showLogout();
       }
 
-      throw Exception(response.statusCode.toString() + ":" + response.body);
+      throw Exception("${response.statusCode},${response.reasonPhrase},${response.body}");
     }
   }
 }

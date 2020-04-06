@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/utils/RegExpUtils.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
@@ -172,10 +173,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                             radius: 13.0,
                             textStyle: TextStyle(fontSize: 18.0),
                             onDismiss: (){
-                              Navigator.of(context).pop(); //先pop。后refresh。refresh可能会出错
-                              if(LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState != null){
-                                LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState.refreshRemoteData();
-                              }
+                              HomeTabBarWidget.myTabbedPageKey.currentState.loginSuccess();
                             }
                         );
 
