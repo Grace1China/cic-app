@@ -3,6 +3,7 @@ import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/net/results/WeaklyReport.dart';
 import 'package:church_platform/net/models/Church.dart';
+import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,8 @@ class _ChurchWidgetState extends State<ChurchWidget> {
   Church church;
   String errmsg;
 
-  Future<WeaklyReport> weaklyl3;
+  WeaklyReport weaklyl3;
+
   Future<WeaklyReport> weaklyReport;
 
   @override
@@ -40,23 +42,61 @@ class _ChurchWidgetState extends State<ChurchWidget> {
       isRefreshLoading = true;
     });
 
-    try{
+    bool isLogin = await SharedPreferencesUtils.isLogin();
+
+    if(isLogin) {
+      _refreshLogin();
+    }else{
+      _refreshNoLogin();
+    }
+  }
+
+  void _refreshLogin() async{
+    _refreshChurch();
+    _refreshWeeklyl3();
+    weaklyReport = API().getWeaklyReport();
+  }
+
+  void _refreshNoLogin() async{
+    setState(() {
+      church = null;
+    });
+    _refreshWeeklyl3();
+    weaklyReport = API().getWeaklyReport();
+  }
+
+  void _refreshChurch() async{
+    setState(() {
+      church = null;
+    });
+    try {
       Church c = await API().getChurch();
       setState(() {
-        isRefreshLoading = false;
         church = c;
-        errmsg = null;
       });
-    }catch(e){
+    } catch (e) {
+      setState(() {
+        church = null;
+      });
+    }
+  }
+
+  void _refreshWeeklyl3() async{
+    try {
+      WeaklyReport l3 = await API().getWeaklyReportL3();
+
       setState(() {
         isRefreshLoading = false;
-        church = null;
+        weaklyl3 = l3;
+        errmsg = null;
+      });
+    } catch (e) {
+      setState(() {
+        isRefreshLoading = false;
+        weaklyl3 = null;
         errmsg = e.toString();
       });
     }
-
-    weaklyl3 = API().getWeaklyReportL3();
-    weaklyReport = API().getWeaklyReport();
   }
 
   Widget buildChurch(BuildContext context){
@@ -160,6 +200,45 @@ class _ChurchWidgetState extends State<ChurchWidget> {
           ));
     }
   }
+
+  Widget buildEWeeklyl3(BuildContext context){
+    if(errmsg != null){
+//      return Text("${errmsg}"); //不显示错误了。因为后两个周报接口可能会成功。
+      return Container();
+    }else if(weaklyl3 == null) {
+      return Container();
+    }else{
+      return Container(
+//                    color: Colors.yellow,
+          padding: const EdgeInsets.only(top: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(5),
+                child: Text("L3 EWeekly",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              ),
+              Container(
+                padding: const EdgeInsets.all(5),
+                child: Text(weaklyl3.title,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              ),
+
+//                        Image(image: NetworkImage(snapshot.data.image),),
+              weaklyl3.image != null ?
+              FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: weaklyl3.image,
+                fit: BoxFit.cover,
+              ):Container(),
+//                        HtmlWidget(snapshot.data.content,webView: true,),
+              Html(data: weaklyl3.content,)
+            ],
+          ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -221,47 +300,7 @@ class _ChurchWidgetState extends State<ChurchWidget> {
 //              height: MediaQuery.of(context).size.width/16*9,
 //              child:  VideofijkplayerWidget(url:"http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8",),
 //            ),
-
-              FutureBuilder<WeaklyReport>(
-                future: weaklyl3,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Container(
-//                    color: Colors.yellow,
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text("L3 EWeekly",
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(snapshot.data.title,
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                            ),
-
-//                        Image(image: NetworkImage(snapshot.data.image),),
-                            snapshot.data.image != null ?
-                            FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: snapshot.data.image,
-                              fit: BoxFit.cover,
-                            ):Container(),
-//                        HtmlWidget(snapshot.data.content,webView: true,),
-                            Html(data: snapshot.data.content,)
-                          ],
-                        ));
-                  } else if (snapshot.hasError) {
-                    return Container(); //Text("${snapshot.error}");
-                  }
-
-                  // By default, show a loading spinner.
-                  return Container(); //Center(child: CircularProgressIndicator(),);
-                },
-              ),
+              buildEWeeklyl3(context),
 
               FutureBuilder<WeaklyReport>(
                 future: weaklyReport,
