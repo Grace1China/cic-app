@@ -1,4 +1,4 @@
-import 'package:church_platform/net/common/NetBaseResponse.dart';
+import 'package:church_platform/net/common/NetResponse.dart';
 
 class IAPVerifyResult extends NetResult {
   String order_no;

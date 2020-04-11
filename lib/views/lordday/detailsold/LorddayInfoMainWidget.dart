@@ -1,15 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/HomeTabBarWidget.dart';
-import 'package:church_platform/main.dart';
 import 'package:church_platform/net/common/API.dart';
-import 'package:church_platform/net/results/Sermon.dart';
 import 'package:church_platform/net/models/Medias.dart';
+import 'package:church_platform/net/results/Sermon.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/vedio/VideoPlayerManager.dart';
 import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
-import 'package:church_platform/views/account/AccountWidget.dart';
-import 'package:church_platform/views/account/LoginWidget.dart';
-import 'package:church_platform/views/lordday/LorddayInfoDetailsWidget.dart';
+import 'package:church_platform/views/lordday/details/LorddayDetailsPlayerWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -119,7 +116,7 @@ class _LorddayInfoMainWidgetState extends State<LorddayInfoMainWidget> with Widg
         onTap: (){
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => LorddayInfoDetailsWidget(lorddayInfo: lorddayInfo, medias:canPlayMedias , selectedIndex: canPlayMedias.indexOf(media),)),
+            MaterialPageRoute(builder: (context) => LorddayDetailsPlayerWidget(lorddayInfo: lorddayInfo, medias:canPlayMedias , selectedIndex: canPlayMedias.indexOf(media),)),
           );
         },
         child: Container(

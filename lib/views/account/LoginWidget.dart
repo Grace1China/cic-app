@@ -1,18 +1,11 @@
-import 'dart:async';
-
 import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/net/common/API.dart';
-import 'package:church_platform/utils/RegExpUtils.dart';
-import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/utils/ValidateUtils.dart';
 import 'package:church_platform/views/account/RegisterWidget.dart';
-import 'package:church_platform/views/lordday/LorddayInfoMainWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//import 'package:validate/validate.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:oktoast/oktoast.dart';
 
 
 class LoginWidget extends StatelessWidget {

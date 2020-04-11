@@ -1,12 +1,13 @@
 
-import 'package:church_platform/net/common/NetBaseResponse.dart';
+import 'package:church_platform/net/common/GenerateUtils.dart';
+import 'package:church_platform/net/common/NetResponse.dart';
 import 'package:church_platform/net/models/Page.dart';
 import 'package:church_platform/net/results/Course.dart';
 
 // 参考
 // https://stackoverflow.com/questions/56271651/how-to-pass-a-generic-type-as-a-parameter-to-a-future-in-flutter
 
-class NetResponseWithPage<T extends NetResult> {
+class NetResponseWithPage<T extends NetResult>{
   String detail;
   String errCode;
   String msg;
@@ -26,37 +27,7 @@ class NetResponseWithPage<T extends NetResult> {
     pageNum = json['page'];
     totalPage = json['totalPage'];
 
-    data = json['data'] != null ?  listFromJson<T>(json['data']) : null;
-  }
-
-  static List<T> listFromJson<T extends NetResult>(dynamic json) {
-    if (json is Iterable) {
-      return _listFromJson<T>(json);
-    } else {
-      throw Exception("Unknown class");
-    }
-  }
-
-  static List<K> _listFromJson<K extends NetResult>(List jsonList) {
-    if (jsonList == null) {
-      return null;
-    }
-    List<K> output = List();
-    for (Map<String, dynamic> json in jsonList) {
-      output.add(classFromJson(json));
-    }
-    return output;
-  }
-
-  static T classFromJson<T extends NetResult>(dynamic json) {
-
-    if (T == NetResult) {
-      return NetResult.fromJson(json) as T;
-    }else if (T == Course) {
-      return Course.fromJson(json) as T;
-    } else {
-      throw Exception("Unknown class");
-    }
+    data = json['data'] != null ?  GenerateUtils.listFromJson<T>(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {

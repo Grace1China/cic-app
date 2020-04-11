@@ -1,7 +1,8 @@
-import 'package:church_platform/net/common/NetBaseResponse.dart';
+import 'package:church_platform/net/common/NetResponse.dart';
 import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/net/models/Medias.dart';
 import 'package:church_platform/net/models/Speaker.dart';
+import 'package:date_format/date_format.dart';
 
 class Sermon extends NetResult {
   int id;
@@ -74,5 +75,9 @@ class Sermon extends NetResult {
     data['pub_time'] = this.pubTime;
     data['status'] = this.status;
     return data;
+  }
+
+  String formatPubtime(){
+    return formatDate(DateTime.parse(pubTime) ,[yyyy,'年',mm,'月',dd,'日']);
   }
 }

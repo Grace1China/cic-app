@@ -7,7 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DonateWidget extends StatefulWidget {
-
+  static final DonateWidgetKey = new GlobalKey<_DonateWidgetState>();
+  DonateWidget({Key key}) : super(key: key);
   @override
   _DonateWidgetState createState() => _DonateWidgetState();
 }

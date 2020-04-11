@@ -1,9 +1,6 @@
-import 'package:church_platform/main.dart';
 import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/net/models/CustomUser.dart';
-import 'package:church_platform/utils//SharedPreferencesUtils.dart';
 import 'package:church_platform/utils/ValidateUtils.dart';
-import 'package:church_platform/views/lordday/LorddayInfoMainWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';

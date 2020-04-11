@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:church_platform/net/common/NetBasePageResponse.dart';
+import 'package:church_platform/net/common/NetResponseWithPage.dart';
 import 'package:church_platform/net/common/NetClient.dart';
 import 'package:church_platform/net/common/NetConfigure.dart';
 import 'package:church_platform/net/models/Church.dart';
@@ -25,7 +25,7 @@ class API {
 
   //----------账户--------------
   Future<String> login(String email, String pwd) async {
-    Map<String,String> params = {'email': email, 'password': pwd};
+    Map<String,String> params = {'email': email.trim(), 'password': pwd.trim()};
     final baseResponse = await NetClient<LoginResult>().request(method: NetMethod.POST, url: "/users/login",params:params);
     if (baseResponse.data.access != null) {
       SharedPreferencesUtils.saveToken(baseResponse.data.access);
@@ -37,11 +37,11 @@ class API {
   Future<bool> register(String churchCode, String username, String email,
       String pwd,String confirmpwd) async {
 
-    Map<String,String> params = {'username': username,
-      'email': email,
-      'church_code': churchCode,
-      'password': pwd,
-      'confirmpwd': confirmpwd
+    Map<String,String> params = {'username': username.trim(),
+      'email': email.trim(),
+      'church_code': churchCode.trim(),
+      'password': pwd.trim(),
+      'confirmpwd': confirmpwd.trim()
     };
     final baseResponse = await NetClient<RegisterResult>().request(method: NetMethod.POST, url: "/user_create",params:params);
     return true;
@@ -53,13 +53,13 @@ class API {
   }
 
   Future<CustomUser> updateUserInfo(String username) async {
-    Map<String,String> params = {'username': username};
+    Map<String,String> params = {'username': username.trim()};
     final baseResponse = await NetClient<CustomUser>().request(method: NetMethod.POST, url: "/users/updateuserinfo",params:params);
     return baseResponse.data;
   }
 
   Future<bool> updateUserPWD(String oldpwd,String newpwd,String confirmpwd) async {
-    Map<String,String> params = {'oldpwd': oldpwd,'newpwd':newpwd,'confirmpwd':confirmpwd};
+    Map<String,String> params = {'oldpwd': oldpwd.trim(),'newpwd':newpwd.trim(),'confirmpwd':confirmpwd.trim()};
     final baseResponse = await NetClient<CustomUser>().request(method: NetMethod.POST, url: "/users/updateuserpwd",params:params);
     return true;
   }
@@ -71,19 +71,14 @@ class API {
   }
 
   Future<WeaklyReport> getWeaklyReportL3() async { //token不需要
-    final baseResponse = await NetClient<WeaklyReport>().request(url: "/eweekly/l3");
+    final baseResponse = await NetClient<WeaklyReport>().request(url: "/eweekly/l3", needToken: false);
     return baseResponse.data;
   }
 
   // curl -X GET "http://l3.community/rapi/eweekly/0" -H "accept: application/json" -H "authoriztion:bear eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTc1NzgzNjA1LCJqdGkiOiIzMjYyYTJlMzU4MDQ0ZTFhYmY1M2VlZTQwZjJkYjMyMSIsInVzZXJfaWQiOjM3fQ.x0nprlwJqxnZdnltRaU7r0gciUTCZoq4wzfbrijLZZw " -d "{ \"username\": \"aa\", \"password\": \"aa_123456\"}"
-  Future<WeaklyReport> getWeaklyReport() async { //会报错。但是ui层忽略了。
-//    try{
-      final baseResponse = await NetClient<WeaklyReport>().request(url: "/eweekly");
+  Future<WeaklyReport> getWeaklyReport() async {
+      final baseResponse = await NetClient<WeaklyReport>().request(url: "/eweekly",needToken: true);
       return baseResponse.data;
-//    }catch(e){
-//
-//    }
-
   }
 
   //---------主日-----------
@@ -94,6 +89,20 @@ class API {
 
   Future<Sermon> getLorddayInfoL3() async {
     final baseResponse = await NetClient<Sermon>().request(url: "/lorddayinfo/l3");
+    return baseResponse.data;
+  }
+
+  Future<NetResponseWithPage<Sermon>> getLorddayInfoList({int page, int pagesize = 20}) async {
+    Map<String,String> params = {
+      "pagesize": pagesize.toString(),
+      "page": page.toString(),
+    };
+    final baseResponse = await NetClient<Sermon>().requestPage(url: "/lorddayinfos/list",params: params);
+    return baseResponse;
+  }
+
+  Future<Sermon> getLorddayInfoByID(int sermonID) async {
+    final baseResponse = await NetClient<Sermon>().request(url: "/lorddayinfos/" + sermonID.toString());
     return baseResponse.data;
   }
 
@@ -140,7 +149,6 @@ class API {
     } else {
       throw Exception(response.statusCode.toString() + ":" + response.body);
     }
-
   }
 
 

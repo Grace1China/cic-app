@@ -11,7 +11,7 @@ import 'package:flutter/rendering.dart';
 
 
 
-class LorddayInfoDetailsWidget extends StatefulWidget {
+class LorddayDetailsPlayerWidget extends StatefulWidget {
 
   Sermon lorddayInfo;
   int selectedIndex;
@@ -19,7 +19,7 @@ class LorddayInfoDetailsWidget extends StatefulWidget {
 
 //  PDFViewerVerticalWidget pdfWidget;
 
-  LorddayInfoDetailsWidget({Key key,this.lorddayInfo,this.medias, this.selectedIndex,}) : super(key: key){
+  LorddayDetailsPlayerWidget({Key key,this.lorddayInfo,this.medias, this.selectedIndex,}) : super(key: key){
 
 //    pdfWidget = PDFViewerVerticalWidget(url:media.pdf);
 
@@ -41,10 +41,10 @@ class LorddayInfoDetailsWidget extends StatefulWidget {
   }
 
   @override
-  _LorddayInfoDetailsWidgetState createState() => _LorddayInfoDetailsWidgetState();
+  _LorddayDetailsPlayerWidgetState createState() => _LorddayDetailsPlayerWidgetState();
 }
 
-class _LorddayInfoDetailsWidgetState extends State<LorddayInfoDetailsWidget> {
+class _LorddayDetailsPlayerWidgetState extends State<LorddayDetailsPlayerWidget> {
 
   @override
   void initState() {
@@ -75,7 +75,7 @@ class _LorddayInfoDetailsWidgetState extends State<LorddayInfoDetailsWidget> {
         (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
 
       ),
-      body: Container(
+      body: widget.lorddayInfo == null? Center(child: CircularProgressIndicator(),): Container(
 //        color: Colors.greenAccent,
 //        margin: EdgeInsets.all(10),
         child: Column(
@@ -127,7 +127,7 @@ class _LorddayInfoDetailsWidgetState extends State<LorddayInfoDetailsWidget> {
                           }
                           ).toList(),
                         ),
-                        Text(formatDate(DateTime.parse(widget.lorddayInfo.pubTime) ,[yyyy,'年',mm,'月',dd,'日'])),
+                        Text(widget.lorddayInfo.formatPubtime()),
                       ],
                     ),
                   ),

@@ -1,5 +1,5 @@
 import 'package:church_platform/net/common/API.dart';
-import 'package:church_platform/net/common/NetBasePageResponse.dart';
+import 'package:church_platform/net/common/NetResponseWithPage.dart';
 import 'package:church_platform/net/models/Page.dart';
 import 'package:church_platform/net/results/Course.dart';
 import 'package:church_platform/views/courses/CourseDetailsWidget.dart';

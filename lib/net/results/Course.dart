@@ -1,4 +1,4 @@
-import 'package:church_platform/net/common/NetBaseResponse.dart';
+import 'package:church_platform/net/common/NetResponse.dart';
 import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/net/models/IAPCharge.dart';
 import 'package:church_platform/net/models/Medias.dart';

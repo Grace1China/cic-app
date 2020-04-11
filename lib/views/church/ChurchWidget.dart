@@ -25,11 +25,9 @@ class _ChurchWidgetState extends State<ChurchWidget> {
   bool isRefreshLoading = true;
 
   Church church;
+
   String errmsg;
-
-  WeaklyReport weaklyl3;
-
-  Future<WeaklyReport> weaklyReport;
+  WeaklyReport eweakly;
 
   @override
   void initState() {
@@ -53,16 +51,42 @@ class _ChurchWidgetState extends State<ChurchWidget> {
 
   void _refreshLogin() async{
     _refreshChurch();
-    _refreshWeeklyl3();
-    weaklyReport = API().getWeaklyReport();
+    try {
+      WeaklyReport weakly = await API().getWeaklyReport();
+
+      setState(() {
+        isRefreshLoading = false;
+        eweakly = weakly;
+        errmsg = null;
+      });
+    } catch (e) {
+      setState(() {
+        isRefreshLoading = false;
+        eweakly = null;
+        errmsg = e.toString();
+      });
+    }
   }
 
   void _refreshNoLogin() async{
     setState(() {
       church = null;
     });
-    _refreshWeeklyl3();
-    weaklyReport = API().getWeaklyReport();
+    try {
+      WeaklyReport weakly = await API().getWeaklyReportL3();
+
+      setState(() {
+        isRefreshLoading = false;
+        eweakly = weakly;
+        errmsg = null;
+      });
+    } catch (e) {
+      setState(() {
+        isRefreshLoading = false;
+        eweakly = null;
+        errmsg = e.toString();
+      });
+    }
   }
 
   void _refreshChurch() async{
@@ -77,24 +101,6 @@ class _ChurchWidgetState extends State<ChurchWidget> {
     } catch (e) {
       setState(() {
         church = null;
-      });
-    }
-  }
-
-  void _refreshWeeklyl3() async{
-    try {
-      WeaklyReport l3 = await API().getWeaklyReportL3();
-
-      setState(() {
-        isRefreshLoading = false;
-        weaklyl3 = l3;
-        errmsg = null;
-      });
-    } catch (e) {
-      setState(() {
-        isRefreshLoading = false;
-        weaklyl3 = null;
-        errmsg = e.toString();
       });
     }
   }
@@ -201,11 +207,11 @@ class _ChurchWidgetState extends State<ChurchWidget> {
     }
   }
 
-  Widget buildEWeeklyl3(BuildContext context){
+  Widget buildEWeekly(BuildContext context){
     if(errmsg != null){
-//      return Text("${errmsg}"); //不显示错误了。因为后两个周报接口可能会成功。
-      return Container();
-    }else if(weaklyl3 == null) {
+      return Text("${errmsg}"); //不显示错误了。因为后两个周报接口可能会成功。
+//      return Container();
+    }else if(eweakly == null) {
       return Container();
     }else{
       return Container(
@@ -216,24 +222,24 @@ class _ChurchWidgetState extends State<ChurchWidget> {
             children: <Widget>[
               Container(
                 padding: const EdgeInsets.all(5),
-                child: Text("L3 EWeekly",
+                child: Text("EWeekly",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ),
               Container(
                 padding: const EdgeInsets.all(5),
-                child: Text(weaklyl3.title,
+                child: Text(eweakly.title,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ),
 
 //                        Image(image: NetworkImage(snapshot.data.image),),
-              weaklyl3.image != null ?
+              eweakly.image != null ?
               FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
-                image: weaklyl3.image,
+                image: eweakly.image,
                 fit: BoxFit.cover,
               ):Container(),
 //                        HtmlWidget(snapshot.data.content,webView: true,),
-              Html(data: weaklyl3.content,)
+              Html(data: eweakly.content,)
             ],
           ));
     }
@@ -300,48 +306,8 @@ class _ChurchWidgetState extends State<ChurchWidget> {
 //              height: MediaQuery.of(context).size.width/16*9,
 //              child:  VideofijkplayerWidget(url:"http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8",),
 //            ),
-              buildEWeeklyl3(context),
-
-              FutureBuilder<WeaklyReport>(
-                future: weaklyReport,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Container(
-//                    color: Colors.yellow,
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text("IMS EWeekly",
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(snapshot.data.title,
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                            ),
-
-//                        Image(image: NetworkImage(snapshot.data.image),),
-                          snapshot.data.image != null ?
-                            FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: snapshot.data.image,
-                              fit: BoxFit.cover,
-                            ):Container(),
-//                        HtmlWidget(snapshot.data.content,webView: true,),
-                            Html(data: snapshot.data.content,)
-                          ],
-                        ));
-                  } else if (snapshot.hasError) {
-                    return Container();//Text("${snapshot.error}");
-                  }
-
-                  // By default, show a loading spinner.
-                  return Container();//Center(child: CircularProgressIndicator(),);
-                },
-              ),
+              buildEWeekly(context),
+              
             ],
           ),
         ),

@@ -2,10 +2,8 @@ import 'package:church_platform/main.dart';
 import 'package:church_platform/utils/AlertDialogUrils.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/views/church/ChurchWidget.dart';
-import 'package:church_platform/views/courses/store/CourseStoreWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
-import 'package:church_platform/views/lordday/LorddayInfoMainWidget.dart';
-import 'package:church_platform/views/spiritual/SpiritualMainWidget.dart';
+import 'package:church_platform/views/lordday/list/LorddayInfoListWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +27,7 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
     ChurchWidget(key: ChurchWidget.ChurchWidgetKey),
     DonateWidget(),
 //    SpiritualMainWidget(),
-    LorddayInfoMainWidget(key: LorddayInfoMainWidget.myLorddayInfoWidgetKey),
+    LorddayInfoListWidget(key: LorddayInfoListWidget.myLorddayInfoListWidgetKey),
 //    CourseStoreWidget(),
   ];
 
@@ -92,8 +90,11 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
     if (ChurchWidget.ChurchWidgetKey.currentState != null) {
       ChurchWidget.ChurchWidgetKey.currentState.refresh();
     }
-    if (LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState != null) {
-      LorddayInfoMainWidget.myLorddayInfoWidgetKey.currentState.refreshRemoteData();
+    if (DonateWidget.DonateWidgetKey.currentState != null) {
+      DonateWidget.DonateWidgetKey.currentState.refresh();
+    }
+    if (LorddayInfoListWidget.myLorddayInfoListWidgetKey.currentState != null) {
+      LorddayInfoListWidget.myLorddayInfoListWidgetKey.currentState.refresh(isFirst: true);
     }
   }
 
