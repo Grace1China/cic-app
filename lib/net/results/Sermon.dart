@@ -80,4 +80,8 @@ class Sermon extends NetResult {
   String formatPubtime(){
     return formatDate(DateTime.parse(pubTime) ,[yyyy,'年',mm,'月',dd,'日']);
   }
+
+  String imageUrl(){
+    return medias != null && medias.length > 0 ? medias[0].image:"";
+  }
 }

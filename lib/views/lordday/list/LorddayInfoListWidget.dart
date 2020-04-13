@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/net/common/NetResponseWithPage.dart';
@@ -138,23 +139,59 @@ class _LorddayInfoListWidgetState extends State<LorddayInfoListWidget> {
           ),
         width: MediaQuery.of(context).size.width,
         height: 100,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-            child: Text(lorddayInfo.title,textAlign: TextAlign.left,  maxLines:2,style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold)),
-          ),
+            Container(
+              width: 70,
+              height: 70,
+              child: CachedNetworkImage(
+                imageUrl: lorddayInfo.imageUrl(),
+                imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
+                  children: <Widget>[
+                    Image(image: imageProvider,
+                      fit: BoxFit.cover,),
+                  ],),
+                placeholder: (context, url) => Container(
+                  decoration:  BoxDecoration(
+                    border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+                    color: Colors.black26,//底色
+                    borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                  ),
+                  child: Center(child: Container(width:30,height: 30, child: CircularProgressIndicator()),),
+                ),
+                errorWidget: (context, url, error) => Container(//灰色边框
+                  decoration:  BoxDecoration(
+                    border:  Border.all(width: 1.0, color: Colors.black12),// 边色与边宽度
+                    color: Colors.black12,//底色
+                    borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                  ),
+                ),
+              ),
+            ),
+            Container(width: 8,height: 8,),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-            Text(lorddayInfo.speaker.title, maxLines:1,style: TextStyle(fontSize: 16)),
-            Text(sermons[index].formatPubtime() ,maxLines:1)
-          ],),
-        ],)
+                children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                  child: Text(lorddayInfo.title + lorddayInfo.title + lorddayInfo.title,textAlign: TextAlign.left, maxLines:2,style: TextStyle(fontSize: 18,fontWeight:FontWeight.bold)),
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                  Text(lorddayInfo.speaker.title, maxLines:1,style: TextStyle(fontSize: 16)),
+                  Text(sermons[index].formatPubtime() ,maxLines:1)
+                ],),
+              ],),
+            ),
+//            Container(width: 8,height: 8,),
+          ],
+        )
       ),
     );
   }
