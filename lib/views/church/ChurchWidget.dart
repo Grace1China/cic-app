@@ -25,9 +25,10 @@ class _ChurchWidgetState extends State<ChurchWidget> {
   bool isRefreshLoading = true;
 
   Church church;
-
   String errmsg;
-  WeaklyReport eweakly;
+
+  Future<WeaklyReport> weaklyReport;
+  WeaklyReport weaklyl3;
 
   @override
   void initState() {
@@ -38,6 +39,10 @@ class _ChurchWidgetState extends State<ChurchWidget> {
   void refresh() async{
     setState(() {
       isRefreshLoading = true;
+      church = null;
+      weaklyReport = null;
+      weaklyl3 = null;
+      errmsg = null;
     });
 
     bool isLogin = await SharedPreferencesUtils.isLogin();
@@ -51,48 +56,15 @@ class _ChurchWidgetState extends State<ChurchWidget> {
 
   void _refreshLogin() async{
     _refreshChurch();
-    try {
-      WeaklyReport weakly = await API().getWeaklyReport();
-
-      setState(() {
-        isRefreshLoading = false;
-        eweakly = weakly;
-        errmsg = null;
-      });
-    } catch (e) {
-      setState(() {
-        isRefreshLoading = false;
-        eweakly = null;
-        errmsg = e.toString();
-      });
-    }
+    weaklyReport = API().getWeaklyReport();
+    _refreshWeeklyl3();
   }
 
   void _refreshNoLogin() async{
-    setState(() {
-      church = null;
-    });
-    try {
-      WeaklyReport weakly = await API().getWeaklyReportL3();
-
-      setState(() {
-        isRefreshLoading = false;
-        eweakly = weakly;
-        errmsg = null;
-      });
-    } catch (e) {
-      setState(() {
-        isRefreshLoading = false;
-        eweakly = null;
-        errmsg = e.toString();
-      });
-    }
+    _refreshWeeklyl3();
   }
 
   void _refreshChurch() async{
-    setState(() {
-      church = null;
-    });
     try {
       Church c = await API().getChurch();
       setState(() {
@@ -102,6 +74,33 @@ class _ChurchWidgetState extends State<ChurchWidget> {
       setState(() {
         church = null;
       });
+    }
+  }
+
+  void _refreshWeeklyl3() async{
+    try {
+      WeaklyReport l3 = await API().getWeaklyReportL3();
+
+      setState(() {
+        isRefreshLoading = false;
+        weaklyl3 = l3;
+        errmsg = null;
+      });
+    } catch (e) {
+      if(church == null && weaklyReport == null){
+        setState(() {
+          isRefreshLoading = false;
+          weaklyl3 = null;
+          errmsg = e.toString();
+        });
+      }else{
+        setState(() {
+          isRefreshLoading = false;
+          weaklyl3 = null;
+          errmsg = null;
+        });
+      }
+
     }
   }
 
@@ -207,11 +206,11 @@ class _ChurchWidgetState extends State<ChurchWidget> {
     }
   }
 
-  Widget buildEWeekly(BuildContext context){
+  Widget buildEWeeklyl3(BuildContext context){
     if(errmsg != null){
-      return Text("${errmsg}"); //不显示错误了。因为后两个周报接口可能会成功。
-//      return Container();
-    }else if(eweakly == null) {
+//      return Text("${errmsg}"); //不显示错误了。因为后两个周报接口可能会成功。
+      return Container();
+    }else if(weaklyl3 == null) {
       return Container();
     }else{
       return Container(
@@ -222,24 +221,24 @@ class _ChurchWidgetState extends State<ChurchWidget> {
             children: <Widget>[
               Container(
                 padding: const EdgeInsets.all(5),
-                child: Text("EWeekly",
+                child: Text("L3 EWeekly",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ),
               Container(
                 padding: const EdgeInsets.all(5),
-                child: Text(eweakly.title,
+                child: Text(weaklyl3.title,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ),
 
 //                        Image(image: NetworkImage(snapshot.data.image),),
-              eweakly.image != null ?
+              weaklyl3.image != null ?
               FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
-                image: eweakly.image,
+                image: weaklyl3.image,
                 fit: BoxFit.cover,
               ):Container(),
 //                        HtmlWidget(snapshot.data.content,webView: true,),
-              Html(data: eweakly.content,)
+              Html(data: weaklyl3.content,)
             ],
           ));
     }
@@ -306,8 +305,49 @@ class _ChurchWidgetState extends State<ChurchWidget> {
 //              height: MediaQuery.of(context).size.width/16*9,
 //              child:  VideofijkplayerWidget(url:"http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8",),
 //            ),
-              buildEWeekly(context),
-              
+
+              FutureBuilder<WeaklyReport>(
+                future: weaklyReport,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Container(
+//                    color: Colors.yellow,
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.all(5),
+                              child: Text("IMS EWeekly",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(5),
+                              child: Text(snapshot.data.title,
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            ),
+
+//                        Image(image: NetworkImage(snapshot.data.image),),
+                            snapshot.data.image != null ?
+                            FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              image: snapshot.data.image,
+                              fit: BoxFit.cover,
+                            ):Container(),
+//                        HtmlWidget(snapshot.data.content,webView: true,),
+                            Html(data: snapshot.data.content,)
+                          ],
+                        ));
+                  } else if (snapshot.hasError) {
+                    return Container();//Text("${snapshot.error}");
+                  }
+
+                  // By default, show a loading spinner.
+                  return Container();//Center(child: CircularProgressIndicator(),);
+                },
+              ),
+
+              buildEWeeklyl3(context),
             ],
           ),
         ),
