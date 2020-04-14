@@ -1,7 +1,7 @@
 class NetConfigure {
   //测试环境Ø
-  static final String HOST_NAME = "192.168.43.196:8000";
-//  static final String HOST_NAME = "192.168.0.100:8000";
+//  static final String HOST_NAME = "192.168.43.196:8000";
+  static final String HOST_NAME = "192.168.0.100:8000";
 //  static final String HOST_NAME = "test.l3.bicf.org";
 
 //  static final String HOST_NAME = "13.231.255.163";//"""http://l3.community";

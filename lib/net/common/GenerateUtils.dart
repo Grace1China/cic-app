@@ -20,6 +20,8 @@ class GenerateUtils{
       return LoginResult.fromJson(json) as T;
     }else if (T == RegisterResult) {
       return RegisterResult.fromJson(json) as T;
+    }else if (T == VerifyCodeResult) {
+      return VerifyCodeResult.fromJson(json) as T;
     }else if (T == CustomUser) {
       return CustomUser.fromJson(json) as T;
     }else if (T == Church) {
@@ -37,7 +39,7 @@ class GenerateUtils{
     }else if (T == OrderResult) {
       return OrderResult.fromJson(json) as T;
     } else {
-      throw Exception("Unknown class");
+      throw Exception("Decode Json Unknown class, Please implements in GenerateUtils.classFromJson");
     }
   }
 

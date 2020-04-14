@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:oktoast/oktoast.dart';
-
+import 'dart:async';
 
 class RegisterWidget extends StatelessWidget {
 
@@ -29,6 +29,7 @@ class RegisterWidget extends StatelessWidget {
 class _RegisterData {
   String username;
   String email;
+  String verifyCode;
   String password;
   String role = "2";
   String churchCode;
@@ -45,6 +46,7 @@ class MyCustomForm extends StatefulWidget {
 
 class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
+//  final _emailKey = GlobalKey<FormState>();  无效
 
   final myController = TextEditingController();
   final myconfpwdController = TextEditingController();
@@ -52,6 +54,43 @@ class MyCustomFormState extends State<MyCustomForm> {
   _RegisterData _data = new _RegisterData();
 
   bool _saving = false;
+
+  /// 倒计时的计时器。
+  Timer _timer;
+  int MAX_SECONDS = 10;
+  /// 当前倒计时的秒数。
+  int _seconds;
+  String _verifyStr = '获取验证码';
+  bool _verifyAvailable = true;
+  /// 启动倒计时的计时器。
+  void _startTimer() {
+    // 计时器（`Timer`）组件的定期（`periodic`）构造函数，创建一个新的重复计时器。
+    _verifyAvailable = false;
+    _seconds = MAX_SECONDS;
+    _timer = Timer.periodic(
+        Duration(seconds: 1),(timer) {
+          if (_seconds == 0) {
+            _cancelTimer();
+            _seconds = MAX_SECONDS;
+            _verifyAvailable = true;
+            setState(() {});
+            return;
+          }
+          _seconds--;
+          _verifyStr = '已发送$_seconds'+'s';
+          setState(() {});
+          if (_seconds == 0) {
+            _verifyAvailable = true;
+            _verifyStr = '重新发送';
+          }
+        });
+  }
+
+  /// 取消倒计时的计时器。
+  void _cancelTimer() {
+    // 计时器（`Timer`）组件的取消（`cancel`）方法，取消计时器。
+    _timer?.cancel();
+  }
 
 //  String _validateEmail(String value) {
 //    // If empty value, the isEmail function throw a error.
@@ -88,6 +127,8 @@ class MyCustomFormState extends State<MyCustomForm> {
   void dispose() {
     // Clean up the controller when the widget is removed from the widget tree.
     // This also removes the _printLatestValue listener.
+    _timer?.cancel();
+    _timer = null;
     myController.dispose();
     super.dispose();
   }
@@ -134,6 +175,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             onSaved: (String value) => _data.username = value,
           ),
           TextFormField(
+//            key: _emailKey,
             keyboardType: TextInputType.emailAddress,
             autofocus: true,
             decoration: InputDecoration(
@@ -146,6 +188,105 @@ class MyCustomFormState extends State<MyCustomForm> {
               _data.email = text;
             },
             onSaved: (String value) => _data.email = value,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      hintText: '请输入验证码',
+                      labelText: '验证码'
+                  ),
+                  validator: ValidateVerifyCode,
+                  onChanged: (text) {
+                    _data.verifyCode = text;
+                  },
+                  onSaved: (String value) => _data.verifyCode = value,
+                ),
+              ),
+              Container(
+                width: 110,
+                height: 40,
+                color: _verifyAvailable ? Theme.of(context).buttonColor : Theme.of(context).disabledColor,
+                child: FlatButton(onPressed: !_verifyAvailable ? null: () async {
+
+                  String errMsg = ValidateEmail(_data.email);
+                  if(errMsg != null){
+                    showToast(
+                      errMsg,
+                      duration: Duration(seconds: 2),
+                      position: ToastPosition.center,
+                      backgroundColor: Colors.black.withOpacity(0.8),
+                      radius: 13.0,
+                      textStyle: TextStyle(fontSize: 18.0),
+                    );
+                    return;
+                  }
+
+                  if (errMsg == null) {
+
+                    _startTimer();
+                    _verifyStr = '已发送$_seconds'+'s';
+                    setState(() {});
+
+                    try{
+
+                      String msg = await API().generateVerifyCode(_data.email);
+
+                      setState(() {
+                        _saving = false;
+                      });
+
+                      if(msg != null && msg.isNotEmpty){
+
+                        showToast(
+                            msg,
+                            duration: Duration(seconds: 2),
+                            position: ToastPosition.center,
+                            backgroundColor: Colors.black.withOpacity(0.8),
+                            radius: 13.0,
+                            textStyle: TextStyle(fontSize: 18.0),
+                        );
+
+                      }else{
+
+                        showToast(
+                          "发送失败",
+                          duration: Duration(seconds: 2),
+                          position: ToastPosition.center,
+                          backgroundColor: Colors.black.withOpacity(0.8),
+                          radius: 13.0,
+                          textStyle: TextStyle(fontSize: 18.0),
+                        );
+                      }
+                    }catch (e){
+                      setState(() {
+                        _saving = false;
+                      });
+
+                      showToast(
+                        e.toString(),
+                        duration: Duration(seconds: 5),
+                        position: ToastPosition.center,
+                        backgroundColor: Colors.black.withOpacity(0.8),
+                        radius: 13.0,
+                        textStyle: TextStyle(fontSize: 18.0),
+                      );
+                    }
+
+                    return;
+
+                  }else{
+
+                  }
+                },
+                  child: Text(_verifyStr,style: TextStyle(color: Colors.white)),
+                ),
+              )
+            ],
           ),
           TextFormField(
             obscureText: true,
@@ -169,6 +310,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             controller: myconfpwdController,
           ),
           Container(
+            height: 40,
             width: MediaQuery.of(context).size.width,
             child: RaisedButton(
                 onPressed: () async {
@@ -181,8 +323,12 @@ class MyCustomFormState extends State<MyCustomForm> {
                     });
 
                     try{
-                      
-                      bool success = await API().register(_data.churchCode,_data.username, _data.email, myController.text,myconfpwdController.text);
+                      bool success = await API().register(churchCode: _data.churchCode,
+                          username: _data.username,
+                          email: _data.email,
+                          verify_code: _data.verifyCode,
+                          pwd: myController.text,
+                          confirmpwd: myconfpwdController.text);
 
                       setState(() {
                         _saving = false;
@@ -234,14 +380,9 @@ class MyCustomFormState extends State<MyCustomForm> {
 
                   }
                 },
-                child: Text('注册',
-                    style: new TextStyle(
-                        color: Colors.white)),
-                color: Theme.of(context).buttonColor
-            ),
-            margin: new EdgeInsets.only(
-                top: 20.0
-            ),
+                child: Text('注册',style: TextStyle(color: Colors.white)),
+                color: Theme.of(context).buttonColor),
+                margin: EdgeInsets.only(top: 20.0),
           )
         ],
       ),

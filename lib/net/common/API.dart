@@ -34,18 +34,29 @@ class API {
     throw Exception('没有token');
   }
 
-  Future<bool> register(String churchCode, String username, String email,
-      String pwd,String confirmpwd) async {
+  Future<bool> register({String churchCode, String username, String email,String verify_code,
+      String pwd,String confirmpwd}) async {
 
     Map<String,String> params = {'username': username.trim(),
       'email': email.trim(),
       'church_code': churchCode.trim(),
+      'verify_code': verify_code.trim(),
       'password': pwd.trim(),
       'confirmpwd': confirmpwd.trim()
     };
-    final baseResponse = await NetClient<RegisterResult>().request(method: NetMethod.POST, url: "/user_create",params:params);
+    final baseResponse = await NetClient<RegisterResult>().request(method: NetMethod.POST, url: "/users/register",params:params);
     return true;
   }
+
+  Future<String> generateVerifyCode(String email) async {
+    Map<String,String> params = {'email': email.trim()};
+    final baseResponse = await NetClient<VerifyCodeResult>().request(method: NetMethod.POST, url: "/users/generateverifycode",params:params);
+    if (baseResponse.data.msg != null) {
+      return baseResponse.data.msg;
+    }
+    throw Exception('生成验证码失败。');
+  }
+
 
   Future<CustomUser> getUserInfo() async {
     final baseResponse = await NetClient<CustomUser>().request(url: "/users/getuserinfo");

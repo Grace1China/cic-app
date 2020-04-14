@@ -12,7 +12,6 @@ import 'utils/CPTheme.dart';
 //routers 博客：https://zhuanlan.zhihu.com/p/56289929
 //项目地址 /Users/kevin/FlutterProjects/mytestapps/flutter_app_routers
 
-//TODO: 主日tab调适˚渴慕，
 //TODO: 课程调适。暂时不做。
 
 void main() => runApp(MyApp());

@@ -14,4 +14,5 @@ class RegExpUtils{
   //数字和小写字母
   static const PWD2 = r"^[Za-z0-9_]+$";
   static const XXX = r"^[\u4E00-\u9FA5A-Za-z0-9_]+$";
+  static const VERIFY_CODE = r"^[0-9]{6}$";
 }

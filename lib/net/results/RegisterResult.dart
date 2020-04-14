@@ -30,3 +30,19 @@ class RegisterResult extends NetResult {
     return data;
   }
 }
+
+class VerifyCodeResult extends NetResult {
+  String msg;
+
+  VerifyCodeResult({this.msg,});
+
+  VerifyCodeResult.fromJson(Map<String, dynamic> json) {
+    msg = json['msg'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['msg'] = this.msg;
+    return data;
+  }
+}
