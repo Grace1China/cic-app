@@ -14,6 +14,7 @@ import 'package:church_platform/net/results/PaypalResult.dart';
 import 'package:church_platform/net/results/RegisterResult.dart';
 import 'package:church_platform/net/results/Sermon.dart';
 import 'package:church_platform/net/results/WeaklyReport.dart';
+import 'package:church_platform/utils/CryptoUtils.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,7 +26,7 @@ class API {
 
   //----------账户--------------
   Future<String> login(String email, String pwd) async {
-    Map<String,String> params = {'email': email.trim(), 'password': pwd.trim()};
+    Map<String,String> params = {'email': email.trim(), 'password': CryptoUtils.convertSha256(pwd.trim())};
     final baseResponse = await NetClient<LoginResult>().request(method: NetMethod.POST, url: "/users/login",params:params);
     if (baseResponse.data.access != null) {
       SharedPreferencesUtils.saveToken(baseResponse.data.access);
@@ -41,8 +42,8 @@ class API {
       'email': email.trim(),
       'church_code': churchCode.trim(),
       'verify_code': verify_code.trim(),
-      'password': pwd.trim(),
-      'confirmpwd': confirmpwd.trim()
+      'password': CryptoUtils.convertSha256(pwd.trim()),
+      'confirmpwd': CryptoUtils.convertSha256(confirmpwd.trim())
     };
     final baseResponse = await NetClient<RegisterResult>().request(method: NetMethod.POST, url: "/users/register",params:params);
     return true;
@@ -70,7 +71,7 @@ class API {
   }
 
   Future<bool> updateUserPWD(String oldpwd,String newpwd,String confirmpwd) async {
-    Map<String,String> params = {'oldpwd': oldpwd.trim(),'newpwd':newpwd.trim(),'confirmpwd':confirmpwd.trim()};
+    Map<String,String> params = {'oldpwd': CryptoUtils.convertSha256(oldpwd.trim()),'newpwd':CryptoUtils.convertSha256(newpwd.trim()),'confirmpwd':CryptoUtils.convertSha256(confirmpwd.trim())};
     final baseResponse = await NetClient<CustomUser>().request(method: NetMethod.POST, url: "/users/updateuserpwd",params:params);
     return true;
   }
