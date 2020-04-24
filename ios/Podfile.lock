@@ -1,6 +1,7 @@
 PODS:
   - audioplayers (0.0.1):
     - Flutter
+  - BIJKPlayer (0.6.0)
   - Braintree/Card (4.32.1):
     - Braintree/Core
   - Braintree/Core (4.32.1)
@@ -32,9 +33,8 @@ PODS:
     - Braintree/UnionPay (~> 4.31)
     - BraintreeDropIn/UIKit
   - BraintreeDropIn/UIKit (8.0.0)
-  - FIJKPlayer (0.5.1)
-  - fijkplayer (0.6.2):
-    - FIJKPlayer (~> 0.5.0)
+  - fijkplayer (0.7.2):
+    - BIJKPlayer (~> 0.6.0)
     - Flutter
   - Flutter (1.0.0)
   - flutter_braintree (0.2.0):
@@ -90,9 +90,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - BIJKPlayer
     - Braintree
     - BraintreeDropIn
-    - FIJKPlayer
     - FMDB
 
 EXTERNAL SOURCES:
@@ -131,25 +131,25 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   audioplayers: 84f968cea3f2deab00ec4f8ff53358b3c0b3992c
+  BIJKPlayer: 3254be04cfa8957d69290ef584785563bb5eaf34
   Braintree: b06d2b42f0c591e508f7f538a7cc6715af1958b7
   BraintreeDropIn: 441ad16190e20548a2544652bffef66d457eb70a
-  FIJKPlayer: dfe6148363ac3ba46b722890bf3c5ddd00c1dd78
-  fijkplayer: df74008d2937c092aba6a7d56d24186b328edd82
+  fijkplayer: be22180fc3c3c635afd7774eded9c1acac77f376
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_braintree: 101b66de3f3ae397c9ee3593c2e24ed67a41eeab
   flutter_pdfview: bdf86972519a15c6d8f50ad34e5b0429b255cbb4
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   in_app_purchase: 6b3a6d6944354f353d59eb1f2a0db3fd7a40917b
-  path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
-  shared_preferences: 430726339841afefe5142b9c1f50cb6bd7793e01
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
   shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
-  video_player: 69c5f029fac4ffe4fc8a85ea7f7b793709661549
+  video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
   video_player_web: da8cadb8274ed4f8dbee8d7171b420dedd437ce7
-  wakelock: bd3dcc6a8bcf53a1c0309780ff192dcee67c6ccb
+  wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
 
 PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
 

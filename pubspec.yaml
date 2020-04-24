@@ -29,6 +29,7 @@ dependencies:
   http:
   provider:
   path_provider:
+  crypto: #^2.1.4
 
   video_player:  #不再使用
   chewie:  #不再使用

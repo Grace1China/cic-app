@@ -40,7 +40,8 @@ void demo() {
 
   loggerNoStack.v({"key": 5, "value": "something"});
 
-  Logger(printer: SimplePrinter()..useColor = true).v("boom");
+//  Logger(printer: SimplePrinter().useColor = true).v("boom");
+  Logger(printer: SimplePrinter()).v("boom");
 }
 
 
