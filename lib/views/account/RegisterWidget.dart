@@ -7,53 +7,32 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:oktoast/oktoast.dart';
 import 'dart:async';
 
-class RegisterWidget extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    final appTitle = '注册';
-
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(appTitle),
-          //centerTitle: true,
-          elevation:
-          (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
-          
-        ),
-        body: SingleChildScrollView(child: MyCustomForm())
-    );
-  }
-}
-
 class _RegisterData {
   String username;
   String email;
   String verifyCode;
-  String password;
-  String role = "2";
   String churchCode;
+//  String password;
 }
 
 // Create a Form widget.
-class MyCustomForm extends StatefulWidget {
+class RegisterWidget extends StatefulWidget {
   @override
-  MyCustomFormState createState() {
-    return MyCustomFormState();
+  RegisterWidgetState createState() {
+    return RegisterWidgetState();
   }
 }
 
 
-class MyCustomFormState extends State<MyCustomForm> {
+class RegisterWidgetState extends State<RegisterWidget> {
   final _formKey = GlobalKey<FormState>();
 //  final _emailKey = GlobalKey<FormState>();  无效
 
-  final myController = TextEditingController();
-  final myconfpwdController = TextEditingController();
-
   _RegisterData _data = new _RegisterData();
-
-  bool _saving = false;
+  final myPWDController = TextEditingController();
+  final myConfimPWDController = TextEditingController();
+  
+  bool _loading = false;
 
   /// 倒计时的计时器。
   Timer _timer;
@@ -129,7 +108,8 @@ class MyCustomFormState extends State<MyCustomForm> {
     // This also removes the _printLatestValue listener.
     _timer?.cancel();
     _timer = null;
-    myController.dispose();
+    myPWDController.dispose();
+    myConfimPWDController.dispose();
     super.dispose();
   }
 
@@ -228,16 +208,18 @@ class MyCustomFormState extends State<MyCustomForm> {
 
                   if (errMsg == null) {
 
-                    _startTimer();
-                    _verifyStr = '已发送$_seconds'+'s';
-                    setState(() {});
-
                     try{
-
-                      String msg = await API().generateVerifyCode(_data.email);
-
+                      FocusScope.of(context).requestFocus(FocusNode());
                       setState(() {
-                        _saving = false;
+                        _loading = true;
+                      });
+
+                      String msg = await API().generateVerifyCode(email:_data.email);
+
+                      _startTimer();
+                      _verifyStr = '已发送$_seconds'+'s';
+                      setState(() {
+                        _loading = false;
                       });
 
                       if(msg != null && msg.isNotEmpty){
@@ -264,7 +246,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                       }
                     }catch (e){
                       setState(() {
-                        _saving = false;
+                        _loading = false;
                       });
 
                       showToast(
@@ -296,7 +278,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 labelText: '密码'
             ),
             validator:ValidatePWD,
-            controller: myController,
+            controller: myPWDController,
           ),
           TextFormField(
             keyboardType: TextInputType.visiblePassword,
@@ -307,7 +289,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 labelText: '再次输入密码'
             ),
             validator: ValidatePWD,
-            controller: myconfpwdController,
+            controller: myConfimPWDController,
           ),
           Container(
             height: 40,
@@ -318,20 +300,20 @@ class MyCustomFormState extends State<MyCustomForm> {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
 
-                    setState(() {
-                      _saving = true;
-                    });
-
                     try{
+                      setState(() {
+                        _loading = true;
+                      });
+
                       bool success = await API().register(churchCode: _data.churchCode,
                           username: _data.username,
                           email: _data.email,
                           verify_code: _data.verifyCode,
-                          pwd: myController.text,
-                          confirmpwd: myconfpwdController.text);
+                          pwd: myPWDController.text,
+                          confirmpwd: myConfimPWDController.text);
 
                       setState(() {
-                        _saving = false;
+                        _loading = false;
                       });
 
                       if(success != null && success == true){
@@ -361,7 +343,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                       }
                     }catch (e){
                       setState(() {
-                        _saving = false;
+                        _loading = false;
                       });
 
                       showToast(
@@ -391,10 +373,19 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   @override
   Widget build(BuildContext context) {
-    return ModalProgressHUD(child:  Container(
-        padding: EdgeInsets.all(20.0),
-        child:  _buildWidget()
-    ),inAsyncCall:_saving ,);
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("注册"),
+          //centerTitle: true,
+          elevation:
+          (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
+
+        ),
+        body: ModalProgressHUD(child: SingleChildScrollView(child:  Container(
+            padding: EdgeInsets.all(20.0),
+            child:  _buildWidget()
+        )),inAsyncCall:_loading ,)
+    );
   }
 }
 

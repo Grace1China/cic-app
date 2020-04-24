@@ -49,8 +49,8 @@ class API {
     return true;
   }
 
-  Future<String> generateVerifyCode(String email) async {
-    Map<String,String> params = {'email': email.trim()};
+  Future<String> generateVerifyCode({String email,bool modifypwd = false}) async {
+    Map<String,String> params = {'email': email.trim(),'modifypwd':modifypwd.toString()};
     final baseResponse = await NetClient<VerifyCodeResult>().request(method: NetMethod.POST, url: "/users/generateverifycode",params:params);
     if (baseResponse.data.msg != null) {
       return baseResponse.data.msg;
@@ -70,8 +70,11 @@ class API {
     return baseResponse.data;
   }
 
-  Future<bool> updateUserPWD(String oldpwd,String newpwd,String confirmpwd) async {
-    Map<String,String> params = {'oldpwd': CryptoUtils.convertSha256(oldpwd.trim()),'newpwd':CryptoUtils.convertSha256(newpwd.trim()),'confirmpwd':CryptoUtils.convertSha256(confirmpwd.trim())};
+  Future<bool> updateUserPWD(String email,String verifyCode,String newpwd,String confirmpwd) async {
+    Map<String,String> params = {'email': email.trim(),
+      'verify_code': verifyCode.trim(),
+      'newpwd':CryptoUtils.convertSha256(newpwd.trim()),
+      'confirmpwd':CryptoUtils.convertSha256(confirmpwd.trim())};
     final baseResponse = await NetClient<CustomUser>().request(method: NetMethod.POST, url: "/users/updateuserpwd",params:params);
     return true;
   }

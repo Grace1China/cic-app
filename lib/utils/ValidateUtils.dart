@@ -19,7 +19,7 @@ String ValidatePWD(String value){
   if (value == null || value.isEmpty) {
     return '密码不能为空';
   }
-  if (!RegExp(RegExpUtils.PWD).hasMatch(value)) {
+  if (!RegExp(RegExpUtils.PWD).hasMatch(value.trim())) {
     return '密码必须为8-20位数字和字母';
   }
   return null;
@@ -29,7 +29,7 @@ String ValidateEmail(String value){
   if (value == null || value.isEmpty) {
     return '邮箱不能为空';
   }
-  if (!RegExp(RegExpUtils.EMAIL).hasMatch(value)) {
+  if (!RegExp(RegExpUtils.EMAIL).hasMatch(value.trim())) {
     return '请输入正确邮箱';
   }
   return null;
@@ -46,7 +46,7 @@ String ValidateVerifyCode(String value){
   if (value == null || value.isEmpty) {
     return '验证码不能为空';
   }
-  if (!RegExp(RegExpUtils.VERIFY_CODE).hasMatch(value)) {
+  if (!RegExp(RegExpUtils.VERIFY_CODE).hasMatch(value.trim())) {
     return '请输入6位数字验证码';
   }
   return null;

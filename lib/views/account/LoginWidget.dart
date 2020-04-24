@@ -141,7 +141,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                     setState(() {
                       _saving = true;
                     });
-
+                    FocusScope.of(context).requestFocus(FocusNode());
 
 //                    new Future.delayed(new Duration(seconds: 4), () {
 //                      setState(() {
