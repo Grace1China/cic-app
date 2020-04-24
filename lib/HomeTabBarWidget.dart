@@ -46,25 +46,25 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
   }
   void logoutSuccess(){
     Navigator.of(context).pop();
-    _logout();
+    logout();
   }
 
-  bool isShow401 = false;
-  void showLogout() {
-    if(isShow401){
-      return;
-    }
+//  bool isShow401 = false;
+//  void showLogout() {
+//    if(isShow401){
+//      return;
+//    }
+//
+//    isShow401 = true;
+//    AlertDialogUtils.show(context, title: "提示", content: "登录过期。",
+//        okHandler: () async {
+//      isShow401 = false;
+//      _logout();
+//    });
+//
+//  }
 
-    isShow401 = true;
-    AlertDialogUtils.show(context, title: "提示", content: "登录过期。",
-        okHandler: () async {
-      isShow401 = false;
-      _logout();
-    });
-
-  }
-
-  void _logout() async {
+  void logout() async {
     bool success = await SharedPreferencesUtils.logout();
     if(success){
       //          if(Navigator.of(context).canPop()){
@@ -96,6 +96,7 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
     if (LorddayInfoListWidget.myLorddayInfoListWidgetKey.currentState != null) {
       LorddayInfoListWidget.myLorddayInfoListWidgetKey.currentState.refresh(isFirst: true);
     }
+    //课程 TODO:
   }
 
   void changeIndex(int index) {

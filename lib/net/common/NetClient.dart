@@ -90,7 +90,7 @@ class NetClient<T extends NetResult> {
     } else {
       //eg: 401,details
       if(response.statusCode == 401){
-        HomeTabBarWidget.myTabbedPageKey.currentState.showLogout();
+        HomeTabBarWidget.myTabbedPageKey.currentState.logout();
       }
 
       throw Exception("${response.statusCode},${response.reasonPhrase},${response.body}");
@@ -178,7 +178,11 @@ class NetClient<T extends NetResult> {
     } else {
       //eg: 401,details
       if(response.statusCode == 401){
-        HomeTabBarWidget.myTabbedPageKey.currentState.showLogout();
+        HomeTabBarWidget.myTabbedPageKey.currentState.logout();
+        throw Exception("${response.statusCode},${response.reasonPhrase},${response.body}");
+      }else if(response.statusCode == 404){
+
+        throw Exception("${response.statusCode},地址错误${response.request.url.toString()}");
       }
 
       throw Exception("${response.statusCode},${response.reasonPhrase},${response.body}");
