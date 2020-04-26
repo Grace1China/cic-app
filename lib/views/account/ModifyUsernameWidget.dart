@@ -1,5 +1,6 @@
 import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/net/models/CustomUser.dart';
+import 'package:church_platform/utils/ToasterUtils.dart';
 import 'package:church_platform/utils/ValidateUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -81,35 +82,16 @@ class _ModifyUsernameWidgetState extends State<ModifyUsernameWidget> {
                     setState(() {
                       _loading = false;
                     });
-
-                    showToast(
-                        "修改成功",
-                        duration: Duration(seconds: 2),
-                        position: ToastPosition.center,
-                        backgroundColor: Colors.black.withOpacity(0.8),
-                        radius: 13.0,
-                        textStyle: TextStyle(fontSize: 18.0),
-                        onDismiss: (){
-                          Navigator.pop(context,widget.user.username);
-                        }
-                    );
+                    ToasterUtils.show(context,msg: "修改成功",onDismiss: (){
+                      Navigator.pop(context,widget.user.username);
+                    });
 
                   }catch(e){
                     setState(() {
                       _loading = false;
                     });
-
-                    showToast(
-                      e.toString(),
-                      duration: Duration(seconds: 5),
-                      position: ToastPosition.center,
-                      backgroundColor: Colors.black.withOpacity(0.8),
-                      radius: 13.0,
-                      textStyle: TextStyle(fontSize: 18.0),
-                    );
+                    ToasterUtils.show(context,msg: e.toString(),duration: 5);
                   }
-
-
 
                 },
                 child: Text('修改',style: TextStyle(color: Colors.white)),

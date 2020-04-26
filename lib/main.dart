@@ -16,10 +16,50 @@ import 'utils/CPTheme.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  AppLifecycleState _notification;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() { _notification = state; });
+    print("打印AppLifecycleState: ${_notification}" );
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    final Brightness brightness =
+        WidgetsBinding.instance.window.platformBrightness;
+    bool isDark = brightness == Brightness.dark;
+
+    print("打印${WidgetsBinding.instance.window.platformBrightness}" ); // should print Brightness.light / Brightness.dark when you switch
+    super.didChangePlatformBrightness(); // make sure you call this
+
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-//    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(  没反应
+    //    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(  没反应
 //        statusBarColor: Colors.white
 //    ));
 
@@ -27,10 +67,11 @@ class MyApp extends StatelessWidget {
     return OKToast(
       child: MaterialApp(
         title: '教会平台',
-        themeMode: ThemeMode.light,
+//        themeMode: ThemeMode.dark,
         theme: defaultTargetPlatform == TargetPlatform.iOS
             ? kIOSTheme
             : kAndroidTheme,
+        darkTheme: kiOSDarkTheme, //ios和android用同一个黑暗主题。
 //      home: HomeTabBarWidget(key:myTabbedPageKey,title: '主页'),
         initialRoute: '/',
         routes: {
@@ -51,7 +92,7 @@ class MyApp extends StatelessWidget {
             case RouteNames.ACCOUNT:
               {
 
-               return MaterialPageRoute(
+                return MaterialPageRoute(
                     fullscreenDialog: true,
                     builder: (context) => AccountWidget());
               }
@@ -65,6 +106,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 class RouteNames {
   static const LOGIN = '/login';

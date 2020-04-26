@@ -1,11 +1,13 @@
 import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/net/common/API.dart';
+import 'package:church_platform/utils/ToasterUtils.dart';
 import 'package:church_platform/utils/ValidateUtils.dart';
 import 'package:church_platform/views/account/RegisterWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:church_platform/utils/CPTheme.dart';
 
 
 class LoginWidget extends StatelessWidget {
@@ -157,18 +159,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                       });
 
                       if(token != null){
-
-                        showToast(
-                            "登录成功",
-                            duration: Duration(seconds: 2),
-                            position: ToastPosition.center,
-                            backgroundColor: Colors.black.withOpacity(0.8),
-                            radius: 13.0,
-                            textStyle: TextStyle(fontSize: 18.0),
-                            onDismiss: (){
-                              HomeTabBarWidget.myTabbedPageKey.currentState.loginSuccess();
-                            }
-                        );
+                        ToasterUtils.show(context,msg: "登录成功",onDismiss: (){
+                          HomeTabBarWidget.myTabbedPageKey.currentState.loginSuccess();
+                        });
 
 //                      Fluttertoast.showToast(
 //                            msg: "登录成功",
@@ -180,29 +173,14 @@ class MyCustomFormState extends State<MyCustomForm> {
 //                            fontSize: 16.0
 //                        );
                       }else{
-
-                        showToast(
-                          "登录失败",
-                          duration: Duration(seconds: 2),
-                          position: ToastPosition.center,
-                          backgroundColor: Colors.black.withOpacity(0.8),
-                          radius: 13.0,
-                          textStyle: TextStyle(fontSize: 18.0),
-                        );
+                        ToasterUtils.show(context,msg: "登录失败");
                       }
                     }catch (e){
                       setState(() {
                         _saving = false;
                       });
 
-                      showToast(
-                        e.toString(),
-                        duration: Duration(seconds: 5),
-                        position: ToastPosition.center,
-                        backgroundColor: Colors.black.withOpacity(0.8),
-                        radius: 13.0,
-                        textStyle: TextStyle(fontSize: 18.0),
-                      );
+                      ToasterUtils.show(context,msg: e.toString());
                     }
 
 //                        showDialog(
@@ -258,9 +236,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                   }
                 },
                 child: Text('登录',
-                    style: new TextStyle(
+                    style: TextStyle(
                         color: Colors.white)),
-                color: Theme.of(context).buttonColor
+                color: ThemeButtonColor,
             ),
             margin: new EdgeInsets.only(
                 top: 20.0
@@ -279,7 +257,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
                 child: Text('还没有账户？去注册',
                     style: new TextStyle(
-                        color: Theme.of(context).buttonColor)),
+                        color: ThemeButtonColor)),
 //                color: Colors.white
             ),
 //            margin: new EdgeInsets.only(

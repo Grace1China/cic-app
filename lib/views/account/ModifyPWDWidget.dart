@@ -1,8 +1,10 @@
 import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/net/models/CustomUser.dart';
+import 'package:church_platform/utils/ToasterUtils.dart';
 import 'package:church_platform/utils/ValidateUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:oktoast/oktoast.dart';
 import 'dart:async';
@@ -164,14 +166,7 @@ class _ModifyPWDWidgetState extends State<ModifyPWDWidget> {
 
                     String errMsg = ValidateEmail(widget.user.email);
                     if(errMsg != null){
-                      showToast(
-                        errMsg,
-                        duration: Duration(seconds: 2),
-                        position: ToastPosition.center,
-                        backgroundColor: Colors.black.withOpacity(0.8),
-                        radius: 13.0,
-                        textStyle: TextStyle(fontSize: 18.0),
-                      );
+                      ToasterUtils.show(context,msg: errMsg);
                       return;
                     }
 
@@ -193,39 +188,16 @@ class _ModifyPWDWidgetState extends State<ModifyPWDWidget> {
                             _loading = false;
                           });
 
-                          showToast(
-                            msg,
-                            duration: Duration(seconds: 2),
-                            position: ToastPosition.center,
-                            backgroundColor: Colors.black.withOpacity(0.8),
-                            radius: 13.0,
-                            textStyle: TextStyle(fontSize: 18.0),
-                          );
-
+                          ToasterUtils.show(context,msg: msg);
                         }else{
+                          ToasterUtils.show(context,msg: "发送失败");
 
-                          showToast(
-                            "发送失败",
-                            duration: Duration(seconds: 2),
-                            position: ToastPosition.center,
-                            backgroundColor: Colors.black.withOpacity(0.8),
-                            radius: 13.0,
-                            textStyle: TextStyle(fontSize: 18.0),
-                          );
                         }
                       }catch (e){
                         setState(() {
                           _loading = false;
                         });
-
-                        showToast(
-                          e.toString(),
-                          duration: Duration(seconds: 5),
-                          position: ToastPosition.center,
-                          backgroundColor: Colors.black.withOpacity(0.8),
-                          radius: 13.0,
-                          textStyle: TextStyle(fontSize: 18.0),
-                        );
+                        ToasterUtils.show(context,msg: e.toString(),duration: 5);
                       }
 
                       return;
@@ -281,32 +253,16 @@ class _ModifyPWDWidgetState extends State<ModifyPWDWidget> {
                           _loading = false;
                         });
                         if(success){
-                          showToast(
-                              "修改成功",
-                              duration: Duration(seconds: 2),
-                              position: ToastPosition.center,
-                              backgroundColor: Colors.black.withOpacity(0.8),
-                              radius: 13.0,
-                              textStyle: TextStyle(fontSize: 18.0),
-                              onDismiss: (){
-                                Navigator.pop(context);
-                              }
-                          );
+                          ToasterUtils.show(context,msg: "修改成功",onDismiss: (){
+                            Navigator.pop(context);
+                          });
                         }
 
                       }catch(e){
                         setState(() {
                           _loading = false;
                         });
-
-                        showToast(
-                          e.toString(),
-                          duration: Duration(seconds: 5),
-                          position: ToastPosition.center,
-                          backgroundColor: Colors.black.withOpacity(0.8),
-                          radius: 13.0,
-                          textStyle: TextStyle(fontSize: 18.0),
-                        );
+                        ToasterUtils.show(context,msg:e.toString());
                       }
                     }
                   },

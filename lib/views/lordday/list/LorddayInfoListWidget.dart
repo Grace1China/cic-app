@@ -178,13 +178,13 @@ class _LorddayInfoListWidgetState extends State<LorddayInfoListWidget> {
                 children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                  child: Text(lorddayInfo.title + lorddayInfo.title + lorddayInfo.title,textAlign: TextAlign.left, maxLines:2,style: TextStyle(fontSize: 18,fontWeight:FontWeight.bold)),
+                  child: Text(lorddayInfo.title + lorddayInfo.title + lorddayInfo.title,textAlign: TextAlign.left, maxLines:2,style: TextStyle(fontSize: 16)),
                 ),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                  Text(lorddayInfo.speaker.title, maxLines:1,style: TextStyle(fontSize: 16)),
+                  Text(lorddayInfo.speaker.title, maxLines:1),
                   Text(sermons[index].formatPubtime() ,maxLines:1)
                 ],),
               ],),

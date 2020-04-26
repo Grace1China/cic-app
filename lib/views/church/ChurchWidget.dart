@@ -121,7 +121,7 @@ class _ChurchWidgetState extends State<ChurchWidget> {
                 padding: const EdgeInsets.all(5),
                 child: Text(
                   church.name,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headline,
                 ),
               ),
 
@@ -162,12 +162,11 @@ class _ChurchWidgetState extends State<ChurchWidget> {
               Container(
                 padding: const EdgeInsets.all(5),
                 child: Text(church.description,
-                  style: TextStyle(fontSize: 14),
                   softWrap: true,
                 ),
               ),
               Text("崇拜",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  style: Theme.of(context).textTheme.subhead),
 
               ListView.builder(
                 itemCount: church.venue.length,
@@ -222,12 +221,12 @@ class _ChurchWidgetState extends State<ChurchWidget> {
               Container(
                 padding: const EdgeInsets.all(5),
                 child: Text("L3 EWeekly",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    style: Theme.of(context).textTheme.subhead),
               ),
               Container(
                 padding: const EdgeInsets.all(5),
                 child: Text(weaklyl3.title,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    style: Theme.of(context).textTheme.subhead),
               ),
 
 //                        Image(image: NetworkImage(snapshot.data.image),),
@@ -319,12 +318,12 @@ class _ChurchWidgetState extends State<ChurchWidget> {
                             Container(
                               padding: const EdgeInsets.all(5),
                               child: Text("IMS EWeekly",
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                  style: Theme.of(context).textTheme.subhead),
                             ),
                             Container(
                               padding: const EdgeInsets.all(5),
                               child: Text(snapshot.data.title,
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                  style: Theme.of(context).textTheme.subhead),
                             ),
 
 //                        Image(image: NetworkImage(snapshot.data.image),),

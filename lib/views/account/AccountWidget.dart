@@ -84,7 +84,7 @@ Widget buildAvatarAndName(BuildContext context) {
       Text(
         'Daniel',
 //              softWrap: true,
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        style: Theme.of(context).textTheme.subhead,
       ),
     ],
   );
@@ -131,10 +131,10 @@ Widget buildContent(BuildContext context) {
               Text(
                 '邮    箱：',
 //              softWrap: true,
-                style: TextStyle(fontSize: 16),
+                style: Theme.of(context).textTheme.subhead,
               ),
               SizedBox(width: 10),
-              Text(user.email, style: TextStyle(fontSize: 14),),
+              Text(user.email),
             ],
           ),
         ),
@@ -146,10 +146,10 @@ Widget buildContent(BuildContext context) {
               Text(
                 '用户名：',
 //              softWrap: true,
-                style: TextStyle(fontSize: 16),
+                style: Theme.of(context).textTheme.subhead,
               ),
               SizedBox(width: 10),
-              Text(user.username, style: TextStyle(fontSize: 14),),
+              Text(user.username),
             ],
           ),
         ),
@@ -161,13 +161,13 @@ Widget buildContent(BuildContext context) {
         GestureDetector(
           child:Container(
             padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-            color: Colors.white, //写上白色才能点击Spacer()。
+            color: Theme.of(context).scaffoldBackgroundColor, //写上颜色才能点击Spacer()。
             child: Row(
               children: <Widget>[
                 Text(
                   '修改用户名',
 //              softWrap: true,
-                  style: TextStyle(fontSize: 16),
+                  style: Theme.of(context).textTheme.subhead,
                 ),
                 Spacer(),
                 Icon(Icons.keyboard_arrow_right),
@@ -194,13 +194,13 @@ Widget buildContent(BuildContext context) {
         GestureDetector(
           child: Container(
             padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-            color: Colors.white, //写上白色才能点击Spacer()。
+            color: Theme.of(context).scaffoldBackgroundColor, //写上白色才能点击Spacer()。
             child: Row(
               children: <Widget>[
                 Text(
                   '修改密码',
 //              softWrap: true,
-                  style: TextStyle(fontSize: 16),
+                  style: Theme.of(context).textTheme.subhead,
                 ),
                 Spacer(),
                 Icon(Icons.keyboard_arrow_right),

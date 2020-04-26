@@ -100,7 +100,7 @@ class _LorddayDetailsWidgetState extends State<LorddayDetailsWidget> with Widget
       child:  Text( MediaTypeToName(MediaTypeFromInt(media.kind)),
         textAlign: TextAlign.left,
 //                              softWrap: true,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        style: Theme.of(context).textTheme.subhead,
       ),
     ));
 
@@ -214,7 +214,7 @@ class _LorddayDetailsWidgetState extends State<LorddayDetailsWidget> with Widget
       child:  Text(lorddayInfo.title,
         textAlign: TextAlign.center,
 //                              softWrap: true,
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        style: Theme.of(context).textTheme.headline,
       ),
     ));
 

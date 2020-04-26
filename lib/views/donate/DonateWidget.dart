@@ -85,7 +85,8 @@ class _DonateWidgetState extends State<DonateWidget> {
 //                height: 300,
 //                fit: BoxFit.cover,
 //              ),
-              Text("请使用微信或者支付宝扫码支付",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+              SizedBox(height: 8,),
+              Text("请使用微信或者支付宝扫码支付",style: Theme.of(context).textTheme.subhead,),
               Spacer()
             ],
           )

@@ -13,4 +13,9 @@ class HexColor extends Color {
   }
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+
+  static Color Hex(final String hex){
+    return Color(_getColorFromHex(hex));
+  }
 }
+

@@ -35,10 +35,23 @@ final ThemeData kFlutterDefaultTheme = ThemeData(
   ),
 );
 
-final kCPColorGreen1 = HexColor("2AA77B"); //浅
-final kCPColorGreen2 = HexColor("279C74"); //中 39,156,116
-final kCPColorGreen3 = HexColor("24926D"); //深
+//自定义大小
+final kFontSizeTitle = 20;
+final kFontSizeSubTitle = 16;
+final kFontSizeBody = 14;
+final kFontSizeCaption = 12;
+
+
+final kCPColorGreen1Hex = "2AA77B";
+final kCPColorGreen2Hex = "279C74";
+final kCPColorGreen3Hex = "24926D";
+
+final kCPColorGreen1 = HexColor.Hex(kCPColorGreen1Hex); //浅
+final kCPColorGreen2 = HexColor.Hex(kCPColorGreen2Hex); //中 39,156,116
+final kCPColorGreen3 = HexColor.Hex(kCPColorGreen3Hex); //深
 //浅橘色 Colors.amber[800]
+
+final ThemeButtonColor = kCPColorGreen1;
 
 Map<int, Color> kCPMaterialColorGreen2 =
 {
@@ -82,7 +95,7 @@ final ThemeData kIOSTheme = ThemeData(
 );
 
 final ThemeData kAndroidTheme = ThemeData(
-//  brightness: Brightness.light,
+  brightness: Brightness.light,
 //  primaryColor: Colors.grey[100],
   accentColor: kCPColorGreen2, //  2AA77B浅绿，279C74中绿，24926D深绿，浅橘色 Colors.amber[800]
 //
@@ -111,4 +124,38 @@ final ThemeData kAndroidTheme = ThemeData(
 //final ThemeData kDefaultTheme = new ThemeData(
 //  primarySwatch: Colors.purple,
 //  accentColor: Colors.orangeAccent[400],
+//);
+
+//ios和android用同一个黑暗主题。
+final ThemeData kiOSDarkTheme = ThemeData.dark().copyWith(
+  primaryColor: kCPColorGreen2,// Colors.grey[100], //navgationbar颜色
+  primaryColorBrightness: Brightness.dark,
+//  primaryTextTheme: TextTheme(  //title颜色。android默认白色
+//      title: TextStyle(
+//          color: Colors.white
+//      )
+//  ),
+  primaryIconTheme: IconThemeData(color: Colors.white),//navgation item icon 颜色。android默认白色，若在appBar的iconTheme写上，反而变成黑色。
+
+  accentColor: kCPColorGreen2,
+
+//  textTheme: TextTheme(
+//    headline: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold),
+//    title: TextStyle(fontSize: 24.0, fontStyle: FontStyle.italic),
+//    body1: TextStyle(fontSize: 12.0, fontFamily: 'Hind'),
+//  ),
+  buttonTheme: ButtonThemeData(buttonColor: kCPColorGreen1),
+  buttonColor: kCPColorGreen1,
+  brightness: Brightness.dark,
+);
+
+//final ThemeData kAndroidDarkTheme = ThemeData(
+//  brightness: Brightness.dark,
+////  primaryColor: Colors.grey[100],
+//  accentColor: kCPColorGreen2, //  2AA77B浅绿，279C74中绿，24926D深绿，浅橘色 Colors.amber[800]
+//  buttonColor: kCPColorGreen1,
+//  //其他
+//  primarySwatch: MaterialColor(0xFF279C74, kCPMaterialColorGreen2), //0xFF880E4F紫红
+////  primaryColorBrightness: Brightness.light,
+//
 //);
