@@ -29,7 +29,7 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
   bool isFirstLoad = true;
   bool isloading = true;
   bool isRefreshLoading = false; //刷新时候的loading，显示ui。
-  Page page = Page();
+  NetPage page = NetPage();
 
   //Search
   Widget _appBarTitle = new Text('课程');

@@ -45,8 +45,8 @@ class NetResponseWithPage<T extends NetResult>{
     return data;
   }
 
-  Page getPage(){
-    return Page(page: pageNum,totalPage: totalPage);
+  NetPage getPage(){
+    return NetPage(page: pageNum,totalPage: totalPage);
   }
 
 }

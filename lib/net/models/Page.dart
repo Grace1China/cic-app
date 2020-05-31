@@ -1,9 +1,9 @@
-class Page {
+class NetPage {
   int page = 1;
   int pageSize = 10;
   int totalPage = 1000;
 
-  Page({this.page,
+  NetPage({this.page,
         this.totalPage});
 
   bool hasNext(){

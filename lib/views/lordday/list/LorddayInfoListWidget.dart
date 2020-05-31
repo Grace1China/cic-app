@@ -25,7 +25,7 @@ class _LorddayInfoListWidgetState extends State<LorddayInfoListWidget> {
 
 
   List<Sermon> sermons = List<Sermon>();
-  Page page = Page();
+  NetPage page = NetPage();
 
   String errmsg = "";
 

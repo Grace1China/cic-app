@@ -1,7 +1,6 @@
 import 'package:church_platform/main.dart';
-import 'package:church_platform/utils/AlertDialogUrils.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
-import 'package:church_platform/views/church/ChurchWidget.dart';
+import 'package:church_platform/views/church/WeeklyWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
 import 'package:church_platform/views/lordday/list/LorddayInfoListWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,7 +23,7 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
 //  static const TextStyle optionStyle =
 //      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    ChurchWidget(key: ChurchWidget.ChurchWidgetKey),
+    WeeklyWidget(key: WeeklyWidget.WeeklyWidgetKey),
     DonateWidget(),
 //    SpiritualMainWidget(),
     LorddayInfoListWidget(key: LorddayInfoListWidget.myLorddayInfoListWidgetKey),
@@ -87,8 +86,8 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
 
 
   void refresh(){
-    if (ChurchWidget.ChurchWidgetKey.currentState != null) {
-      ChurchWidget.ChurchWidgetKey.currentState.refresh();
+    if (WeeklyWidget.WeeklyWidgetKey.currentState != null) {
+      WeeklyWidget.WeeklyWidgetKey.currentState.refresh();
     }
     if (DonateWidget.DonateWidgetKey.currentState != null) {
       DonateWidget.DonateWidgetKey.currentState.refresh();

@@ -1,7 +1,7 @@
 
 import 'package:church_platform/net/common/NetResponse.dart';
 
-class WeaklyReport extends NetResult{
+class WeeklyReport extends NetResult{
   int id;
   int church;
   int creator;
@@ -13,7 +13,7 @@ class WeaklyReport extends NetResult{
   String create_time;
   String update_time;
 
-  WeaklyReport(
+  WeeklyReport(
       {this.id,
         this.church,
         this.creator,
@@ -25,7 +25,7 @@ class WeaklyReport extends NetResult{
         this.create_time,
         this.update_time});
 
-  WeaklyReport.fromJson(Map<String, dynamic> json) {
+  WeeklyReport.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     church = json['church'];
     creator = json['creator'];

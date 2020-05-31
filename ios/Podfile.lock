@@ -1,47 +1,47 @@
 PODS:
   - audioplayers (0.0.1):
     - Flutter
-  - BIJKPlayer (0.6.0)
-  - Braintree/Card (4.32.1):
+  - BIJKPlayer (0.7.3)
+  - Braintree/Card (4.33.0):
     - Braintree/Core
-  - Braintree/Core (4.32.1)
-  - Braintree/PaymentFlow (4.32.1):
+  - Braintree/Core (4.33.0)
+  - Braintree/PaymentFlow (4.33.0):
     - Braintree/Card
     - Braintree/Core
     - Braintree/PayPalOneTouch
-  - Braintree/PayPal (4.32.1):
+  - Braintree/PayPal (4.33.0):
     - Braintree/Core
     - Braintree/PayPalOneTouch
-  - Braintree/PayPalDataCollector (4.32.1):
+  - Braintree/PayPalDataCollector (4.33.0):
     - Braintree/Core
     - Braintree/PayPalUtils
-  - Braintree/PayPalOneTouch (4.32.1):
+  - Braintree/PayPalOneTouch (4.33.0):
     - Braintree/Core
     - Braintree/PayPalDataCollector
     - Braintree/PayPalUtils
-  - Braintree/PayPalUtils (4.32.1)
-  - Braintree/UnionPay (4.32.1):
+  - Braintree/PayPalUtils (4.33.0)
+  - Braintree/UnionPay (4.33.0):
     - Braintree/Card
     - Braintree/Core
-  - BraintreeDropIn (8.0.0):
-    - BraintreeDropIn/DropIn (= 8.0.0)
-  - BraintreeDropIn/DropIn (8.0.0):
-    - Braintree/Card (~> 4.31)
-    - Braintree/Core (~> 4.31)
-    - Braintree/PaymentFlow (~> 4.31)
-    - Braintree/PayPal (~> 4.31)
-    - Braintree/UnionPay (~> 4.31)
+  - BraintreeDropIn (8.1.0):
+    - BraintreeDropIn/DropIn (= 8.1.0)
+  - BraintreeDropIn/DropIn (8.1.0):
+    - Braintree/Card (~> 4.32)
+    - Braintree/Core (~> 4.32)
+    - Braintree/PaymentFlow (~> 4.32)
+    - Braintree/PayPal (~> 4.32)
+    - Braintree/UnionPay (~> 4.32)
     - BraintreeDropIn/UIKit
-  - BraintreeDropIn/UIKit (8.0.0)
-  - fijkplayer (0.7.2):
-    - BIJKPlayer (~> 0.6.0)
+  - BraintreeDropIn/UIKit (8.1.0)
+  - fijkplayer (0.8.4):
+    - BIJKPlayer (~> 0.7.3)
     - Flutter
   - Flutter (1.0.0)
   - flutter_braintree (0.2.0):
     - Braintree/PayPal
     - BraintreeDropIn
     - Flutter
-  - flutter_pdfview (0.0.1):
+  - flutter_pdfview (1.0.2):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
@@ -69,6 +69,8 @@ PODS:
     - Flutter
   - wakelock (0.0.1):
     - Flutter
+  - webview_flutter (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
@@ -87,9 +89,10 @@ DEPENDENCIES:
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - video_player_web (from `.symlinks/plugins/video_player_web/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
+  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - BIJKPlayer
     - Braintree
     - BraintreeDropIn
@@ -128,19 +131,21 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/video_player_web/ios"
   wakelock:
     :path: ".symlinks/plugins/wakelock/ios"
+  webview_flutter:
+    :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
   audioplayers: 84f968cea3f2deab00ec4f8ff53358b3c0b3992c
-  BIJKPlayer: 3254be04cfa8957d69290ef584785563bb5eaf34
-  Braintree: b06d2b42f0c591e508f7f538a7cc6715af1958b7
-  BraintreeDropIn: 441ad16190e20548a2544652bffef66d457eb70a
-  fijkplayer: be22180fc3c3c635afd7774eded9c1acac77f376
+  BIJKPlayer: 1ecf2e48a182e2e4618d47a01d04814ee4126c96
+  Braintree: 586e4d274398fabe9d70ab790eefca41660b8a17
+  BraintreeDropIn: fc3e96a8a2b5416e5e3a3beba119f0089713bc1e
+  fijkplayer: df94cc554363066892cd2a6b1d94aaf9077fcb64
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_braintree: 101b66de3f3ae397c9ee3593c2e24ed67a41eeab
-  flutter_pdfview: bdf86972519a15c6d8f50ad34e5b0429b255cbb4
+  flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  in_app_purchase: 6b3a6d6944354f353d59eb1f2a0db3fd7a40917b
+  in_app_purchase: 3e2155afa9d03d4fa32d9e62d567885080ce97d6
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
@@ -150,7 +155,8 @@ SPEC CHECKSUMS:
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
   video_player_web: da8cadb8274ed4f8dbee8d7171b420dedd437ce7
   wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
+  webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
-PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
+PODFILE CHECKSUM: 73d69d282a87aa0aafabdecb47f632fc347a9aac
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.9.3

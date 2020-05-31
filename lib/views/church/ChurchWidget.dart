@@ -1,11 +1,13 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/net/common/API.dart';
-import 'package:church_platform/net/results/WeaklyReport.dart';
 import 'package:church_platform/net/models/Church.dart';
+import 'package:church_platform/net/results/WeaklyReport.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
-import 'package:church_platform/views/account/AccountWidget.dart';
+import 'package:church_platform/views/common/BaseWebViewContainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -21,14 +23,29 @@ class ChurchWidget extends StatefulWidget {
   _ChurchWidgetState createState() => _ChurchWidgetState();
 }
 
+const String kNavigationExamplePage = '''
+<!DOCTYPE html><html>
+<head><title>Navigation Delegate Example</title></head>
+<body>
+<p>
+The navigation delegate is set to block navigation to the youtube website.
+</p>
+<ul>
+<ul><a href="https://www.youtube.com/">https://www.youtube.com/</a></ul>
+<ul><a href="https://www.baidu.com/">https://www.baidu.com/</a></ul>
+</ul>
+</body>
+</html>
+''';
+
 class _ChurchWidgetState extends State<ChurchWidget> {
   bool isRefreshLoading = true;
 
   Church church;
   String errmsg;
 
-  Future<WeaklyReport> weaklyReport;
-  WeaklyReport weaklyl3;
+  Future<WeeklyReport> weaklyReport;
+  WeeklyReport weaklyl3;
 
   @override
   void initState() {
@@ -56,7 +73,7 @@ class _ChurchWidgetState extends State<ChurchWidget> {
 
   void _refreshLogin() async{
     _refreshChurch();
-    weaklyReport = API().getWeaklyReport();
+    weaklyReport = API().getWeeklyReport();
     _refreshWeeklyl3();
   }
 
@@ -79,7 +96,7 @@ class _ChurchWidgetState extends State<ChurchWidget> {
 
   void _refreshWeeklyl3() async{
     try {
-      WeaklyReport l3 = await API().getWeaklyReportL3();
+      WeeklyReport l3 = await API().getWeeklyReportL3();
 
       setState(() {
         isRefreshLoading = false;
@@ -236,8 +253,15 @@ class _ChurchWidgetState extends State<ChurchWidget> {
                 image: weaklyl3.image,
                 fit: BoxFit.cover,
               ):Container(),
-//                        HtmlWidget(snapshot.data.content,webView: true,),
-              Html(data: weaklyl3.content,)
+              Html(data: weaklyl3.content,),
+    Expanded(child:
+              Container(
+                width: MediaQuery.of(context).size.width,
+//                height: 300,
+                child: BaseWebViewContainer(htmlContent: weaklyl3.content,),
+              )
+    ),
+
             ],
           ));
     }
@@ -305,7 +329,7 @@ class _ChurchWidgetState extends State<ChurchWidget> {
 //              child:  VideofijkplayerWidget(url:"http://d30szedwfk6krb.cloudfront.net/20191117IMS_Ve4x3lFTEST.m3u8",),
 //            ),
 
-              FutureBuilder<WeaklyReport>(
+              FutureBuilder<WeeklyReport>(
                 future: weaklyReport,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -333,8 +357,8 @@ class _ChurchWidgetState extends State<ChurchWidget> {
                               image: snapshot.data.image,
                               fit: BoxFit.cover,
                             ):Container(),
-//                        HtmlWidget(snapshot.data.content,webView: true,),
-                            Html(data: snapshot.data.content,)
+                            Html(data: snapshot.data.content,),
+//                            BaseWebViewContainer(htmlContent: snapshot.data.content,),
                           ],
                         ));
                   } else if (snapshot.hasError) {

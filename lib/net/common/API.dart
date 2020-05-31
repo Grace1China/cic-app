@@ -85,14 +85,14 @@ class API {
     return baseResponse.data;
   }
 
-  Future<WeaklyReport> getWeaklyReportL3() async { //token不需要
-    final baseResponse = await NetClient<WeaklyReport>().request(url: "/eweekly/l3", needToken: false);
+  Future<WeeklyReport> getWeeklyReportL3() async { //token不需要
+    final baseResponse = await NetClient<WeeklyReport>().request(url: "/eweekly/l3", needToken: false);
     return baseResponse.data;
   }
 
   // curl -X GET "http://l3.community/rapi/eweekly/0" -H "accept: application/json" -H "authoriztion:bear eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTc1NzgzNjA1LCJqdGkiOiIzMjYyYTJlMzU4MDQ0ZTFhYmY1M2VlZTQwZjJkYjMyMSIsInVzZXJfaWQiOjM3fQ.x0nprlwJqxnZdnltRaU7r0gciUTCZoq4wzfbrijLZZw " -d "{ \"username\": \"aa\", \"password\": \"aa_123456\"}"
-  Future<WeaklyReport> getWeaklyReport() async {
-      final baseResponse = await NetClient<WeaklyReport>().request(url: "/eweekly",needToken: true);
+  Future<WeeklyReport> getWeeklyReport() async {
+      final baseResponse = await NetClient<WeeklyReport>().request(url: "/eweekly",needToken: true);
       return baseResponse.data;
   }
 

@@ -26,8 +26,8 @@ class GenerateUtils{
       return CustomUser.fromJson(json) as T;
     }else if (T == Church) {
       return Church.fromJson(json) as T;
-    }else if (T == WeaklyReport) {
-      return WeaklyReport.fromJson(json) as T;
+    }else if (T == WeeklyReport) {
+      return WeeklyReport.fromJson(json) as T;
     }else if (T == Sermon) {
       return Sermon.fromJson(json) as T;
     }else if (T == Course) {
