@@ -7,7 +7,6 @@ import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/net/results/WeaklyReport.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
-import 'package:church_platform/views/common/BaseWebViewContainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -258,7 +257,7 @@ class _ChurchWidgetState extends State<ChurchWidget> {
               Container(
                 width: MediaQuery.of(context).size.width,
 //                height: 300,
-                child: BaseWebViewContainer(htmlContent: weaklyl3.content,),
+//                child: BaseWebViewContainer(htmlContent: weaklyl3.content,), //TODO:显示webview
               )
     ),
 

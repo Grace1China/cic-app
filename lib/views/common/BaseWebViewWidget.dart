@@ -23,7 +23,7 @@ class BaseWebViewWidget extends StatefulWidget {
 
 class _BaseWebViewWidgetState extends State<BaseWebViewWidget> {
   String _title = "";
-  bool isRefreshLoading = true;
+  bool isRefreshLoading = false;
   final Completer<WebViewController> _controller =
   Completer<WebViewController>();
 

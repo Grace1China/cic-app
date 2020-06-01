@@ -158,7 +158,11 @@ class _LorddayInfoListWidgetState extends State<LorddayInfoListWidget> {
                     color: Colors.black26,//底色
                     borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
                   ),
-                  child: Center(child: Container(width:30,height: 30, child: CircularProgressIndicator()),),
+                  child: Center(child: Container(width:30,height: 30,
+//                                                child: CircularProgressIndicator()
+                                                  child: Container(),
+                                                ),
+                          ),
                 ),
                 errorWidget: (context, url, error) => Container(//灰色边框
                   decoration:  BoxDecoration(

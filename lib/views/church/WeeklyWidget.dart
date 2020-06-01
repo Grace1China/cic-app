@@ -38,7 +38,7 @@ class _WeeklyWidgetState extends State<WeeklyWidget> {
   @override
   void initState() {
     super.initState();
-    refresh();
+    refresh(isFirst: true);
   }
 
   void _reloadHtmlContent() async{
@@ -46,18 +46,28 @@ class _WeeklyWidgetState extends State<WeeklyWidget> {
       final String contentBase64 = base64Encode(const Utf8Encoder().convert(weeklyReport.content));
       url = 'data:text/html;base64,$contentBase64';
       await _controller.future.then((value) => value.loadUrl(url));
+//      _controller.future.then((value) => value.reload());
     }else{
-      _controller.future.then((value) => value.loadUrl(""));
+      await _controller.future.then((value) => value.loadUrl(""));
     }
   }
 
-  void refresh() async{
-    setState(() {
-      isRefreshLoading = true;
-      errmsg = null;
-      weeklyReport = null;
-    });
-    _reloadHtmlContent();
+  void refresh({bool isFirst = false}) async{
+    if(isFirst){
+      setState(() {
+        isRefreshLoading = true;
+        errmsg = null;
+        weeklyReport = null;
+      });
+      _reloadHtmlContent();
+    }else{
+      setState(() {
+        isRefreshLoading = false;
+        errmsg = null;
+        weeklyReport = null;
+      });
+      _reloadHtmlContent();
+    }
 
     try {
       bool isLogin = await SharedPreferencesUtils.isLogin();

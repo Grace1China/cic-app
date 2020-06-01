@@ -18,7 +18,10 @@ class HomeTabBarWidget extends StatefulWidget {
   _HomeTabBarWidgetState createState() => _HomeTabBarWidgetState();
 }
 
-class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
+class _HomeTabBarWidgetState extends State<HomeTabBarWidget> with AutomaticKeepAliveClientMixin<HomeTabBarWidget> {
+  @protected
+  bool get wantKeepAlive=>true;
+
   int _selectedIndex = 0;
 //  static const TextStyle optionStyle =
 //      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -29,6 +32,16 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
     LorddayInfoListWidget(key: LorddayInfoListWidget.myLorddayInfoListWidgetKey),
 //    CourseStoreWidget(),
   ];
+
+  void reloadWidgets(){
+    _widgetOptions = <Widget>[
+      WeeklyWidget(key: WeeklyWidget.WeeklyWidgetKey),
+      DonateWidget(),
+//    SpiritualMainWidget(),
+      LorddayInfoListWidget(key: LorddayInfoListWidget.myLorddayInfoListWidgetKey),
+//    CourseStoreWidget(),
+    ];
+  }
 
   void tryShowAccount() async{
     bool isLogin = await SharedPreferencesUtils.isLogin();
@@ -84,8 +97,13 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
     }
   }
 
-
+ //无论初始化，还是刷新。都是非首次效果，即没有圈圈。
   void refresh(){
+
+//    setState(() {
+//      reloadWidgets(); //解决WeeklyWidget的webview从空刷新成有数据失败的问题。 就不需要刷新了。
+//    });
+
     if (WeeklyWidget.WeeklyWidgetKey.currentState != null) {
       WeeklyWidget.WeeklyWidgetKey.currentState.refresh();
     }
@@ -122,6 +140,11 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> {
     return Scaffold(
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
+//        child:TabBarView(children: _widgetOptions,),
+//        child:IndexedStack(
+//          index: _selectedIndex,
+//          children: _widgetOptions,
+//        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
