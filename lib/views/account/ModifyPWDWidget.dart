@@ -43,7 +43,7 @@ class _ModifyPWDWidgetState extends State<ModifyPWDWidget> {
 
   /// 倒计时的计时器。
   Timer _timer;
-  int MAX_SECONDS = 10;
+  int MAX_SECONDS = 60;
   /// 当前倒计时的秒数。
   int _seconds;
   String _verifyStr = '获取验证码';

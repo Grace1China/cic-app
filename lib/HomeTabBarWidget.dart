@@ -1,6 +1,7 @@
 import 'package:church_platform/main.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/views/church/WeeklyWidget.dart';
+import 'package:church_platform/views/courses/store/CourseStoreWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
 import 'package:church_platform/views/lordday/list/LorddayInfoListWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,16 +31,16 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> with AutomaticKeepA
     DonateWidget(),
 //    SpiritualMainWidget(),
     LorddayInfoListWidget(key: LorddayInfoListWidget.myLorddayInfoListWidgetKey),
-//    CourseStoreWidget(),
+    CourseStoreWidget(),
   ];
 
   void reloadWidgets(){
     _widgetOptions = <Widget>[
       WeeklyWidget(key: WeeklyWidget.WeeklyWidgetKey),
-      DonateWidget(),
+      DonateWidget(key:DonateWidget.DonateWidgetKey),
 //    SpiritualMainWidget(),
       LorddayInfoListWidget(key: LorddayInfoListWidget.myLorddayInfoListWidgetKey),
-//    CourseStoreWidget(),
+      CourseStoreWidget(key:CourseStoreWidget.myCourseStoreWidgetKey),
     ];
   }
 
@@ -113,7 +114,9 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> with AutomaticKeepA
     if (LorddayInfoListWidget.myLorddayInfoListWidgetKey.currentState != null) {
       LorddayInfoListWidget.myLorddayInfoListWidgetKey.currentState.refresh(isFirst: true);
     }
-    //课程 TODO:
+    if (CourseStoreWidget.myCourseStoreWidgetKey.currentState != null) {
+      CourseStoreWidget.myCourseStoreWidgetKey.currentState.refresh(isFirst: true);
+    }
   }
 
   void changeIndex(int index) {
@@ -165,10 +168,10 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> with AutomaticKeepA
             icon: Icon(Icons.live_tv),
             title: Text('主日'),
           ),
-//          BottomNavigationBarItem(
-//            icon: Icon(Icons.library_books),
-//            title: Text('课程'),
-//          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_books),
+            title: Text('课程'),
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Theme.of(context).accentColor,

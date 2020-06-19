@@ -143,8 +143,8 @@ class _LorddayInfoListWidgetState extends State<LorddayInfoListWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              width: 70,
-              height: 70,
+              width: 92,
+              height: 92,
               child: CachedNetworkImage(
                 imageUrl: lorddayInfo.imageUrl(),
                 imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,

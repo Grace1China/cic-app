@@ -15,6 +15,46 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+const String kNavigationExamplePage = '''
+<table border="0" cellpadding="0" cellspacing="0" style="width:100%">
+	<tbody>
+		<tr>
+			<td style="width:25%">
+			<p><a href="https://www.baidu.com"><img src="https://api.bicf.org/mediabase/L3/default/c225a6ba-3417-6ce6-e577-eccabed61f3e" style="width:100%" /></a></p>
+			</td>
+			<td style="width:25%">
+			<p><a href="http://localhost:8000/blog/tuwen/5"><img src="https://api.bicf.org/mediabase/L3/default/d7bbf96a-8d6c-a8b0-6740-3ffacb30e1a1" style="width:100%" /></a></p>
+			</td>
+			<td style="width:25%">
+			<p><img src="https://api.bicf.org/mediabase/L3/default/613ca59b-5391-0f8b-2ee0-bf6359725dcb?x-oss-process=style" style="width:100%" /></p>
+			</td>
+			<td style="width:25%">
+			<p><img src="https://api.bicf.org/mediabase/L3/default/9b95fb88-0fb6-9459-128e-d5a04c3d9704?x-oss-process=style" style="width:100%" /></p>
+			</td>
+		</tr>
+		
+
+	</tbody>
+</table>
+
+<p>&nbsp;</p>
+<button onclick="callFlutter()">callFlutter</button>
+<button onclick="callFlutter2()">callFlutter2</button>
+<button onclick="callFlutter3()">callFlutter3</button>
+<p>&nbsp;</p>
+<script>
+    function callFlutter(){
+       ChurchPlatformJs2Native.postMessage("JS调用了Flutter");
+    }
+    function callFlutter2(){
+       ChurchPlatformJs2Native.postMessage("{\\"name\\":\\"value\\"}"); /* json没有调适成功 */
+    }
+    function callFlutter3(){
+      document.location = "churchplatform://js2native?arg1=111&arg2=222";
+    }
+</script>
+''';
+
 void main() => runApp(MaterialApp(home: WeeklyWidget()));
 
 class WeeklyWidget extends StatefulWidget {
@@ -42,13 +82,15 @@ class _WeeklyWidgetState extends State<WeeklyWidget> {
   }
 
   void _reloadHtmlContent() async{
-    if(weeklyReport.content != null && weeklyReport.content.isNotEmpty){
-      final String contentBase64 = base64Encode(const Utf8Encoder().convert(weeklyReport.content));
+    if(weeklyReport != null && weeklyReport.content != null && weeklyReport.content.isNotEmpty){
+//      String htmlcontent = kNavigationExamplePage;
+      String htmlcontent = weeklyReport.content;
+      final String contentBase64 = base64Encode(const Utf8Encoder().convert(htmlcontent));
       url = 'data:text/html;base64,$contentBase64';
       await _controller.future.then((value) => value.loadUrl(url));
 //      _controller.future.then((value) => value.reload());
     }else{
-      await _controller.future.then((value) => value.loadUrl(""));
+      await _controller.future.then((value) => value.loadUrl("about:blank"));
     }
   }
 

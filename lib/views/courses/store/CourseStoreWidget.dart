@@ -1,7 +1,11 @@
+import 'package:church_platform/HomeTabBarWidget.dart';
+import 'package:church_platform/main.dart';
 import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/net/common/NetResponseWithPage.dart';
 import 'package:church_platform/net/models/Page.dart';
 import 'package:church_platform/net/results/Course.dart';
+import 'package:church_platform/utils/CPTheme.dart';
+import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/views/courses/CourseDetailsWidget.dart';
 import 'package:church_platform/views/courses/store/CourseStoreItem.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +16,9 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import '../../../utils/LoggerUtils.dart';
 
 class CourseStoreWidget extends StatefulWidget {
+  static final myCourseStoreWidgetKey =  GlobalKey<_CourseStoreWidgetState>();
+  CourseStoreWidget({Key key}) : super(key: key);
+
   @override
   _CourseStoreWidgetState createState() => _CourseStoreWidgetState();
 }
@@ -20,7 +27,7 @@ class CourseStoreWidget extends StatefulWidget {
 class _CourseStoreWidgetState extends State<CourseStoreWidget> {
 
   //  Future<CourseResponse> courseResponse;
-  List<Course> courses;
+  List<Course> courses = List<Course>();
 
   String errmsg = "";
 
@@ -41,6 +48,7 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
   //横向选择索引
   List<String> segmentTitles = <String>["综合","销量","已购"];
   int segmentIndex = 0;
+
   //最左边筛选竖向选择索引
   bool showItemSelectedView = false;
   List<String> itemTitles = <String>["综合","价格降序","价格升序"];
@@ -97,28 +105,30 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
     }
   }
   //TODO:刷新完后滚动到起始位置。
-  void refresh({bool isFirst = false}) async{
+  void refresh({bool isFirst = true}) async{
     try{
       calculateOrderRules();
-//      if(isFirst){
-//        setState(() {
-//          isloading = true;
-//        });
-//      }else{
-//        setState(() {
-//          isRefreshLoading = true;
-//        });
-//      }
+      if(isFirst){
+        setState(() {
+          isloading = true;
+        });
+      }else{
+        setState(() {
+          isRefreshLoading = true;
+          errmsg = "";
+        });
+      }
       NetResponseWithPage<Course> response = await API().getCourseList(page: 1,pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
       setState(() {
         isloading = false;
+        errmsg = "";
         page = response.getPage();
-        if(courses == null){
+//        if(courses == null){
           courses = response.data;
-        }else{
-          courses.clear();
-          courses.addAll(response.data);
-        }
+//        }else{
+//          courses.clear();
+//          courses.addAll(response.data);
+//        }
 
         _controller.finishRefresh(success: true);
         _controller.finishLoad(success: true,noMore: !page.hasNext());
@@ -127,17 +137,20 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
       });
 
     }catch (e) {
+      if(mounted){ 
 //      if(isFirst){
         setState(() {
           isloading = false;
           errmsg = "$e";
-
+          courses.clear();
           _controller.finishRefresh(success: true);
-          _controller.finishLoad(success: true,noMore: !page.hasNext());
+          _controller.finishLoad(success: true,noMore: true);
 
           isRefreshLoading = false;
         });
 //      }
+      }
+
     }
   }
 
@@ -146,6 +159,7 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
       calculateOrderRules();
 //      setState(() {
 //        isRefreshLoading = true;
+//        errmsg = "";
 //      });
       NetResponseWithPage<Course> r = await API().getCourseList(page: page.page + 1, pagesize: page.pageSize,keyword: searchKeyword,orderby: requestOrderBy,asc: requestAsc,bought: requestBought);
       setState(() {
@@ -154,15 +168,16 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
         _controller.finishLoad(success: true,noMore: !page.hasNext());
 
         isRefreshLoading = false;
+        errmsg = "";
       });
     }catch(e){
+      if(mounted){ 
+        setState(() {
+          _controller.finishLoad(success: true,noMore: !page.hasNext());
 
-      setState(() {
-        _controller.finishLoad(success: true,noMore: !page.hasNext());
-
-        isRefreshLoading = false;
-      });
-
+          isRefreshLoading = false;
+        });
+      }
     }
 
   }
@@ -186,7 +201,7 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
               buildContent(context),
               showItemSelectedView ? GestureDetector(
                 child: Container(
-                  color: Color(0x4d000000),
+                  color: Color(0x4d000000), //灰色背景
                 ),onTap: (){
                   setState(() {
                     showItemSelectedView = false;
@@ -195,7 +210,7 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
               ):Container(),
               showItemSelectedView ? Container(
                 height: 60.0 * 3,
-                color: Colors.white,
+                color: (isDarkMode(context) ? Colors.black : Colors.white),
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
 
@@ -206,14 +221,17 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
                       onTap: () {
                         Log.i("${index}");
                         setState(() {
+                          showItemSelectedView = false;
+                        });
                           if(itemIndex != index){
+                            setState(() {
                             segmentIndex = 0;
                             itemIndex = index;
                             isRefreshLoading = true;
+                            errmsg = "";
+                            });
                             refresh();
                           }
-                          showItemSelectedView = false;
-                        });
                       },
                     );
                   },
@@ -235,42 +253,80 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
       if(index == 0){
         segmentTitle = itemTitles[itemIndex];
       }
+      bool isDark = isDarkMode(context);
+      Text text = Text(segmentTitle,style: TextStyle(color: (segmentIndex == index ? Theme.of(context).primaryColor : (isDark ? Colors.white : Colors.black))));
 
-      Text text = Text(segmentTitle,style: TextStyle(color: (segmentIndex == index ? Theme.of(context).primaryColor : Colors.black),));
+      VoidCallback onPressed0 = (){
+        //如果未选择,那么选择，刷新，不做itemslist显示。
+        if(segmentIndex != 0){
+          setState(() {
+            segmentIndex = 0;
+            isRefreshLoading = true;
+            errmsg = "";
+          });
+          refresh();
+          return;
+        }
 
-      VoidCallback onPressed = (){
         setState(() {
-          if(index == 0){
-
-            if(segmentIndex == index){
-
-              showItemSelectedView = !showItemSelectedView;
-            }else{
-              showItemSelectedView = !showItemSelectedView;
-            }
-          }else{
+          //如果以选择segment。只做itemslist显示和收起。不刷新
+          if (showItemSelectedView) {
             showItemSelectedView = false;
-
-            //刷新
-            if(segmentIndex != index){
-
-              segmentIndex = index;
-              isRefreshLoading = true;
-              refresh();
-            }
+          } else {
+            showItemSelectedView = true;
           }
-
         });
+
       };
+
+      VoidCallback onPressed1 = (){
+        setState(() {
+            showItemSelectedView = false;
+        });
+        //刷新
+        if(segmentIndex != index){
+          setState(() {
+            segmentIndex = index;
+            isRefreshLoading = true;
+            errmsg = "";
+          });
+          refresh();
+        }
+      };
+
+
+      //已购
+      VoidCallback onPressed2 = () async {
+        if (!await SharedPreferencesUtils.isLogin()) {
+          Navigator.pushNamed(context, RouteNames.LOGIN);
+          return;
+        }
+        setState(() {
+            showItemSelectedView = false;
+        });
+        //刷新
+        if(segmentIndex != index){
+          setState(() {
+            segmentIndex = index;
+            isRefreshLoading = true;
+            errmsg = "";
+          });
+          refresh();
+        }
+      };
+
 
       if(index == 0){
         return FlatButton(child:Container(width:80,
                     child: Row(mainAxisAlignment:MainAxisAlignment.center,children: <Widget>[
                       text,
-                      Icon( showItemSelectedView ? Icons.arrow_drop_up : Icons.arrow_drop_down, color: segmentIndex == 0 ? Theme.of(context).primaryColor :Colors.black ,),
-                    ],)) ,onPressed:onPressed);
-      }else{
-        return FlatButton(child:Container(width:80,child: Center(child: text)) ,onPressed:onPressed);
+                      Icon( showItemSelectedView ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                        color: segmentIndex == 0 ? Theme.of(context).primaryColor : (isDark ? Colors.white : Colors.black),),
+                    ],)) ,onPressed:onPressed0);
+      }else if(index == 1){
+        return FlatButton(child:Container(width:80,child: Center(child: text)) ,onPressed:onPressed1);
+      }else if(index == 2){
+        return FlatButton(child:Container(width:80,child: Center(child: text)) ,onPressed:onPressed2);
       }
 
     }).toList());
@@ -289,7 +345,7 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
       return  ModalProgressHUD(
         inAsyncCall: isRefreshLoading,
         // demo of some additional parameters
-        opacity: 0.5,
+        opacity: isDarkMode(context) ? 0.0:0.5,
         progressIndicator: CircularProgressIndicator(),
         child: EasyRefresh(
           controller: _controller,
@@ -317,8 +373,9 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
                           builder: (context) => CourseDetailsWidget(course: courses[index])
                       ),
                     );
-                    if(isBuySuccess){
+                    if(isBuySuccess != null && isBuySuccess){
                       isRefreshLoading = true;
+                      errmsg = "";
                       refresh();
                     }
                   },
@@ -385,6 +442,7 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
                       FocusScope.of(context).requestFocus(FocusNode());
                       setState(() {
                         isRefreshLoading = true;
+                        errmsg = "";
                       });
                       refresh();
                     },
@@ -399,11 +457,21 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
                   searchKeyword = null;
                   FocusScope.of(context).requestFocus(FocusNode());
                   //handleSearchEnd();
+                  setState(() {
+                    isRefreshLoading = true;
+                    errmsg = "";
+                  });
+                  refresh();
                 }
               });
             },
 
-          ):Container()
+          ): IconButton(
+              icon: Icon(Icons.account_circle),
+              onPressed: () {
+                HomeTabBarWidget.myTabbedPageKey.currentState.tryShowAccount();
+              }
+            )
         ],
         ),
 //        backgroundColor: Colors.black12,
@@ -412,83 +480,4 @@ class _CourseStoreWidgetState extends State<CourseStoreWidget> {
 
     );
   }
-
-  /*
-  //FetureBuilder版本
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('课程'),
-        //centerTitle: true,
-        elevation:
-        (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
-//        actions: <Widget>[
-//          IconButton(icon: Icon(Icons.account_circle),
-//              onPressed: (){
-//                 Navigator.of(context).push(
-//                    CupertinoPageRoute(
-//                        fullscreenDialog: true,
-//                        builder: (context) => AccountWidget()
-//                    )
-//                );
-//              })
-//        ],
-      ),
-      backgroundColor: Colors.black12,
-      body:FutureBuilder<CourseResponse>(
-        future: courseResponse,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-
-            return  EasyRefresh(
-              onRefresh: () async {
-//                await Future.delayed(Duration(seconds: 2), () {
-//                  setState(() {
-//                    _gridCount = 30;
-//                  });
-//                });
-              },
-              onLoad: () async {
-//                await Future.delayed(Duration(seconds: 2), () {
-//                  setState(() {
-//                    _gridCount += 10;
-//                  });
-//                });
-              },
-              child: GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.75),
-                  itemCount:snapshot.data.data.length,
-                  itemBuilder: (context,index){
-                    //如果显示到最后一个并且Icon总数小于200时继续获取数据
-                    if (index == snapshot.data.data.length - 1 && snapshot.data.data.length < 200) {
-//              _retrieveIcons();
-                    }
-                    return GestureDetector(
-                      child: CourseGridItem(
-                          course: snapshot.data.data[index]
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => CourseInfoWidget(course: snapshot.data.data[index])
-                          ),
-                        );
-                      },
-                    );
-                  }),
-            );
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-
-          return Center(child:CircularProgressIndicator());
-        },
-      )
-
-    );
-  }*/
 }

@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'HexColor.dart';
 
+bool isDarkMode(BuildContext context){
+  return Theme.of(context).brightness == Brightness.dark;
+}
+
 //NAME       SIZE   WEIGHT   SPACING  2018 NAME
 //display4   112.0  thin     0.0      headline1
 //display3   56.0   normal   0.0      headline2
@@ -130,11 +134,11 @@ final ThemeData kAndroidTheme = ThemeData(
 final ThemeData kiOSDarkTheme = ThemeData.dark().copyWith(
   primaryColor: kCPColorGreen2,// Colors.grey[100], //navgationbar颜色
   primaryColorBrightness: Brightness.dark,
-//  primaryTextTheme: TextTheme(  //title颜色。android默认白色
-//      title: TextStyle(
-//          color: Colors.white
-//      )
-//  ),
+  primaryTextTheme: TextTheme(  //title颜色。android默认白色
+      title: TextStyle(
+          color: Colors.white
+      )
+  ),
   primaryIconTheme: IconThemeData(color: Colors.white),//navgation item icon 颜色。android默认白色，若在appBar的iconTheme写上，反而变成黑色。
 
   accentColor: kCPColorGreen2,
@@ -149,13 +153,11 @@ final ThemeData kiOSDarkTheme = ThemeData.dark().copyWith(
   brightness: Brightness.dark,
 );
 
-//final ThemeData kAndroidDarkTheme = ThemeData(
+//final ThemeData kAndroidDarkTheme = ThemeData.dark().copyWith(
 //  brightness: Brightness.dark,
 ////  primaryColor: Colors.grey[100],
 //  accentColor: kCPColorGreen2, //  2AA77B浅绿，279C74中绿，24926D深绿，浅橘色 Colors.amber[800]
 //  buttonColor: kCPColorGreen1,
-//  //其他
-//  primarySwatch: MaterialColor(0xFF279C74, kCPMaterialColorGreen2), //0xFF880E4F紫红
 ////  primaryColorBrightness: Brightness.light,
 //
 //);

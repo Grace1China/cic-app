@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/main.dart';
 import 'package:church_platform/net/common/API.dart';
+import 'package:church_platform/net/common/NetConfigure.dart';
 import 'package:church_platform/net/results/Course.dart';
 import 'package:church_platform/net/results/IAPVerifyResult.dart';
 import 'package:church_platform/net/results/OrderResult.dart';
@@ -19,6 +20,7 @@ import 'package:church_platform/views/courses/CoursePlayWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -113,6 +115,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
   StreamSubscription<List<PurchaseDetails>> _subscription;
   ProductDetails _product; //查到的产品
   bool _loading = false;
+  bool _payLoading = false;
   bool isBuySuccess; //是否在该页完成一次购买。
 
   _CourseDetailsWidgetState() {
@@ -259,13 +262,20 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
       PurchaseParam purchaseParam = PurchaseParam(
           productDetails: _product,
           applicationUserName: null,
-          sandboxTesting: true);
-      _connection.buyConsumable(
+          sandboxTesting: NetConfigure.IS_SANDBOX);
+      _payLoading = true;
+      bool success = await _connection.buyConsumable(
           purchaseParam: purchaseParam,
           autoConsume: kAutoConsume || Platform.isIOS);
+      print("doPurchase buyConsumable ${success}");
     } catch (e) {
       hideLoading();
-      AlertDialogUtils.show(context, title: "提示", content: e.toString());
+      if(e is PlatformException && e.code == "storekit_duplicate_product_object"){
+          await InAppPurchaseConnection.instance.completePurchaseWithID(_product.id);
+          tapPurchase();
+      }else{
+          AlertDialogUtils.show(context, title: "提示", content: e.toString());
+      }
     }
   }
 
@@ -278,6 +288,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
   void hideLoading() {
     setState(() {
       _loading = false;
+      _payLoading = false;
     });
   }
 
@@ -295,8 +306,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
             .refreshPurchaseVerificationData();
         Log.i("待验证数据" + receiptData.localVerificationData);
 
-        IAPVerifyResult result =
-            await API().iapVerify(receiptData.localVerificationData, order_no);
+        IAPVerifyResult result = await API().iapVerify(receiptData.localVerificationData, order_no);
         return Future<bool>.value(true);
       } catch (e) {
         throw e;
@@ -312,8 +322,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
         PurchaseVerificationData receiptData = await InAppPurchaseConnection
             .instance
             .refreshPurchaseVerificationData();
-        IAPVerifyResult result =
-            await API().iapVerify(receiptData.localVerificationData, order_no);
+        IAPVerifyResult result = await API().iapVerify(receiptData.localVerificationData, order_no);
         return Future<bool>.value(true);
       } catch (e) {
         throw e;
@@ -356,23 +365,22 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
   void _finishPurchase(PurchaseDetails purchaseDetails) async {
     if (Platform.isIOS) {
       if (purchaseDetails.pendingCompletePurchase) {
-        await InAppPurchaseConnection.instance
-            .completePurchase(purchaseDetails);
+        await InAppPurchaseConnection.instance.completePurchase(purchaseDetails);
       }
     }
   }
 
   //监听逻辑
+  //TODO: 中途断掉后，没有保存IAPUnCompletePurchaseStore，是有未完成的购买。但是_listenToPurchaseUpdated监听不到，而无法finish。
   void _listenToPurchaseStart() {
     //购买payment状况的监听
-    Stream purchaseUpdated =
-        InAppPurchaseConnection.instance.purchaseUpdatedStream;
+    Stream purchaseUpdated = InAppPurchaseConnection.instance.purchaseUpdatedStream;
     _subscription = purchaseUpdated.listen((purchaseDetailsList) {
-//      Log.i("------购买监听-----个数${purchaseDetailsList.length.toString()}");
+      Log.i("------购买监听-----个数${purchaseDetailsList.length.toString()}");
       _listenToPurchaseUpdated(purchaseDetailsList);
     }, onDone: () {
       Log.i("------购买完成-----: done");
-//      _subscription.cancel();
+      _subscription.cancel();
       hideLoading();
       //TODO:_purchaseSuccess();???
     }, onError: (error) {
@@ -393,6 +401,10 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
           _purchaseError(purchaseDetails.error, purchaseDetails);
           break;
         case PurchaseStatus.purchased:
+//          //测试：强制完成。
+//          _finishPurchase(purchaseDetails);
+//          break;
+
           IAPUnCompletePurchaseStore.save(purchaseDetails.purchaseID,
               widget.course.id.toString(), widget.course.title, _product.price);
 
@@ -543,7 +555,7 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: (){
         Navigator.pop(context, isBuySuccess);
       },
       child: Scaffold(
@@ -553,13 +565,14 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
           elevation:
               (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
         ),
-        // Use a FutureBuilder to display a loading spinner while waiting for the
-        // VideoPlayerController to finish initializing.
         body: ModalProgressHUD(
           inAsyncCall: _loading,
-          // demo of some additional parameters
           opacity: 0.5,
-          progressIndicator: CircularProgressIndicator(),
+          progressIndicator: _payLoading ? Container(
+                  child:Center(child:Column(crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:<Widget>[CircularProgressIndicator(),SizedBox(height: 20),Text("请耐心等待，不要退出应用")])),
+                 ):CircularProgressIndicator(),
 
           child: SingleChildScrollView(
             child: Column(
@@ -640,12 +653,6 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
                           ),
                         ),
                       ),
-//              Center(child:
-//              FloatingActionButton(
-//                heroTag: "btn${widget.course.id}",
-////                            onPressed: () {},
-//                child:  Icon(Icons.play_arrow,),),
-//              ),
                     ],
                   ),
                 ),

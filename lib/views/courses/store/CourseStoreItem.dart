@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/net/results/Course.dart';
+import 'package:church_platform/utils/CPTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -27,7 +28,7 @@ class CourseStoreItem extends StatelessWidget {
 //            padding: EdgeInsets.all(10.0),
             child: Container(
               padding: EdgeInsets.all(5.0),
-              color: Colors.white,
+              color: isDarkMode(context) ? Colors.black12 : Colors.white,
               child: Column(
                 children: <Widget>[
 //                    FadeInImage.memoryNetwork(
@@ -59,7 +60,8 @@ class CourseStoreItem extends StatelessWidget {
                                   borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
         //                              boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
                                 ),
-                                child: Center(child: CircularProgressIndicator(),),
+//                                child: Center(child: CircularProgressIndicator(),),
+                                child: Center(child: Container(),),
                               ),
                         errorWidget: (context, url, error) =>
                           //灰色边框

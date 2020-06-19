@@ -1,5 +1,5 @@
+
 import 'package:church_platform/HomeTabBarWidget.dart';
-import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:church_platform/views/account/LoginWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +12,6 @@ import 'utils/CPTheme.dart';
 //routers 博客：https://zhuanlan.zhihu.com/p/56289929
 //项目地址 /Users/kevin/FlutterProjects/mytestapps/flutter_app_routers
 
-//TODO: 课程调适。暂时不做。
 
 void main() => runApp(MyApp());
 
