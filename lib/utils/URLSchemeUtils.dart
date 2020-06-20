@@ -44,12 +44,14 @@ class URLSchemeUtils{
           break;
         case "PlayVideo":
           String videourl = u.queryParameters["videourl"];
-          String title = u.queryParameters["title"];
-          String imageurl = u.queryParameters["imageurl"];
+          String title = u.queryParameters["title"] ?? "";
+          String imageurl = u.queryParameters["imageurl"] ?? "";
 
-          videourl = "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4";
-          title = "标题";
-          imageurl = "http://api.bicf.org/mediabase/L3/20191006CC-560.jpg";
+//          videourl = "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4";
+//          title = "标题";
+//          imageurl = "http://api.bicf.org/mediabase/L3/20191006CC-560.jpg";
+//          title = "";
+//          imageurl = "";
 
           Navigator.push(
             context,

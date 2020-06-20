@@ -97,8 +97,8 @@ class _WeeklyWidgetState extends State<WeeklyWidget> {
 
   void _reloadHtmlContent() async{
     if(weeklyReport != null && weeklyReport.content != null && weeklyReport.content.isNotEmpty){
-      String htmlcontent = kNavigationExamplePage;
-//      String htmlcontent = weeklyReport.content;
+//      String htmlcontent = kNavigationExamplePage;
+      String htmlcontent = weeklyReport.content;
       final String contentBase64 = base64Encode(const Utf8Encoder().convert(htmlcontent));
       url = 'data:text/html;base64,$contentBase64';
       await _controller.future.then((value) => value.loadUrl(url));
