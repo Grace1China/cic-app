@@ -138,13 +138,13 @@ class _LorddayInfoListWidgetState extends State<LorddayInfoListWidget> {
             //                              boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
           ),
         width: MediaQuery.of(context).size.width,
-        height: 100,
+        height: 90,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              width: 92,
-              height: 92,
+              width: 120,
+              height: 90,
               child: CachedNetworkImage(
                 imageUrl: lorddayInfo.imageUrl(),
                 imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
@@ -178,20 +178,22 @@ class _LorddayInfoListWidgetState extends State<LorddayInfoListWidget> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
-
                 children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                  child: Text(lorddayInfo.title + lorddayInfo.title + lorddayInfo.title,textAlign: TextAlign.left, maxLines:2,style: TextStyle(fontSize: 16)),
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                  Text(lorddayInfo.speaker.title, maxLines:1),
-                  Text(sermons[index].formatPubtime() ,maxLines:1)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                    child: Text(lorddayInfo.title,textAlign: TextAlign.left, maxLines:1,style: Theme.of(context).textTheme.subtitle2,),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("主日证道 | " + lorddayInfo.speaker.title, maxLines:1,style: Theme.of(context).textTheme.caption,),
+                    ],),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(sermons[index].formatPubtimeMM_DD() ,maxLines:1,style: Theme.of(context).textTheme.caption,)
+                    ],),
                 ],),
-              ],),
             ),
 //            Container(width: 8,height: 8,),
           ],
