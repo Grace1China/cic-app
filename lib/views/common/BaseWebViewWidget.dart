@@ -6,6 +6,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:church_platform/utils/URLSchemeUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -18,10 +19,10 @@ class BaseWebViewWidget extends StatefulWidget {
   BaseWebViewWidget({Key key, this.url}) : super(key: key);
 
   @override
-  _BaseWebViewWidgetState createState() => _BaseWebViewWidgetState();
+  BaseWebViewWidgetState createState() => BaseWebViewWidgetState();
 }
 
-class _BaseWebViewWidgetState extends State<BaseWebViewWidget> {
+class BaseWebViewWidgetState extends State<BaseWebViewWidget> {
   String _title = "";
   bool isRefreshLoading = false;
   final Completer<WebViewController> _controller =
@@ -67,17 +68,7 @@ class _BaseWebViewWidgetState extends State<BaseWebViewWidget> {
               return NavigationDecision.navigate;
             }
 
-            if (request.url.startsWith('http://') || request.url.startsWith('https://')) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BaseWebViewWidget(url: request.url,)),
-              );
-              print('blocking navigation to $request}');
-              return NavigationDecision.prevent;
-            }
-
-            print('allowing navigation to $request');
-            return NavigationDecision.navigate;
+            return URLSchemeUtils(context: context).canNavigation(request) ? NavigationDecision.navigate : NavigationDecision.prevent;
           },
           onPageStarted: (String url) {
             print('Page started loading: $url');

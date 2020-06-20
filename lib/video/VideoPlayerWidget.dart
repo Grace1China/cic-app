@@ -1,21 +1,21 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:church_platform/video/VideofijkplayerWidget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import '../../net/results/Course.dart';
 
 
-class CoursePlayWidget extends StatefulWidget {
-  Course course;
-  CoursePlayWidget({Key key,this.course,}) : super(key: key){
+class VideoPlayerWidget extends StatefulWidget {
+  String videourl;
+  String title;
+  String imageurl;
+  VideoPlayerWidget({Key key,this.videourl,this.title,this.imageurl}) : super(key: key){
   }
   @override
-  _CoursePlayWidgetState createState() => _CoursePlayWidgetState();
+  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
 }
 
-class _CoursePlayWidgetState extends State<CoursePlayWidget> {
+class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _CoursePlayWidgetState extends State<CoursePlayWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.course.title),
+        title: Text(widget.title ?? ""),
         elevation:
         (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
 
@@ -39,13 +39,13 @@ class _CoursePlayWidgetState extends State<CoursePlayWidget> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          widget.course.medias.length > 0 && widget.course.medias[0].hDURL != null && widget.course.medias[0].hDURL.isNotEmpty ?
+          widget.videourl != null && widget.videourl.isNotEmpty ?
           Container(
               width: double.infinity,
               height: MediaQuery.of(context).size.width/16*9,
-              child:  VideofijkplayerWidget(url: widget.course.medias[0].hDURL)):
+              child:  VideofijkplayerWidget(url: widget.videourl)):
           CachedNetworkImage(
-            imageUrl: widget.course.medias[0].image,
+            imageUrl: widget.imageurl,
             imageBuilder: (context, imageProvider) => Stack(alignment: AlignmentDirectional.center,
               children: <Widget>[
                 Image(image: imageProvider,fit: BoxFit.cover,),
@@ -56,7 +56,7 @@ class _CoursePlayWidgetState extends State<CoursePlayWidget> {
                     border:  Border.all(width: 2.0, color: Colors.black12),// 边色与边宽度
                     color: Colors.black26,//底色
                     borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
-                              ),
+                  ),
                   child:
                   Center(child: CircularProgressIndicator(),
                   ),

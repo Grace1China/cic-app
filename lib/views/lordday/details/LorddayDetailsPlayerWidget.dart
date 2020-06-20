@@ -2,8 +2,8 @@
 import 'package:church_platform/net/results/Sermon.dart';
 import 'package:church_platform/net/models/Medias.dart';
 import 'package:church_platform/pdf/PDFViewerVerticalWidget.dart';
-import 'package:church_platform/vedio/VideoPlayerManager.dart';
-import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
+import 'package:church_platform/video/VideoPlayerManager.dart';
+import 'package:church_platform/video/VideofijkplayerWidget.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

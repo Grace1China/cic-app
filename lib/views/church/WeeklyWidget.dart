@@ -10,7 +10,11 @@ import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/net/results/WeaklyReport.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
+import 'package:church_platform/utils/URLSchemeUtils.dart';
+import 'package:church_platform/video/VideoPlayerWidget.dart';
 import 'package:church_platform/views/common/BaseWebViewWidget.dart';
+import 'package:church_platform/views/courses/CourseDetailsWidget.dart';
+import 'package:church_platform/views/lordday/details/LorddayDetailsWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -38,9 +42,11 @@ const String kNavigationExamplePage = '''
 </table>
 
 <p>&nbsp;</p>
-<button onclick="callFlutter()">callFlutter</button>
-<button onclick="callFlutter2()">callFlutter2</button>
-<button onclick="callFlutter3()">callFlutter3</button>
+<button onclick="callFlutter()">通道字符串</button>
+<button onclick="callFlutter2()">通道json</button>
+<button onclick="callFlutter3()">url跳转课程详情</button>
+<button onclick="callFlutter4()">url跳转主日详情</button>
+<button onclick="callFlutter5()">url跳转视频</button>
 <p>&nbsp;</p>
 <script>
     function callFlutter(){
@@ -50,7 +56,13 @@ const String kNavigationExamplePage = '''
        ChurchPlatformJs2Native.postMessage("{\\"name\\":\\"value\\"}"); /* json没有调适成功 */
     }
     function callFlutter3(){
-      document.location = "churchplatform://js2native?arg1=111&arg2=222";
+      document.location = "churchplatform://js2native?type=ShowCourseDetail&courseid=58";
+    }
+    function callFlutter4(){
+      document.location = "churchplatform://js2native?type=ShowSermonDetail&sermonid=45";
+    }
+    function callFlutter5(){
+      document.location = "churchplatform://js2native?type=PlayVideo&videourl=https://abc.mp4&title=titlename&imageurl=http://aaa.com";
     }
 </script>
 ''';
@@ -58,7 +70,7 @@ const String kNavigationExamplePage = '''
 void main() => runApp(MaterialApp(home: WeeklyWidget()));
 
 class WeeklyWidget extends StatefulWidget {
-  static final WeeklyWidgetKey = new GlobalKey<_WeeklyWidgetState>();
+  static final WeeklyWidgetKey = GlobalKey<_WeeklyWidgetState>();
 
   WeeklyWidget({Key key}) : super(key: key);
 
@@ -67,6 +79,8 @@ class WeeklyWidget extends StatefulWidget {
 }
 
 class _WeeklyWidgetState extends State<WeeklyWidget> {
+//  GlobalKey<BaseWebViewWidgetState> _webViewKey = GlobalKey<BaseWebViewWidgetState>();
+
   final Completer<WebViewController> _controller =
   Completer<WebViewController>();
 
@@ -83,8 +97,8 @@ class _WeeklyWidgetState extends State<WeeklyWidget> {
 
   void _reloadHtmlContent() async{
     if(weeklyReport != null && weeklyReport.content != null && weeklyReport.content.isNotEmpty){
-//      String htmlcontent = kNavigationExamplePage;
-      String htmlcontent = weeklyReport.content;
+      String htmlcontent = kNavigationExamplePage;
+//      String htmlcontent = weeklyReport.content;
       final String contentBase64 = base64Encode(const Utf8Encoder().convert(htmlcontent));
       url = 'data:text/html;base64,$contentBase64';
       await _controller.future.then((value) => value.loadUrl(url));
@@ -158,18 +172,7 @@ class _WeeklyWidgetState extends State<WeeklyWidget> {
             print('allowing navigation to $request');
             return NavigationDecision.navigate;
           }
-
-          if (request.url.startsWith('http://') || request.url.startsWith('https://')) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => BaseWebViewWidget(url: request.url,)),
-            );
-            print('blocking navigation to $request}');
-            return NavigationDecision.prevent;
-          }
-
-          print('allowing navigation to $request');
-          return NavigationDecision.navigate;
+          return URLSchemeUtils(context: context).canNavigation(request) ? NavigationDecision.navigate : NavigationDecision.prevent;
         },
         onPageStarted: (String url) {
           print('Page started loading: $url');

@@ -15,7 +15,7 @@ import 'package:church_platform/utils/IAPUnCompletePurchaseStore.dart';
 import 'package:church_platform/utils/IAPUtils.dart';
 import 'package:church_platform/utils/LoggerUtils.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
-import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
+import 'package:church_platform/video/VideofijkplayerWidget.dart';
 import 'package:church_platform/views/courses/CoursePlayWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -96,9 +96,10 @@ void main() {
 }
 
 class CourseDetailsWidget extends StatefulWidget {
+  int courseid;
   Course course;
 
-  CourseDetailsWidget({Key key, this.course}) : super(key: key);
+  CourseDetailsWidget({Key key, this.course, this.courseid}) : super(key: key);
 
   @override
   _CourseDetailsWidgetState createState() => _CourseDetailsWidgetState();
@@ -114,8 +115,15 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
   InAppPurchaseConnection _connection;
   StreamSubscription<List<PurchaseDetails>> _subscription;
   ProductDetails _product; //查到的产品
+
+  //查询课程
+  bool _isFirstLoading = false;
+  String _errmsg;
+
+  //加载产品
   bool _loading = false;
   bool _payLoading = false;
+
   bool isBuySuccess; //是否在该页完成一次购买。
 
   _CourseDetailsWidgetState() {
@@ -130,6 +138,33 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
 
   @override
   void initState() {
+    initStateSelf();
+    super.initState();
+  }
+
+  void initStateSelf() async{
+    if(widget.courseid != null && widget.courseid > 0) {
+      try {
+        setState(() {
+          _isFirstLoading = true;
+        });
+        widget.course = await API().getCourse(widget.courseid);
+        setState(() {
+          _isFirstLoading = false;
+        });
+        _initProductid();
+      } catch (e) {
+        setState(() {
+          _isFirstLoading = false;
+          _errmsg = e.toString();
+        });
+      }
+    }else{
+      _initProductid();
+    }
+  }
+
+  void _initProductid(){
     if (Platform.isIOS) {
       _kConsumableId = widget.course.iapCharge != null
           ? widget.course.iapCharge.productId
@@ -143,8 +178,6 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
         _product = null;
       });
     }
-
-    super.initState();
   }
 
   Future<void> _initStoreInfo() async {
@@ -552,147 +585,155 @@ class _CourseDetailsWidgetState extends State<CourseDetailsWidget> {
         disabledColor: Colors.grey);
   }
 
+  Widget buildBody(BuildContext context){
+    if (_isFirstLoading) {
+      return Center(child: CircularProgressIndicator());
+    }else if(_errmsg != null && _errmsg.isNotEmpty) {
+      return Text(_errmsg);
+    }else{
+      return ModalProgressHUD(
+        inAsyncCall: _loading,
+        opacity: 0.5,
+        progressIndicator: _payLoading ? Container(
+          child:Center(child:Column(crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:<Widget>[CircularProgressIndicator(),SizedBox(height: 20),Text("请耐心等待，不要退出应用")])),
+        ):CircularProgressIndicator(),
+
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1.0, color: Colors.black12),
+                  // 边色与边宽度
+//                color: Colors.black26,//底色
+                  borderRadius:
+                  const BorderRadius.all(const Radius.circular(2.0)),
+                  // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
+                ),
+                child:
+//              VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
+                Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: <Widget>[
+                    widget.course.medias.length > 0 &&
+                        widget.course.medias[0].hDURL != null &&
+                        widget.course.medias[0].hDURL.isNotEmpty &&
+                        widget.course.is_buy
+                        ? Offstage(
+                      offstage: true,
+                      child: Container(
+                          width:
+                          MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.width *
+                              0.8 /
+                              16 *
+                              9,
+                          child: VideofijkplayerWidget(
+                              url: widget.course.medias[0].hDURL)),
+                    )
+                        : Container(),
+                    CachedNetworkImage(
+                      imageUrl: widget.course.medias[0].image,
+                      imageBuilder: (context, imageProvider) => Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: <Widget>[
+                          Image(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      ),
+                      placeholder: (context, url) => Container(
+                        //color: Colors.grey,
+                        decoration: BoxDecoration(
+                          border:
+                          Border.all(width: 2.0, color: Colors.black12),
+                          // 边色与边宽度
+                          color: Colors.black26,
+                          //底色
+                          borderRadius: const BorderRadius.all(
+                              const Radius.circular(2.0)),
+                          // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
+                        ),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+//                              Center(child: Container(),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                      //灰色边框
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 1.0, color: Colors.black12), // 边色与边宽度
+                          color: Colors.black12, //底色
+                          borderRadius: const BorderRadius.all(
+                              const Radius.circular(2.0)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              //名字
+              Container(
+                padding: const EdgeInsets.all(5),
+                child: Text(
+                  widget.course.title,
+//              softWrap: true,
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              //价格
+              Container(
+                padding: const EdgeInsets.all(5),
+                child: Text(
+                  _product != null
+                      ? _product.price
+                      : "￥" + widget.course.platformPrice(),
+//              softWrap: true,
+                  style: TextStyle(fontSize: 18, color: Colors.red),
+                ),
+              ),
+              //详情
+              widget.course.content != null
+                  ? Html(data: widget.course.content)
+                  : Container(),
+              //支付/观看
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                child: buildPayBtn(context),
+//              margin: new EdgeInsets.only(
+//                  top: 20.0
+//              ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
       onWillPop: (){
         Navigator.pop(context, isBuySuccess);
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.course.title),
+          title: Text(widget.course != null ? widget.course.title : ""),
           //centerTitle: true,
           elevation:
               (Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
         ),
-        body: ModalProgressHUD(
-          inAsyncCall: _loading,
-          opacity: 0.5,
-          progressIndicator: _payLoading ? Container(
-                  child:Center(child:Column(crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:<Widget>[CircularProgressIndicator(),SizedBox(height: 20),Text("请耐心等待，不要退出应用")])),
-                 ):CircularProgressIndicator(),
-
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-//          VedioPlayerWidget(url:widget.course.video),
-//          VedioPlayerWidget(url:widget.course.medias[0].hDURL),
-                Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1.0, color: Colors.black12),
-                    // 边色与边宽度
-//                color: Colors.black26,//底色
-                    borderRadius:
-                        const BorderRadius.all(const Radius.circular(2.0)),
-                    // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
-                  ),
-                  child:
-//              VideofijkplayerWidget(url: widget.course.medias[0].hDURL)),
-                      Stack(
-                    alignment: AlignmentDirectional.center,
-                    children: <Widget>[
-                      widget.course.medias.length > 0 &&
-                              widget.course.medias[0].hDURL != null &&
-                              widget.course.medias[0].hDURL.isNotEmpty &&
-                              widget.course.is_buy
-                          ? Offstage(
-                              offstage: true,
-                              child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  height: MediaQuery.of(context).size.width *
-                                      0.8 /
-                                      16 *
-                                      9,
-                                  child: VideofijkplayerWidget(
-                                      url: widget.course.medias[0].hDURL)),
-                            )
-                          : Container(),
-                      CachedNetworkImage(
-                        imageUrl: widget.course.medias[0].image,
-                        imageBuilder: (context, imageProvider) => Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: <Widget>[
-                            Image(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                        placeholder: (context, url) => Container(
-                          //color: Colors.grey,
-                          decoration: BoxDecoration(
-                            border:
-                                Border.all(width: 2.0, color: Colors.black12),
-                            // 边色与边宽度
-                            color: Colors.black26,
-                            //底色
-                            borderRadius: const BorderRadius.all(
-                                const Radius.circular(2.0)),
-                            // boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
-                          ),
-                          child: Center(
-                            child: CircularProgressIndicator(),
-//                              Center(child: Container(),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            //灰色边框
-                            Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 1.0, color: Colors.black12), // 边色与边宽度
-                            color: Colors.black12, //底色
-                            borderRadius: const BorderRadius.all(
-                                const Radius.circular(2.0)),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                //名字
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  child: Text(
-                    widget.course.title,
-//              softWrap: true,
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-                //价格
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  child: Text(
-                    _product != null
-                        ? _product.price
-                        : "￥" + widget.course.platformPrice(),
-//              softWrap: true,
-                    style: TextStyle(fontSize: 18, color: Colors.red),
-                  ),
-                ),
-                //详情
-                widget.course.content != null
-                    ? Html(data: widget.course.content)
-                    : Container(),
-                //支付/观看
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  child: buildPayBtn(context),
-//              margin: new EdgeInsets.only(
-//                  top: 20.0
-//              ),
-                ),
-              ],
-            ),
-          ),
-        ), // This trailing comma makes auto-formatting nicer for build methods.
+        body: buildBody(context), // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );
   }

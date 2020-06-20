@@ -167,6 +167,12 @@ class API {
   }
 
 
+
+  Future<Course> getCourse(int courseid) async {
+    final baseResponse = await NetClient<Course>().request(url: "/course/$courseid");
+    return baseResponse.data;
+  }
+
 //-----------支付-------------
   Future<String> iapCreateOrder(int courseID) async {
     final baseResponse = await NetClient<OrderResult>().request(method: NetMethod.POST, url: "/payments/orders",params: {'course_id': courseID});

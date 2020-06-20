@@ -6,7 +6,7 @@ import 'package:church_platform/net/common/API.dart';
 import 'package:church_platform/net/models/Church.dart';
 import 'package:church_platform/net/results/WeaklyReport.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
-import 'package:church_platform/vedio/VideofijkplayerWidget.dart';
+import 'package:church_platform/video/VideofijkplayerWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -319,9 +319,6 @@ class _ChurchWidgetState extends State<ChurchWidget> {
 ////            height: 240,
 ////            fit: BoxFit.cover,
 //            ),
-//            VedioPlayerNativeWidget(url:"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
-//            VedioPlayerWidget(
-//                url: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"),
 //            Container(
 //              width: double.infinity,
 //              height: MediaQuery.of(context).size.width/16*9,

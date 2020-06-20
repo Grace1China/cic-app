@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 void main() {
-  runApp(new MaterialApp(home: new VedioPlayerNativeWidget(url:"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4")));
+  runApp(new MaterialApp(home: new VideoPlayerNativeWidgetTest(url:"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4")));
 }
 
-class VedioPlayerNativeWidget extends StatefulWidget {
+class VideoPlayerNativeWidgetTest extends StatefulWidget {
   String url;
-  VedioPlayerNativeWidget({Key key, this.url}) : super(key: key);
+  VideoPlayerNativeWidgetTest({Key key, this.url}) : super(key: key);
 
   @override
-  _VedioPlayerNativeWidgetState createState() => _VedioPlayerNativeWidgetState();
+  _VideoPlayerNativeWidgetTestState createState() => _VideoPlayerNativeWidgetTestState();
 }
 
-class _VedioPlayerNativeWidgetState extends State<VedioPlayerNativeWidget> {
+class _VideoPlayerNativeWidgetTestState extends State<VideoPlayerNativeWidgetTest> {
   VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
 

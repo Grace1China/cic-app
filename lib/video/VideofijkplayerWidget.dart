@@ -1,7 +1,10 @@
-import 'package:church_platform/vedio/VideoPlayerManager.dart';
+import 'package:church_platform/video/VideoPlayerManager.dart';
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
 
+
+//https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4
+//https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4
 
 class VideofijkplayerWidget extends StatefulWidget {
   final String url;
@@ -15,8 +18,6 @@ class VideofijkplayerWidget extends StatefulWidget {
     selfState = VideofijkplayerWidgetState();
     return selfState;
   }
-
-
 }
 
 class VideofijkplayerWidgetState extends State<VideofijkplayerWidget> {

@@ -11,14 +11,14 @@ import 'package:video_player/video_player.dart';
 //  }
 //}
 
-class VedioPlayerNativeScreen extends StatefulWidget {
-  VedioPlayerNativeScreen({Key key}) : super(key: key);
+class VideoPlayerNativeScreen extends StatefulWidget {
+  VideoPlayerNativeScreen({Key key}) : super(key: key);
 
   @override
-  _VedioPlayerNativeScreenState createState() => _VedioPlayerNativeScreenState();
+  _VideoPlayerNativeScreenState createState() => _VideoPlayerNativeScreenState();
 }
 
-class _VedioPlayerNativeScreenState extends State<VedioPlayerNativeScreen> {
+class _VideoPlayerNativeScreenState extends State<VideoPlayerNativeScreen> {
   VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
 
