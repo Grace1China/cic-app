@@ -72,7 +72,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^0.1.9
 
+# 首次生成native的launch。然后再native上改效果。
+#  flutter pub run flutter_native_splash:create
+#flutter_native_splash:
+#  image: images/1b.png
+#  color: F4BB7F
+#  fill: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

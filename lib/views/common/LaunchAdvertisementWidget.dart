@@ -19,22 +19,22 @@ class LaunchAdvertisementWidget extends StatefulWidget {
 class _LaunchAdvertisementWidgetState extends State<LaunchAdvertisementWidget> {
 
   List<LauncModel> models = [
-    LauncModel(bgColor:Color.fromRGBO(244,187,127,1),bgImage:"images/1b.png",centerImage: "images/1t.png",logoImage: "images/imslogo.png",title: "异象",subTitle:"成为当代话语教会复兴运动的灯台" ),
-    LauncModel(bgColor:Color.fromRGBO(174,195,170,1),bgImage:"images/2b.png",centerImage: "images/2t.png",logoImage: "images/imslogo.png",title: "植堂",subTitle:"建立本地教会" ),
-    LauncModel(bgColor:Color.fromRGBO(255,113,97,1),bgImage:"images/3b.png",centerImage: "images/3t.png",logoImage: "images/imslogo.png",title: "中央厨房",subTitle:"装备本地交会，复制健康教会模式" ),];
+    LauncModel(bgColor:Color.fromRGBO(244,187,127,1),imageWidth:224,imageHeight:182, bgImage:"images/1b.png",centerImage: "images/1t.png",logoImage: "images/imslogo.png",title: "异象",subTitle:"成为当代话语教会复兴运动的灯台" ),
+    LauncModel(bgColor:Color.fromRGBO(174,195,170,1),imageWidth:290,imageHeight:206, bgImage:"images/2b.png",centerImage: "images/2t.png",logoImage: "images/imslogo.png",title: "植堂",subTitle:"建立本地教会" ),
+    LauncModel(bgColor:Color.fromRGBO(255,113,97,1),imageWidth:286,imageHeight:200, bgImage:"images/3b.png",centerImage: "images/3t.png",logoImage: "images/imslogo.png",title: "中央厨房",subTitle:"装备本地交会，复制健康教会模式" ),];
 
-  List<Widget> images = List<Widget>();
+//  List<Widget> images = List<Widget>();
   @override
   void initState() {
     super.initState();
-    for(int i = 0; i< models.length; i ++){
-      images.add(Image.asset(
-        models[i].bgImage,
-        width: double.infinity,
-        height: double.infinity,
-        fit: BoxFit.fill,
-      ));
-    }
+//    for(int i = 0; i< models.length; i ++){
+//      images.add(Image.asset(
+//        models[i].bgImage,
+//        width: double.infinity,
+//        height: double.infinity,
+//        fit: BoxFit.fill,
+//      ));
+//    }
   }
 
   @override
@@ -51,7 +51,12 @@ class _LaunchAdvertisementWidgetState extends State<LaunchAdvertisementWidget> {
           width: double.infinity,
           height: double.infinity,
           color: models[index].bgColor,),
-        images[index],
+        Image.asset(
+          model.bgImage,
+          width: MediaQuery.of(context).size.width,//double.infinity,
+          height: MediaQuery.of(context).size.height,//double.infinity,
+          fit: BoxFit.fill,
+        ),
 //      Align(alignment: Alignment(0,-0.2),
 ////        child: FractionallySizedBox(
 ////          alignment: Alignment.bottomCenter,
@@ -106,25 +111,31 @@ class _LaunchAdvertisementWidgetState extends State<LaunchAdvertisementWidget> {
 ////            },
 ////          ),
 ////        ),),
-      Align(alignment: Alignment(0,0.65),
+      Align(alignment: Alignment(0,0.5),
           child:Container(
 //            color: Colors.blueAccent,
             width: MediaQuery.of(context).size.width,
             height: 480,
             child: Column(children: <Widget>[
-              AsperctRaioImage.asset(
+//              AsperctRaioImage.asset(
+//                model.centerImage,
+//                builder: (context, snapshot, url) {
+//                  return
+//                    Container(
+//                      width: snapshot.data.width.toDouble() / 3,
+//                      height: snapshot.data.height.toDouble() / 3,
+//                      decoration: BoxDecoration(
+//                        image: DecorationImage(
+//                            image: AssetImage(url), fit: BoxFit.cover),
+//                      ),
+//                    );
+//                },
+//              ),
+              Image.asset(
                 model.centerImage,
-                builder: (context, snapshot, url) {
-                  return
-                    Container(
-                      width: snapshot.data.width.toDouble() / 3,
-                      height: snapshot.data.height.toDouble() / 3,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(url), fit: BoxFit.cover),
-                      ),
-                    );
-                },
+                width: model.imageWidth,
+                height: model.imageHeight,
+                fit: BoxFit.fill,
               ),
               SizedBox(height: 50,),
               Text(model.title,style: TextStyle(color:Colors.white,fontSize:26,fontWeight: FontWeight.bold),),
@@ -213,6 +224,8 @@ class _LaunchAdvertisementWidgetState extends State<LaunchAdvertisementWidget> {
 
 class LauncModel{
   Color bgColor; //解决加载图片慢的问题。
+  double imageWidth;  //解决加载图片慢的问题。
+  double imageHeight;
   String bgImage;
   String centerImage;
   String logoImage;
@@ -221,6 +234,8 @@ class LauncModel{
 
   LauncModel(
       {this.bgColor,
+        this.imageWidth,
+        this.imageHeight,
         this.bgImage,
         this.centerImage,
         this.logoImage,
