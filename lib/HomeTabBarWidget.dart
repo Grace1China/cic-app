@@ -141,6 +141,7 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> with AutomaticKeepA
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
 //        child:TabBarView(children: _widgetOptions,),

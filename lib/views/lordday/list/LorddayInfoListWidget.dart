@@ -64,9 +64,10 @@ class _LorddayInfoListWidgetState extends State<LorddayInfoListWidget> {
           isloading = true;
         });
       }else{
-        setState(() {
-          isRefreshLoading = true;
-        });
+        //不显示refresh中心圈圈
+//        setState(() {
+//          isRefreshLoading = true;
+//        });
       }
       NetResponseWithPage<Sermon> response = await API().getLorddayInfoList(page: 1);
       setState(() {
@@ -100,6 +101,7 @@ class _LorddayInfoListWidgetState extends State<LorddayInfoListWidget> {
 
   void loadMore() async{
     try {
+      //不显示refresh中心圈圈
 //      setState(() {
 //        isRefreshLoading = true;
 //      });
@@ -216,7 +218,7 @@ class _LorddayInfoListWidgetState extends State<LorddayInfoListWidget> {
         child: EasyRefresh(
           controller: _controller,
           enableControlFinishRefresh: true,
-          enableControlFinishLoad: true,
+          enableControlFinishLoad: false,
           onRefresh:() async {this.refresh();},
           onLoad:() async {this.loadMore();},
           child: ListView.builder(

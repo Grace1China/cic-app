@@ -6,6 +6,7 @@ import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+//TODO: 长按图片保存，扫码支付。
 class DonateWidget extends StatefulWidget {
   static final DonateWidgetKey = new GlobalKey<_DonateWidgetState>();
   DonateWidget({Key key}) : super(key: key);

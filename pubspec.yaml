@@ -59,6 +59,7 @@ dependencies:
 
   date_format: #^1.0.8
   flutter_easyrefresh:
+    path: ../flutter_easyrefresh
 
   dio:
 
@@ -96,19 +97,15 @@ flutter:
     - images/pic3.jpg
     - images/church1.png
     - images/receive.png
-    - images/1 b.png
-    - images/1 t.png
-    - images/2 b.png
-    - images/2 t.png
-    - images/3 b.png
-    - images/3 t.png
-    - images/4 b.png
-    - images/4 t.png
-    - images/5 b.png
-    - images/5 t.png
-    - images/bai.png
-    - images/ims logo.png
-    - images/lv.png
+    - images/1b.png
+    - images/1t.png
+    - images/2b.png
+    - images/2t.png
+    - images/3b.png
+    - images/3t.png
+    - images/bar_normal.png
+    - images/bar_selected.png
+    - images/imslogo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

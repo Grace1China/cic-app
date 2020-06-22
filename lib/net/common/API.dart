@@ -158,9 +158,12 @@ class API {
     if (response.statusCode == 200) {
       final baseResponse = NetResponseWithPage<Course>.fromJson(json.decode(response.body));
       if (baseResponse.errCode == "0") {
+        if(baseResponse.data.length == 0){
+          throw Exception('没有找到课程');
+        }
         return baseResponse;
       }
-      throw Exception('没有课程信息');
+      throw Exception('没有找到课程');
     } else {
       throw Exception(response.statusCode.toString() + ":" + response.body);
     }

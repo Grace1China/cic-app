@@ -2,6 +2,7 @@
 import 'package:church_platform/HomeTabBarWidget.dart';
 import 'package:church_platform/views/account/AccountWidget.dart';
 import 'package:church_platform/views/account/LoginWidget.dart';
+import 'package:church_platform/views/common/LaunchAdvertisementWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,19 +14,29 @@ import 'utils/CPTheme.dart';
 //项目地址 /Users/kevin/FlutterProjects/mytestapps/flutter_app_routers
 
 
-void main() => runApp(MyApp());
+void main() => runApp(MainApp(key: MainApp.MainAppKey,));
 
-class MyApp extends StatefulWidget {
-  MyApp({Key key}) : super(key: key);
+class MainApp extends StatefulWidget {
+  static final MainAppKey = new GlobalKey<_MainAppState>();
+
+  MainApp({Key key}) : super(key: key);
   @override
-  _MyAppState createState() => _MyAppState();
+  _MainAppState createState() => _MainAppState();
 }
 
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+//    Navigator.pushNamed(context, RouteNames.SPLASH);
+//    Navigator.push(
+//      context,
+//      PageRouteBuilder(
+//        pageBuilder: (_, _, _) => LaunchAdvertisementWidget(),
+//        transitionDuration: Duration(seconds: 0),
+//      ),
+//    );
   }
 
   @override
@@ -56,6 +67,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     });
   }
 
+//  void gotoHome(){
+//    Navigator.of(context).pushReplacementNamed('/');
+//  }
   @override
   Widget build(BuildContext context) {
     //    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(  没反应
@@ -71,11 +85,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             ? kIOSTheme
             : kAndroidTheme,
         darkTheme: kiOSDarkTheme, //ios和android用同一个黑暗主题。
+//        home:LaunchAdvertisementWidget(),
 //      home: HomeTabBarWidget(key:myTabbedPageKey,title: '主页'),
-        initialRoute: '/',
+        initialRoute: RouteNames.SPLASH,
         routes: {
-          '/': (context) => HomeTabBarWidget(
-              key: HomeTabBarWidget.myTabbedPageKey, title: '主页'),
+          RouteNames.HOME: (context) => HomeTabBarWidget(key: HomeTabBarWidget.myTabbedPageKey, title: '主页'),
+          RouteNames.SPLASH:(context) => LaunchAdvertisementWidget(),
 //          '/second': (context) => SecondScreen(), //当push多个同名字的时候，Navigator.of(context).popUntil(ModalRoute.withName("/second"));失效。
         },
         onGenerateRoute: (settings) {
@@ -108,6 +123,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
 
 class RouteNames {
+  static const HOME = "/";
+  static const SPLASH = "/Splash";
   static const LOGIN = '/login';
   static const ACCOUNT = '/account';
 }

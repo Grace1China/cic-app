@@ -271,6 +271,8 @@ class _ChurchWidgetState extends State<ChurchWidget> {
 
     return Scaffold(
       appBar: AppBar(
+//        automaticallyImplyLeading: false,
+//        leading: Text(""),
         title: Text('教会'),
 //        backgroundColor: Color(0xFFFF1744), //背景色，在theme优先级之上
         //centerTitle: true, //ios默认居中，android需要制定为true。
