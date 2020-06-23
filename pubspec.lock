@@ -180,7 +180,7 @@ packages:
       name: flutter_pdfview
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.2+4"
+    version: "1.0.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -198,6 +198,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.1"
+  gallery_saver:
+    dependency: "direct main"
+    description:
+      name: gallery_saver
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.1"
   html:
     dependency: transitive
     description:
@@ -226,6 +233,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.12"
+  image_pickers:
+    dependency: "direct main"
+    description:
+      name: image_pickers
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.7+6"
   in_app_purchase:
     dependency: "direct main"
     description:

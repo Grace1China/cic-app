@@ -54,7 +54,8 @@ dependencies:
   oktoast: #^2.2.1
   modal_progress_hud: #^0.1.3
 
-
+  image_pickers:
+  gallery_saver: ^2.0.1
   cached_network_image: ^2.0.0-rc
 
   date_format: #^1.0.8

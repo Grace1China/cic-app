@@ -1,4 +1,19 @@
 PODS:
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
+    - AFNetworking/NSURLSession
   - audioplayers (0.0.1):
     - Flutter
   - BIJKPlayer (0.7.3)
@@ -48,6 +63,12 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - gallery_saver (0.0.1):
+    - Flutter
+  - image_pickers (0.0.1):
+    - AFNetworking
+    - Flutter
+    - ZLPhotoBrowser (~> 3.1.2)
   - in_app_purchase (0.0.1):
     - Flutter
   - path_provider (0.0.1):
@@ -56,6 +77,9 @@ PODS:
     - Flutter
   - path_provider_macos (0.0.1):
     - Flutter
+  - SDWebImage (5.8.1):
+    - SDWebImage/Core (= 5.8.1)
+  - SDWebImage/Core (5.8.1)
   - shared_preferences (0.0.1):
     - Flutter
   - shared_preferences_macos (0.0.1):
@@ -73,6 +97,8 @@ PODS:
     - Flutter
   - webview_flutter (0.0.1):
     - Flutter
+  - ZLPhotoBrowser (3.1.4):
+    - SDWebImage
 
 DEPENDENCIES:
   - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
@@ -81,6 +107,8 @@ DEPENDENCIES:
   - flutter_braintree (from `.symlinks/plugins/flutter_braintree/ios`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - gallery_saver (from `.symlinks/plugins/gallery_saver/ios`)
+  - image_pickers (from `.symlinks/plugins/image_pickers/ios`)
   - in_app_purchase (from `.symlinks/plugins/in_app_purchase/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - path_provider_linux (from `.symlinks/plugins/path_provider_linux/ios`)
@@ -96,10 +124,13 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AFNetworking
     - BIJKPlayer
     - Braintree
     - BraintreeDropIn
     - FMDB
+    - SDWebImage
+    - ZLPhotoBrowser
 
 EXTERNAL SOURCES:
   audioplayers:
@@ -114,6 +145,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_pdfview/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  gallery_saver:
+    :path: ".symlinks/plugins/gallery_saver/ios"
+  image_pickers:
+    :path: ".symlinks/plugins/image_pickers/ios"
   in_app_purchase:
     :path: ".symlinks/plugins/in_app_purchase/ios"
   path_provider:
@@ -140,6 +175,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
+  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   audioplayers: 84f968cea3f2deab00ec4f8ff53358b3c0b3992c
   BIJKPlayer: 1ecf2e48a182e2e4618d47a01d04814ee4126c96
   Braintree: 586e4d274398fabe9d70ab790eefca41660b8a17
@@ -150,10 +186,13 @@ SPEC CHECKSUMS:
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
+  image_pickers: 42e1a69c6ef9ea90e3d8dc5e0d7665e8d799f6fa
   in_app_purchase: 3e2155afa9d03d4fa32d9e62d567885080ce97d6
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
+  SDWebImage: e3eae2eda88578db0685a0c88597fdadd9433f05
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
   shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
@@ -162,6 +201,7 @@ SPEC CHECKSUMS:
   video_player_web: da8cadb8274ed4f8dbee8d7171b420dedd437ce7
   wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
+  ZLPhotoBrowser: 638189d99c51f78013c9a0369e385db4a4b9673f
 
 PODFILE CHECKSUM: 73d69d282a87aa0aafabdecb47f632fc347a9aac
 
