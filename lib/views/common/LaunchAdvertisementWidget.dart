@@ -111,7 +111,7 @@ class _LaunchAdvertisementWidgetState extends State<LaunchAdvertisementWidget> {
 ////            },
 ////          ),
 ////        ),),
-      Align(alignment: Alignment(0,0.5),
+      Align(alignment: Alignment(0,0.4),
           child:Container(
 //            color: Colors.blueAccent,
             width: MediaQuery.of(context).size.width,
@@ -133,8 +133,10 @@ class _LaunchAdvertisementWidgetState extends State<LaunchAdvertisementWidget> {
 //              ),
               Image.asset(
                 model.centerImage,
-                width: model.imageWidth,
-                height: model.imageHeight,
+//                width: model.imageWidth,
+//                height: model.imageHeight,
+                width: 235,//285,
+                height: 182,//200,
                 fit: BoxFit.fill,
               ),
               SizedBox(height: 50,),
