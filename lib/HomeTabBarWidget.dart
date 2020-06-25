@@ -28,21 +28,21 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> with AutomaticKeepA
 //      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
     WeeklyWidget(key: WeeklyWidget.WeeklyWidgetKey),
-    DonateWidget(),
+    DonateWidget(key:DonateWidget.DonateWidgetKey),
 //    SpiritualMainWidget(),
     LorddayInfoListWidget(key: LorddayInfoListWidget.myLorddayInfoListWidgetKey),
-    CourseStoreWidget(),
+    CourseStoreWidget(key:CourseStoreWidget.myCourseStoreWidgetKey),
   ];
 
-  void reloadWidgets(){
-    _widgetOptions = <Widget>[
-      WeeklyWidget(key: WeeklyWidget.WeeklyWidgetKey),
-      DonateWidget(key:DonateWidget.DonateWidgetKey),
-//    SpiritualMainWidget(),
-      LorddayInfoListWidget(key: LorddayInfoListWidget.myLorddayInfoListWidgetKey),
-      CourseStoreWidget(key:CourseStoreWidget.myCourseStoreWidgetKey),
-    ];
-  }
+//  void reloadWidgets(){
+//    _widgetOptions = <Widget>[
+//      WeeklyWidget(key: WeeklyWidget.WeeklyWidgetKey),
+//      DonateWidget(key:DonateWidget.DonateWidgetKey),
+////    SpiritualMainWidget(),
+//      LorddayInfoListWidget(key: LorddayInfoListWidget.myLorddayInfoListWidgetKey),
+//      CourseStoreWidget(key:CourseStoreWidget.myCourseStoreWidgetKey),
+//    ];
+//  }
 
   void tryShowAccount() async{
     bool isLogin = await SharedPreferencesUtils.isLogin();
@@ -123,12 +123,13 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> with AutomaticKeepA
     _onItemTapped(index);
   }
 
-  void _onItemTapped(int index) async {
-    bool b = await SharedPreferencesUtils.isLogin();
-    if (!b && [1].contains(index)) {
-      Navigator.pushNamed(context, '/login');
-      return;
-    }
+  void _onItemTapped(int index){
+    //不论任何一个tab，都可以不登录进入。
+//    bool b = await SharedPreferencesUtils.isLogin();
+//    if (!b && [1].contains(index)) {
+//      Navigator.pushNamed(context, '/login');
+//      return;
+//    }
 
     if(_selectedIndex != index){
       setState(() {
@@ -143,12 +144,12 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> with AutomaticKeepA
     return Scaffold(
 
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+//        child: _widgetOptions.elementAt(_selectedIndex),
 //        child:TabBarView(children: _widgetOptions,),
-//        child:IndexedStack(
-//          index: _selectedIndex,
-//          children: _widgetOptions,
-//        ),
+        child:IndexedStack(
+          index: _selectedIndex,
+          children: _widgetOptions,
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

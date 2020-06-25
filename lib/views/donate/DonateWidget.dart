@@ -38,6 +38,11 @@ class _DonateWidgetState extends State<DonateWidget> {
   void refresh() async{
 
     try{
+      setState(() {
+        isRefreshLoading = true;
+        church = null;
+        errmsg = null;
+      });
       Church c = await API().getChurch();
       setState(() {
         isRefreshLoading = false;
