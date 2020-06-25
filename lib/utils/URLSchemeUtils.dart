@@ -13,14 +13,22 @@ class URLSchemeUtils{
   URLSchemeUtils({@required this.context}) : super();
 
   bool canNavigation(NavigationRequest request){
-
     if (request.url.startsWith('http://') || request.url.startsWith('https://')) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => BaseWebViewWidget(url: request.url,)),
-      );
-      print('blocking navigation to $request}');
-      return false;
+
+      Uri u = Uri.parse(request.url);
+      String target = u.queryParameters["target"];
+      if(target == "_blank"){ //_blank新页面，_self是自己，不写null也是自己。
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => BaseWebViewWidget(url: request.url,)),
+        );
+        print('blocking navigation to $request}');
+        return false;
+      }
+
+      //_self是自己，不写也是自己。
+      print('allowing navigation to $request');
+      return true;
     }
 
     if (request.url.startsWith('churchplatform://js2native')) {
@@ -64,12 +72,6 @@ class URLSchemeUtils{
       print('blocking navigation to $request}');
       return false;
     }
-//            String arg1 = u.queryParameters['arg1'];
-//            String arg2 = u.queryParameters['arg2'];
-//
-//            Scaffold.of(context).showSnackBar(
-//              SnackBar(content: Text(request.url + ",参数1：" + arg1 + ",参数2:" + arg2)),
-//            );
 
     print('allowing navigation to $request');
     return true;
