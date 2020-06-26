@@ -6,6 +6,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:church_platform/utils/SharedPreferencesUtils.dart';
 import 'package:church_platform/utils/URLSchemeUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -15,8 +16,9 @@ void main() => runApp(MaterialApp(home: BaseWebViewWidget(url: "https://www.baid
 
 class BaseWebViewWidget extends StatefulWidget {
   String url;
+  bool needToken = true;
 
-  BaseWebViewWidget({Key key, this.url}) : super(key: key);
+  BaseWebViewWidget({Key key, this.url,this.needToken = true}) : super(key: key);
 
   @override
   BaseWebViewWidgetState createState() => BaseWebViewWidgetState();
@@ -27,6 +29,55 @@ class BaseWebViewWidgetState extends State<BaseWebViewWidget> {
   bool isRefreshLoading = false;
   final Completer<WebViewController> _controller =
   Completer<WebViewController>();
+  String urlWithParams = "_blank";
+
+  BaseWebViewWidgetState(){
+    initUrl();
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    initUrl();
+  }
+
+  void initUrl() async{
+    if(widget.needToken){
+      String urltemp = widget.url;
+      final token = await SharedPreferencesUtils.getToken();
+      if (token != null && token.isNotEmpty) {
+        urltemp += "?token=" + token;
+        setState(() {
+          urlWithParams = urltemp;
+        });
+
+        _reloadWebViewURL();
+      }
+    }else{
+      setState(() {
+        urlWithParams = widget.url;
+      });
+      _reloadWebViewURL();
+    }
+  }
+
+  void _reloadWebViewURL() async{
+    String urltemp = widget.url;
+    final token = await SharedPreferencesUtils.getToken();
+    if (token != null && token.isNotEmpty) {
+      Map<String, String> headers = {"Authorization": "Bearer " + token};
+      urltemp += "?token=" + token;
+      setState(() {
+        urlWithParams = urltemp;
+      });
+      await _controller.future.then((value) => value.loadUrl(urlWithParams,headers: headers));
+    }else{
+      setState(() {
+        urlWithParams = urltemp;
+      });
+      await _controller.future.then((value) => value.loadUrl(urlWithParams));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +107,9 @@ class BaseWebViewWidgetState extends State<BaseWebViewWidget> {
           onWebViewCreated: (WebViewController webViewController) {
             _controller.complete(webViewController);
             isRefreshLoading = false;
+//            if(widget.needToken){
+//              _reloadWebViewURL();
+//            }
           },
           // TODO(iskakaushik): Remove this when collection literals makes it to stable.
           // ignore: prefer_collection_literals
@@ -63,7 +117,7 @@ class BaseWebViewWidgetState extends State<BaseWebViewWidget> {
             _toasterJavascriptChannel(context),
           ].toSet(),
           navigationDelegate: (NavigationRequest request) {
-            if (request.url == widget.url){
+            if (request.url == urlWithParams){
               print('allowing navigation to $request');
               return NavigationDecision.navigate;
             }

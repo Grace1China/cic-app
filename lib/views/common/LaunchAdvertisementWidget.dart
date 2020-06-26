@@ -19,7 +19,7 @@ class LaunchAdvertisementWidget extends StatefulWidget {
 class _LaunchAdvertisementWidgetState extends State<LaunchAdvertisementWidget> {
 
   List<LauncModel> models = [
-    LauncModel(bgColor:Color.fromRGBO(244,187,127,1),imageWidth:224,imageHeight:182, bgImage:"images/1b.png",centerImage: "images/1t.png",logoImage: "images/imslogo.png",title: "异象",subTitle:"成为当代话语教会复兴运动的灯台" ),
+    LauncModel(bgColor:Color.fromRGBO(244,187,127,1),imageWidth:224,imageHeight:182, bgImage:"images/1b.png",centerImage: "images/1t.png",logoImage: "images/imslogo.png",title: "异象",subTitle:"成为当代华语教会复兴运动的灯台" ),
     LauncModel(bgColor:Color.fromRGBO(174,195,170,1),imageWidth:290,imageHeight:206, bgImage:"images/2b.png",centerImage: "images/2t.png",logoImage: "images/imslogo.png",title: "植堂",subTitle:"建立本地教会" ),
     LauncModel(bgColor:Color.fromRGBO(255,113,97,1),imageWidth:286,imageHeight:200, bgImage:"images/3b.png",centerImage: "images/3t.png",logoImage: "images/imslogo.png",title: "中央厨房",subTitle:"装备本地交会，复制健康教会模式" ),];
 
@@ -111,11 +111,11 @@ class _LaunchAdvertisementWidgetState extends State<LaunchAdvertisementWidget> {
 ////            },
 ////          ),
 ////        ),),
-      Align(alignment: Alignment(0,0.4),
+      Align(alignment: Alignment(0,0.5),
           child:Container(
 //            color: Colors.blueAccent,
             width: MediaQuery.of(context).size.width,
-            height: 480,
+            height: 520,
             child: Column(children: <Widget>[
 //              AsperctRaioImage.asset(
 //                model.centerImage,
@@ -139,7 +139,7 @@ class _LaunchAdvertisementWidgetState extends State<LaunchAdvertisementWidget> {
                 height: 182,//200,
                 fit: BoxFit.fill,
               ),
-              SizedBox(height: 50,),
+              SizedBox(height: 80,),
               Text(model.title,style: TextStyle(color:Colors.white,fontSize:26,fontWeight: FontWeight.bold),),
               SizedBox(height: 8,),
               Text(model.subTitle,style: TextStyle(color:Colors.white,fontSize:17),),
@@ -191,7 +191,7 @@ class _LaunchAdvertisementWidgetState extends State<LaunchAdvertisementWidget> {
                     ),
                   ],),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 40,),
               index == 2 ? Container(
 //                padding:EdgeInsets.all(5) ,
                 height: 34,

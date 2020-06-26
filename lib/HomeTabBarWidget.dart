@@ -1,5 +1,6 @@
 import 'package:church_platform/main.dart';
 import 'package:church_platform/utils/SharedPreferencesUtils.dart';
+import 'package:church_platform/views/church/TabWebViewMainWidget.dart';
 import 'package:church_platform/views/church/WeeklyWidget.dart';
 import 'package:church_platform/views/courses/store/CourseStoreWidget.dart';
 import 'package:church_platform/views/donate/DonateWidget.dart';
@@ -27,10 +28,13 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> with AutomaticKeepA
 //  static const TextStyle optionStyle =
 //      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    WeeklyWidget(key: WeeklyWidget.WeeklyWidgetKey),
+//    WeeklyWidget(key: WeeklyWidget.WeeklyWidgetKey),
+    TabWebViewMainWidget(key: TabWebViewMainWidget.ChurchMainWidgetKey,tabType: TabType.CHURCH,),
     DonateWidget(key:DonateWidget.DonateWidgetKey),
+
 //    SpiritualMainWidget(),
-    LorddayInfoListWidget(key: LorddayInfoListWidget.myLorddayInfoListWidgetKey),
+//    LorddayInfoListWidget(key: LorddayInfoListWidget.myLorddayInfoListWidgetKey),
+    TabWebViewMainWidget(key: TabWebViewMainWidget.LordDayMainWidgetKey,tabType: TabType.LORDINFO,),
     CourseStoreWidget(key:CourseStoreWidget.myCourseStoreWidgetKey),
   ];
 
@@ -105,14 +109,21 @@ class _HomeTabBarWidgetState extends State<HomeTabBarWidget> with AutomaticKeepA
 //      reloadWidgets(); //解决WeeklyWidget的webview从空刷新成有数据失败的问题。 就不需要刷新了。
 //    });
 
-    if (WeeklyWidget.WeeklyWidgetKey.currentState != null) {
-      WeeklyWidget.WeeklyWidgetKey.currentState.refresh();
+//    if (WeeklyWidget.WeeklyWidgetKey.currentState != null) {
+//      WeeklyWidget.WeeklyWidgetKey.currentState.refresh();
+//    }
+    if (TabWebViewMainWidget.ChurchMainWidgetKey.currentState != null) {
+      TabWebViewMainWidget.ChurchMainWidgetKey.currentState.refresh(isFirst: true);
     }
+
     if (DonateWidget.DonateWidgetKey.currentState != null) {
       DonateWidget.DonateWidgetKey.currentState.refresh();
     }
-    if (LorddayInfoListWidget.myLorddayInfoListWidgetKey.currentState != null) {
-      LorddayInfoListWidget.myLorddayInfoListWidgetKey.currentState.refresh(isFirst: true);
+//    if (LorddayInfoListWidget.myLorddayInfoListWidgetKey.currentState != null) {
+//      LorddayInfoListWidget.myLorddayInfoListWidgetKey.currentState.refresh(isFirst: true);
+//    }
+    if (TabWebViewMainWidget.LordDayMainWidgetKey.currentState != null) {
+      TabWebViewMainWidget.LordDayMainWidgetKey.currentState.refresh(isFirst: true);
     }
     if (CourseStoreWidget.myCourseStoreWidgetKey.currentState != null) {
       CourseStoreWidget.myCourseStoreWidgetKey.currentState.refresh(isFirst: true);
