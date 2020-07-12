@@ -27,8 +27,6 @@ dependencies:
   shared_preferences: #^0.5.4+3
   logger: #^0.8.3
   http:
-  webview_flutter:
-    path: ../plugins/packages/webview_flutter
   provider:
   path_provider:
   crypto: #^2.1.4
@@ -63,6 +61,9 @@ dependencies:
     path: ../flutter_easyrefresh
 
   dio:
+
+  webview_flutter:
+    path: ../plugins/packages/webview_flutter
 
   in_app_purchase:
     path: ../plugins/packages/in_app_purchase

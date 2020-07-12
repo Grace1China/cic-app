@@ -21,7 +21,7 @@ class _LaunchAdvertisementWidgetState extends State<LaunchAdvertisementWidget> {
   List<LauncModel> models = [
     LauncModel(bgColor:Color.fromRGBO(244,187,127,1),imageWidth:224,imageHeight:182, bgImage:"images/1b.png",centerImage: "images/1t.png",logoImage: "images/imslogo.png",title: "异象",subTitle:"成为当代华语教会复兴运动的灯台" ),
     LauncModel(bgColor:Color.fromRGBO(174,195,170,1),imageWidth:290,imageHeight:206, bgImage:"images/2b.png",centerImage: "images/2t.png",logoImage: "images/imslogo.png",title: "植堂",subTitle:"建立本地教会" ),
-    LauncModel(bgColor:Color.fromRGBO(255,113,97,1),imageWidth:286,imageHeight:200, bgImage:"images/3b.png",centerImage: "images/3t.png",logoImage: "images/imslogo.png",title: "中央厨房",subTitle:"装备本地交会，复制健康教会模式" ),];
+    LauncModel(bgColor:Color.fromRGBO(255,113,97,1),imageWidth:286,imageHeight:200, bgImage:"images/3b.png",centerImage: "images/3t.png",logoImage: "images/imslogo.png",title: "中央厨房",subTitle:"装备本地教会，复制健康教会模式" ),];
 
 //  List<Widget> images = List<Widget>();
   @override
